@@ -118,6 +118,12 @@ void handleDebugStepper() {
     case 4:
       rtnv = stp[id].distanceToGo();
       break;
+    case 5:
+      stp[id].setMaxSpeed(value);
+      break;
+    case 6:
+      stp[id].setAcceleration(value);
+      break;
 
     default:
       return;
@@ -130,6 +136,6 @@ void handleDebugServo() {
   int id = server.arg("id").toInt();
   int value = server.arg("value").toInt();
 
-  servo[1].write(value);
+  servo[id].write(value);
   server.send(200, "text/plain", "Executed.");
 }
