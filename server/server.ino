@@ -3,7 +3,7 @@
 #include <Servo.h>
 #include <AccelStepper.h>
 
-#define stepsPerSecond 200  // number of steps of steppers
+#define stepsPerSecond 400  // number of steps of steppers
 
 // Webserver config
 const char* ssid = "StrumMaster";
@@ -17,7 +17,6 @@ ESP8266WebServer server(80);
 bool connected = 0;
 bool is_playing_note = 0;
 
-
 // Servos pin attribution
 uint8_t servo1_pin = D4;
 
@@ -28,8 +27,8 @@ Servo servo[7] = {
 };
 
 // Steppers pin attribution
-uint8_t stp1_step = D4;
-uint8_t stp1_dir = D5;
+uint8_t stp1_step = D5;
+uint8_t stp1_dir = D6;
 
 // Steppers init
 AccelStepper stp1(1, stp1_step, stp1_dir);
@@ -42,7 +41,8 @@ void setup() {
   servo[1].attach(servo1_pin);
 
   // Steppers speed init
-  stp[1].setMaxSpeed(stepsPerSecond);
+  stp[1].setMaxSpeed(1000);
+  stp[1].setAcceleration(10000);
 
   // WiFi initialisation
   WiFi.softAP(ssid, password);
@@ -57,13 +57,16 @@ void setup() {
   server.on("/debug_stepper", HTTP_GET, []() {
     handleDebugStepper();
   });
+  server.on("/debug_servo", HTTP_GET, []() {
+    handleDebugServo();
+  });
   server.onNotFound(handleNotSupported);
 
   server.begin();
 }
 void loop() {
   server.handleClient();
-  stp1.run();
+  stp[1].run();
 }
 
 ///////////////////////////////////////////////////////////
@@ -88,6 +91,7 @@ void handlePlayNote() {
 }
 
 void handleStop() {
+  stp[1].stop();
   server.send(200, "text/plain", "All motor off.");
 }
 
@@ -96,9 +100,9 @@ void handleNotSupported() {
 }
 
 void handleDebugStepper() {
-  int function = server.arg("function").toInt();
   int id = server.arg("id").toInt();
   int value = server.arg("value").toInt();
+  int function = server.arg("function").toInt();
   int rtnv = 0;
 
   switch (function) {
@@ -118,5 +122,14 @@ void handleDebugStepper() {
     default:
       return;
   }
+
   server.send(200, "text/plain", "Executed. Return value : " + rtnv);
+}
+
+void handleDebugServo() {
+  int id = server.arg("id").toInt();
+  int value = server.arg("value").toInt();
+
+  servo[1].write(value);
+  server.send(200, "text/plain", "Executed.");
 }
