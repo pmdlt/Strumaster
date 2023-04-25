@@ -17,11 +17,11 @@ const routes = [
     ],
   },
   {
-    path: '/',
+    path: '/debug_stepper',
     component: () => import('@/layouts/default/Default.vue'),
     children: [
       {
-        path: '/debug_stepper',
+        path: '',
         name: 'Debug Stepper',
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
