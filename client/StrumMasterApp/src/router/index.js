@@ -1,19 +1,26 @@
 // Composables
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
-import DebugStepper from '../views/DebugStepper.vue'
+import Profile from '../views/Profile.vue'
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    component: () => import('@/layouts/default/Default.vue'),
+    children: [
+      {
+        path: '/',
+        name: 'Home',
+        component: Home
+      },
+      {
+        path: '/profile',
+        name: 'profile',
+        component: Profile,
+      },
+    ],
   },
-  {
-    path: '/debugstepper',
-    name: 'DebugStepper',
-    component: DebugStepper
-  },
+
 ]
 
 const router = createRouter({
