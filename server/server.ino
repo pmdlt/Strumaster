@@ -2,7 +2,15 @@
 #include <ESP8266WebServer.h>
 #include <Servo.h>
 #include <AccelStepper.h>
+#include <Wire.h>
+#include <Adafruit_PWMServoDriver.h>
 
+#include "stepper_librairy.h"
+
+// called this way, it uses the default address 0x40
+Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
+
+// FIXME should disappear as well as all other references to steppers which do not use the librairy
 #define stepsPerSecond 400  // number of steps of steppers
 
 // Webserver config
