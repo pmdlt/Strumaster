@@ -3,24 +3,35 @@ typedef struct StepperDriver {
   uint8_t step;
   uint8_t dir;
 
+  // 1 = clockwise, 0 = counterclockwise todo (i think, to be verified)
   uint8_t reversedDir;
 
   uint position;
   uint goal;
-
-  void (*setGoal)(struct StepperDriver*, uint);
 } StepperDriver;
 
 /**
+  Setup for the steppers librairy
+  @param nb Number of steppers handled
+  @param stepDelay Duration for a step, in microseconds. Setting it too low will result in undefined behavior.
+*/
+void steppersLibrairySetup(uint nb, uint stepDelay);
+
+/**
+  Contruct a stepper motor driver given the pins and whether a positive means clock wise or anti-clockwise
+*/
+StepperDriver* StepperDriverConstructor(uint8_t stepPin, uint8_t dirPin, uint8_t isClockwise);
+
+/**
   Make all steppers that have not reached their goal position do a step
-  @param steppers: Array of *6* pointers to stepper drivers
+  @param steppers: Array of pointers to stepper drivers. The size of the array must be equal to the number of steppers precised in steppersLibrairySetup
 */
 void updateSteppers(StepperDriver* steppers[]);
 
 /**
-  Contruct a stepper motor driver given the pins and wether a positive means clock wise or anti-clockwise
+  Stop all steppers. 
 */
-StepperDriver* StepperDriverConstructor(uint8_t stepPin, uint8_t dirPin, uint8_t isClockwise);
+void stopSteppers(StepperDriver* steppers[]);
 
 /**
   Set the goal of a stepper, i.e the number of steps required to reach the goal from 0

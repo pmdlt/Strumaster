@@ -10,9 +10,6 @@
 // called this way, it uses the default address 0x40
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 
-// FIXME should disappear as well as all other references to steppers which do not use the librairy
-#define stepsPerSecond 400  // number of steps of steppers
-
 // Webserver config
 const char* ssid = "StrumMaster";
 const char* password = "12345678";
@@ -35,22 +32,22 @@ Servo servo[7] = {
 };
 
 // Steppers pin attribution
+uint nbSteppers = 1;
+StepperDriver** steppers;
 uint8_t stp1_step = D5;
 uint8_t stp1_dir = D6;
 
-// Steppers init
-AccelStepper stp1(1, stp1_step, stp1_dir);
-AccelStepper stp[7] = {
-  AccelStepper(), stp1
-};
-
 void setup() {
+  // Adafruit PCA9685 initialisation
+  pwm.begin();
+  pwm.setPWMFreq(1600);  // Maximum PWM frequency
+
   // Servos pin attachment
   servo[1].attach(servo1_pin);
 
-  // Steppers speed init
-  stp[1].setMaxSpeed(1000);
-  stp[1].setAcceleration(10000);
+  // Steppers init
+  steppersLibrairySetup(1, 1000); // 1 stepper, 1 ms for step delay
+  StepperDriver* steppers[nbSteppers] = {StepperDriverConstructor(stp1_step, stp1_dir, 0)};
 
   // WiFi initialisation
   WiFi.softAP(ssid, password);
@@ -74,12 +71,13 @@ void setup() {
 }
 void loop() {
   server.handleClient();
-  stp[1].run();
+  updateSteppers(steppers);
 }
 
 ///////////////////////////////////////////////////////////
 
-void activate_stepper(int id, int position) {
+void activate_stepper(int id, int goal) {
+  setGoal(steppers[id], goal);
 }
 
 void activate_servo(int id) {
@@ -99,7 +97,7 @@ void handlePlayNote() {
 }
 
 void handleStop() {
-  stp[1].stop();
+  stopSteppers(steppers);
   server.send(200, "text/plain", "All motor off.");
 }
 
@@ -114,23 +112,30 @@ void handleDebugStepper() {
   int rtnv = 0;
 
   switch (function) {
+    // Make a stepper go to a certain position
     case 1:
-      stp[id].moveTo(value);
+      setGoal(steppers[id], value);
       break;
+
+    // Move the stepper <value> steps 
     case 2:
-      stp[id].move(value);
+      setGoal(steppers[id], steppers[id]->position + value);
       break;
+
+    // return the stepper position
     case 3:
-      rtnv = stp[id].currentPosition();
+      rtnv = steppers[id]->position;
       break;
+
+    // return the distance to go of the stepper
     case 4:
-      rtnv = stp[id].distanceToGo();
+      rtnv = steppers[id]->position - steppers[id]->goal;
+      rtnv = rtnv < 0 ? -rtnv : rtnv;
       break;
+
+    // Modify the delay of the steps 
     case 5:
-      stp[id].setMaxSpeed(value);
-      break;
-    case 6:
-      stp[id].setAcceleration(value);
+      steppersLibrairySetup(nbSteppers, value);
       break;
 
     default:
