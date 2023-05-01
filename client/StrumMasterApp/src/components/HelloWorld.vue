@@ -1,79 +1,86 @@
 <template>
-  <v-container class="fill-height">
-    <v-responsive class="d-flex align-center text-center fill-height">
-      <v-img
-        contain
-        height="300"
-        src="@/assets/logo.svg"
-      />
+  <v-app id="inspire">
+    <v-app-bar flat>
+      <v-container class="fill-height d-flex align-center">
+        <v-avatar
+          class="me-10 ms-4"
+          color="grey-darken-1"
+          size="32"
+        ></v-avatar>
 
-      <div class="text-body-2 font-weight-light mb-n1">Welcome to</div>
+        <v-btn
+          v-for="link in links"
+          :key="link"
+          variant="text"
+        >
+          {{ link }}
+        </v-btn>
 
-      <h1 class="text-h2 font-weight-bold">Vuetify</h1>
+        <v-spacer></v-spacer>
 
-      <div class="py-14" />
+        <v-responsive max-width="260">
+          <v-text-field
+            density="compact"
+            hide-details
+            variant="solo"
+          ></v-text-field>
+        </v-responsive>
+      </v-container>
+    </v-app-bar>
 
-      <v-row class="d-flex align-center justify-center">
-        <v-col cols="auto">
-          <v-btn
-            href="https://next.vuetifyjs.com/components/all/"
-            min-width="164"
-            rel="noopener noreferrer"
-            target="_blank"
-            variant="text"
-          >
-            <v-icon
-              icon="mdi-view-dashboard"
-              size="large"
-              start
-            />
+    <v-main class="bg-grey-lighten-3">
+      <v-container>
+        <v-row>
+          <v-col cols="2">
+            <v-sheet rounded="lg">
+              <v-list rounded="lg">
+                <v-list-item
+                  v-for="n in 5"
+                  :key="n"
+                  link
+                >
+                  <v-list-item-title>
+                    List Item {{ n }}
+                  </v-list-item-title>
+                </v-list-item>
 
-            Components
-          </v-btn>
-        </v-col>
+                <v-divider class="my-2"></v-divider>
 
-        <v-col cols="auto">
-          <v-btn
-            color="primary"
-            href="https://next.vuetifyjs.com/introduction/why-vuetify/#feature-guides"
-            min-width="228"
-            rel="noopener noreferrer"
-            size="x-large"
-            target="_blank"
-            variant="flat"
-          >
-            <v-icon
-              icon="mdi-speedometer"
-              size="large"
-              start
-            />
+                <v-list-item
+                  link
+                  color="grey-lighten-4"
+                >
+                  <v-list-item-title>
+                    Refresh
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-sheet>
+          </v-col>
 
-            Get Started
-          </v-btn>
-        </v-col>
-
-        <v-col cols="auto">
-          <v-btn
-            href="https://community.vuetifyjs.com/"
-            min-width="164"
-            rel="noopener noreferrer"
-            target="_blank"
-            variant="text"
-          >
-            <v-icon
-              icon="mdi-account-group"
-              size="large"
-              start
-            />
-
-            Community
-          </v-btn>
-        </v-col>
-      </v-row>
-    </v-responsive>
-  </v-container>
+          <v-col>
+            <v-sheet
+              min-height="70vh"
+              rounded="lg"
+            >
+            <v-text-field label="Label" variant="outlined"></v-text-field>
+            </v-sheet>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
-<script setup>
-  //
+<script>
+  export default {
+    data: () => ({
+      links: [
+        'Dashboard',
+        'Messages',
+        'Profile',
+        'Updates',
+      ],
+    }),
+  }
 </script>
