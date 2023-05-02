@@ -1,18 +1,5 @@
 <template>
   <v-app id="inspire">
-    <v-app-bar class="px-3" color="white" flat density="compact">
-
-
-      <v-spacer></v-spacer>
-
-      <v-tabs centered color="grey-darken-2">
-        <v-tab v-for="link in links" :key="link">
-          {{ link }}
-        </v-tab>
-      </v-tabs>
-      <v-spacer></v-spacer>
-    </v-app-bar>
-
     <v-main class="bg-grey-lighten-3">
       <v-container>
         <v-row>
@@ -68,38 +55,41 @@
 </template>
 
 <script>
+import AppBar from '@/layouts/default/AppBar.vue';
+
 export default {
-  data: () => ({
-    links: [
-      'Dashboard',
-      'Play song (via Midi)',
-      'Play notes',
-      'Debug and calibrate motors',
-    ],
-    speed: 0,
-    channel: 0,
-    file: null,
-  }),
-  methods: {
-    sendAndPlay() {
-      const params = new URLSearchParams({
-        channel: this.channel,
-        speed: this.speed,
-        file: this.file,
-      });
-      const url = `http://192.168.1.1/play_midi?${params.toString()}`;
-      fetch(url, { method: 'GET' })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          // handle successful response
-        })
-        .catch(error => {
-          console.error('There was a problem with the network request:', error);
-          // handle error
-        });
-    }
-  }
+    data: () => ({
+        links: [
+            "Dashboard",
+            "Play song (via Midi)",
+            "Play notes",
+            "Debug and calibrate motors",
+        ],
+        speed: 0,
+        channel: 0,
+        file: null,
+    }),
+    methods: {
+        sendAndPlay() {
+            const params = new URLSearchParams({
+                channel: this.channel,
+                speed: this.speed,
+                file: this.file,
+            });
+            const url = `http://192.168.1.1/play_midi?${params.toString()}`;
+            fetch(url, { method: "GET" })
+                .then(response => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                // handle successful response
+            })
+                .catch(error => {
+                console.error("There was a problem with the network request:", error);
+                // handle error
+            });
+        }
+    },
+    components: { AppBar }
 }
 </script>
