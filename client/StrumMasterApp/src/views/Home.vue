@@ -55,8 +55,6 @@
 </template>
 
 <script>
-import AppBar from '@/layouts/default/AppBar.vue';
-
 export default {
     data: () => ({
         links: [
@@ -89,7 +87,6 @@ export default {
                 // handle error
             });
         }
-    },
-    components: { AppBar }
+    }
 }
 </script>

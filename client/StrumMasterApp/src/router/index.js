@@ -8,14 +8,24 @@ const routes = [
     children: [
       {
         path: '',
-        name: 'Home',
+        name: 'Dashboard',
         component: () => import('@/views/Home.vue'),
       },
       {
-        path: '/debug_stepper',
-        name: 'DebugStepper',
-        component: () => import('@/views/DebugStepper.vue')
-      },      
+        path: '/debug',
+        name: 'Debug Motors',
+        component: () => import('@/views/Debug.vue')
+      },
+      {
+        path: '/play-notes',
+        name: 'Play Notes',
+        component: () => import('@/views/Notes.vue')
+      },
+      {
+        path: '/play-song',
+        name: 'Play Song',
+        component: () => import('@/views/Song.vue')
+      },
     ],
   },
 ]

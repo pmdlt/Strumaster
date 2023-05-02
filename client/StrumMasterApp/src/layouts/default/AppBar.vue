@@ -2,23 +2,29 @@
   <v-app-bar class="px-3" color="white" flat density="compact">
     <v-spacer></v-spacer>
     <v-tabs centered color="grey-darken-2">
-      <v-tab v-for="link in links" :key="link">
-        {{ link }}
-      </v-tab>
+      <router-link to="/">
+        <v-tab>Dashboard</v-tab>
+      </router-link>
+      <router-link to="/play-song">
+        <v-tab>Play song (via Midi)</v-tab>
+      </router-link>
+      <router-link to="/play-notes">
+        <v-tab>Play notes</v-tab>
+      </router-link>
+      <router-link to="/debug">
+        <v-tab>Debug and calibrate motors</v-tab>
+      </router-link>
     </v-tabs>
     <v-spacer></v-spacer>
   </v-app-bar>
 </template>
 
 <script>
+import { RouterLink } from 'vue-router'
+
 export default {
-  data: () => ({
-    links: [
-      'Dashboard',
-      'Play song (via Midi)',
-      'Play notes',
-      'Debug and calibrate motors',
-    ],
-  }),
+  components: {
+    RouterLink
+  }
 }
 </script>
