@@ -80,5 +80,26 @@ export default {
     channel: 0,
     file: null,
   }),
+  methods: {
+    sendAndPlay() {
+      const params = new URLSearchParams({
+        channel: this.channel,
+        speed: this.speed,
+        file: this.file,
+      });
+      const url = `http://192.168.1.1/play_midi?${params.toString()}`;
+      fetch(url, { method: 'GET' })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          // handle successful response
+        })
+        .catch(error => {
+          console.error('There was a problem with the network request:', error);
+          // handle error
+        });
+    }
+  }
 }
 </script>
