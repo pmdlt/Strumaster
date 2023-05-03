@@ -12,20 +12,29 @@
           <v-col cols="12" sm="9">
             <v-sheet min-height="70vh" rounded="lg">
               <v-container>
+
                 <v-form ref="form">
-                  <v-row>
-                    <v-col cols="12" sm="4">
-                      <v-select v-model="functionToUse" :items="['SetGoal()', 'ToGoal()', 'SetSpeed()']"
-                        label="Function to use"></v-select>
-                    </v-col>
-                    <v-col cols="12" sm="4">
-                      <v-slider v-model="stepperId" min="1" max="6" label="Stepper ID"></v-slider>
-                    </v-col>
-                    <v-col cols="12" sm="4">
-                      <v-slider v-model="value" min="0" max="100" label="Value"></v-slider>
-                    </v-col>
-                  </v-row>
-                  <v-btn @click="sendAndPlay" block class="mt-2">Send and play</v-btn>
+                  <p class="text-h5-center">Stepper debug form<br><br></p>
+
+                  <v-select v-model="stepperFunctionToUse" :items="['SetGoal()', 'ToGoal()', 'SetSpeed()']"
+                    label="Function to use"></v-select>
+
+                  <v-slider v-model="stepperId" :min="0" :max="6" :step="1" label="Stepper ID"></v-slider>
+
+                  <v-text-field v-model="stepperValue" label="Value" variant="outlined"></v-text-field>
+
+                  <v-btn @click="debugStepper" block class="mt-2">Debug Stepper</v-btn><br><br>
+
+                  <p class="text-h5-center">Servo debug form<br><br></p>
+
+                  <v-select v-model="servoFunctionToUse" :items="['SetValue()']"
+                    label="Function to use"></v-select>
+
+                  <v-slider v-model="servoId" :min="0" :max="6" :step="1" label="Servo ID"></v-slider>
+
+                  <v-text-field v-model="servoValue" label="Value" variant="outlined"></v-text-field>
+
+                  <v-btn @click="debugServo" block class="mt-2">Debug Servo</v-btn>
                 </v-form>
               </v-container>
             </v-sheet>
@@ -33,7 +42,8 @@
         </v-row>
       </v-container>
     </v-main>
-    <v-snackbar v-model="snackbarVisible" :color="snackbarColor" :timeout="snackbarTimeout">{{ snackbarText }}</v-snackbar>
+    <v-snackbar v-model="snackbarVisible" :color="snackbarColor" :timeout="snackbarTimeout">{{ snackbarText
+    }}</v-snackbar>
   </v-app>
 </template>
 
@@ -45,23 +55,20 @@ export default {
     TheMenuBar,
   },
   data: () => ({
-    links: [
-      "Dashboard",
-      "Play song (via Midi)",
-      "Play notes",
-      "Debug and calibrate motors",
-    ],
-    functionToUse: null,
-    stepperId: null,
-    value: 0,
+    stepperFunctionToUse: null,
+    stepperId: 1,
+    stepperValue: null,
+    servoFunctionToUse: null,
+    servoId: 1,
+    servoValue: null,
     snackbarVisible: false,
     snackbarText: '',
     snackbarColor: '',
-    snackbarTimeout: 3000,
+    snackbarTimeout: 2000,
   }),
   methods: {
-    sendAndPlay() {
-      const url = `http://192.168.1.1/debug_stepper?function=${this.functionToUse}&id=${this.stepperId}&value=${this.value}`
+    debugStepper() {
+      const url = `http://192.168.1.1/debug_stepper?function=${this.stepperFunctionToUse}&id=${this.stepperId}&value=${this.stepperValue}`
       fetch(url)
         .then(response => {
           if (response.ok) {

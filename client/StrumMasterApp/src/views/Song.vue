@@ -17,13 +17,10 @@
                                     <v-file-input v-model="file" label="MIDI File" variant="solo"></v-file-input>
 
                                     <p class="text-center">Parameters</p>
+                                    
+                                    <v-slider v-model="channel" :min="0" :max="16" :step="1" thumb-label label="MIDI Channel"></v-slider>
 
-                                    <p class="text-left">MIDI Channel<br></p>
-                                    <v-slider v-model="channel" :min="0" :max="16" :step="1" thumb-label></v-slider>
-
-                                    <div :class="text - h6">Speed<br></div>
-
-                                    <v-slider v-model="speed" :min="0" :max="100" thumb-label></v-slider>
+                                    <v-slider v-model="speed" :min="0" :max="100" thumb-label label="Speed"></v-slider>
 
                                     <v-btn type="submit" block class="mt-2">Send and play</v-btn>
                                 </v-form>
