@@ -20,18 +20,18 @@ void steppersLibrairySetup(uint nb, uint stepDelay);
 /**
   Contruct a stepper motor driver given the pins and whether a positive means clock wise or anti-clockwise
 */
-StepperDriver* StepperDriverConstructor(uint8_t stepPin, uint8_t dirPin, uint8_t isClockwise);
+StepperDriver StepperDriverConstructor(uint8_t stepPin, uint8_t dirPin, uint8_t isClockwise);
 
 /**
   Make all steppers that have not reached their goal position do a step
   @param steppers: Array of pointers to stepper drivers. The size of the array must be equal to the number of steppers precised in steppersLibrairySetup
 */
-void updateSteppers(StepperDriver* steppers[]);
+void updateSteppers(StepperDriver steppers[]);
 
 /**
   Stop all steppers. 
 */
-void stopSteppers(StepperDriver* steppers[]);
+void stopSteppers(StepperDriver steppers[]);
 
 /**
   Set the goal of a stepper, i.e the number of steps required to reach the goal from 0
