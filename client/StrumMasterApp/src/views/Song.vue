@@ -5,7 +5,7 @@
                 <v-row>
                     <v-col cols="12" sm="3">
                         <v-sheet rounded="lg">
-                            <Menu />
+                            <the-menu-bar />
                         </v-sheet>
                     </v-col>
 
@@ -37,6 +37,8 @@
 </template>
 
 <script>
+import TheMenuBar from './Menu.vue'
+
 export default {
     data: () => ({
         links: [
