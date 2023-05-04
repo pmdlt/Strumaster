@@ -144,6 +144,8 @@ void handleDebugServo() {
 
 void handleNote(){
   int id = server.arg("id").toInt();
+  sendNoteStepper(int id);
+  delay(1000);
   switch (id/10)
   {
   case 0:
