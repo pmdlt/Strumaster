@@ -5,8 +5,6 @@
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
 
-#include "stepper_librairy.h"
-
 // called this way, it uses the default address 0x40
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 
@@ -31,12 +29,6 @@ Servo servo[7] = {
   Servo(), servo1
 };
 
-// Steppers pins attribution (adafruit pins)
-const uint nbSteppers = 3;
-StepperDriver steppers[nbSteppers];
-const uint8_t steppersStepPins[nbSteppers] = {0, 2, 4};
-const uint8_t steppersDirPins[nbSteppers] = {1, 3, 5};
-
 void setup() {
   Serial.begin(9600);
   // Adafruit PCA9685 initialisation
@@ -45,15 +37,6 @@ void setup() {
 
   // Servos pin attachment
   servo[1].attach(servo1_pin);
-
-  // Steppers init
-  steppersLibrairySetup(nbSteppers, 5 * 1000); // 5 ms for step delay
-  const static StepperDriver tmp[nbSteppers] = {
-    StepperDriverConstructor(steppersStepPins[0], steppersDirPins[0], 0),
-    StepperDriverConstructor(steppersStepPins[1], steppersDirPins[1], 0),
-    StepperDriverConstructor(steppersStepPins[2], steppersDirPins[2], 0)
-    };
-  memcpy(steppers, tmp, sizeof tmp);
 
   // WiFi initialisation
   WiFi.softAP(ssid, password);
@@ -77,13 +60,12 @@ void setup() {
 }
 void loop() {
   server.handleClient();
-  updateSteppers(steppers);
 }
 
 ///////////////////////////////////////////////////////////
 
 void activate_stepper(int id, int goal) {
-  setGoal(&steppers[id], goal);
+  
 }
 
 void activate_servo(int id) {
@@ -103,7 +85,6 @@ void handlePlayNote() {
 }
 
 void handleStop() {
-  stopSteppers(steppers);
   server.send(200, "text/plain", "All motor off.");
 }
 
@@ -116,34 +97,26 @@ void handleDebugStepper() {
   int value = server.arg("value").toInt();
   int function = server.arg("function").toInt();
   int rtnv = 0;
-  Serial.printf("Id: %d, value: %d, function: %d\n", id, value, function);
-
 
   switch (function) {
     // Make a stepper go to a certain position
     case 1:
-      setGoal(&steppers[id], value);
       break;
 
     // Move the stepper <value> steps 
     case 2:
-      setGoal(&steppers[id], steppers[id].position + value);
       break;
 
     // return the stepper position
     case 3:
-      rtnv = steppers[id].position;
       break;
 
     // return the distance to go of the stepper
     case 4:
-      rtnv = steppers[id].position - steppers[id].goal;
-      rtnv = rtnv < 0 ? -rtnv : rtnv;
       break;
 
     // Modify the delay of the steps 
     case 5:
-      steppersLibrairySetup(nbSteppers, value);
       break;
 
     default:
