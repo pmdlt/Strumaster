@@ -8,6 +8,7 @@ typedef struct StepperDriver {
 
   uint position;
   uint goal;
+  uint blockedUntil;
 } StepperDriver;
 
 /**
@@ -36,4 +37,9 @@ void stopSteppers(StepperDriver steppers[]);
 /**
   Set the goal of a stepper, i.e the number of steps required to reach the goal from 0
 */
-void setGoal(StepperDriver* stepper, uint goal);
+void setGoal(StepperDriver* stepper, uint goal, uint bloquedUntilTime);
+
+/**
+  Return true if the stepper is blocked, false otherwise
+*/
+bool isRunning(StepperDriver* stepper, uint currTime);

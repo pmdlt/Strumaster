@@ -18,10 +18,10 @@ void updateSteppers(StepperDriver steppers[]){
     if (!diff) continue;
 
     // Do the step in the right direction
-    if (!((diff > 0) ^ stepper.reversedDir)) setPWMHigh(stepper.dir); else setPWMLow(stepper.dir); 
-    setPWMHigh(stepper.step);
+    if (!((diff > 0) ^ stepper.reversedDir)) digitalWrite(stepper.dir, HIGH); else digitalWrite(stepper.dir, LOW); 
+    digitalWrite(stepper.step, HIGH);
     delayMicroseconds(STEP_MICRODELAY);
-    setPWMLow(stepper.step);
+    digitalWrite(stepper.step, LOW);
     stepper.position += should_incr ? 1 : -1;
     steppers[i] = stepper; // todo use a pointer, will be easier
   }
@@ -42,13 +42,6 @@ void stopSteppers(StepperDriver steppers[]){
   }
 }
 
-// -------------------------------------------------------  utils functions
-
-void setPWMHigh(uint8_t pin){
-  //pwm.setPWM(pin, 0, 4096);
-  digitalWrite(pin, HIGH);
-}
-void setPWMLow(uint8_t pin){
-  //pwm.setPWM(pin, 4096, 0);
-  digitalWrite(pin, LOW);
+bool isRunning(StepperDriver* stepper, uint currTime){
+  return currTime > stepper->blockedUntil;
 }
