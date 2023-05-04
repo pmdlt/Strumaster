@@ -5,6 +5,8 @@
 
 #define stepsPerSecond 400  // number of steps of steppers
 
+
+
 // Webserver config
 const char* ssid = "StrumMaster";
 const char* password = "12345678";
@@ -138,4 +140,41 @@ void handleDebugServo() {
 
   servo[id].write(value);
   server.send(200, "text/plain", "Executed.");
+}
+
+void handleNote(){
+  int id = server.arg("id").toInt();
+  switch (id/10)
+  {
+  case 0:
+    playServos(1,0,0,0,0,0);
+    break;
+  case 1:
+    playServos(0,1,0,0,0,0);
+    break;
+  case 2:
+    playServos(0,0,1,0,0,0);
+    break;
+  case 3:
+    playServos(0,0,0,1,0,0);
+    break;
+  case 4:
+    playServos(0,0,0,0,1,0);
+    break;
+  case 5:
+    playServos(0,0,0,0,0,1);
+    break;
+  
+  default:
+    server.send(200, "text/plain", "Invalid note id.");
+    break;
+  }
+}
+
+void sendNoteStepper(int id){
+  //TODO Albert: send to Arduino
+}
+
+void playServos(bool a, bool b, bool c, bool d, bool e, bool f){
+  //TODO PH: activate servos a:1 b:2 c:3 d:4 e:5 f:6
 }
