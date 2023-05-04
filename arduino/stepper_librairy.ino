@@ -1,29 +1,36 @@
 uint NUM_STEPPERS = 0;
-uint STEP_MICRODELAY = 0;
+uint STEP_MICRODELAY = 0; //todo faire en sorte que l'interpas soit toujours le même, pour l'instant si y'en a 1 qui tourne il va super vite, si le 3 vont en même temps c'est plus lent 
 
 void steppersLibrairySetup(uint nb, uint stepDelay){
   NUM_STEPPERS = nb;
-  STEP_MICRODELAY =  stepDelay;
+  STEP_MICRODELAY = stepDelay;
 }
 
 // do a step for each stepper motor needing one.
 void updateSteppers(StepperDriver steppers[]){
+  // check that the librairy has been initialized
   if(NUM_STEPPERS != 0 && STEP_MICRODELAY != 0); else return;
-
-  for (uint i = 0; i < NUM_STEPPERS; ++i){
-    StepperDriver stepper = steppers[i];
+  
+  // Allow constant speed
+  uint8_t nbActiveSteppers = 0;
+  for (uint8_t i = 0; i < NUM_STEPPERS; ++i){
+    if (steppers[i].goal - steppers[i].position) nbActiveSteppers += 1;
+  }
+  uint stepDelay = STEP_MICRODELAY / nbActiveSteppers;
+  
+  // Stepping
+  for (uint8_t i = 0; i < NUM_STEPPERS; ++i){
+    StepperDriver* stepper = &steppers[i];
     
-    uint8_t should_incr = stepper.goal > stepper.position; // todo fixme, ça prend pas si ça doit aller en arrière
-    uint diff = stepper.goal - stepper.position;
+    uint diff = stepper->goal - stepper->position;
     if (!diff) continue;
 
     // Do the step in the right direction
-    if (!((diff > 0) ^ stepper.reversedDir)) digitalWrite(stepper.dir, HIGH); else digitalWrite(stepper.dir, LOW); 
-    digitalWrite(stepper.step, HIGH);
+    if (!((diff > 0) ^ stepper->reversedDir)) digitalWrite(stepper->dir, HIGH); else digitalWrite(stepper->dir, LOW); 
+    digitalWrite(stepper->step, HIGH);
     delayMicroseconds(STEP_MICRODELAY);
-    digitalWrite(stepper.step, LOW);
-    stepper.position += should_incr ? 1 : -1;
-    steppers[i] = stepper; // todo use a pointer, will be easier
+    digitalWrite(stepper->step, LOW);
+    stepper->position += diff > 0 ? 1 : -1;
   }
 }
 
