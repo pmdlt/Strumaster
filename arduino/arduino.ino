@@ -17,12 +17,12 @@ void setup() {
   for (int i = 2; i < 8; i++){
     pinMode(i, OUTPUT);
   }
-  steppersLibrairySetup(3, 300);
+  steppersLibrairySetup(3, 600);
 
   // translater initialisation
   for (int id = 0; id < 6; id++){
     for (int fret = 0; fret < 10; fret++){
-      translater[id*10 + fret] = {id, fret*10}; //tbd
+      translater[id*10 + fret] = {id, fret*100}; //tbd
     }
   }
 }
