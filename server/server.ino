@@ -15,6 +15,7 @@ IPAddress local_ip(192, 168, 1, 1);
 IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 255, 0);
 ESP8266WebServer server(80);
+SoftwareSerial Arduino(2, 3);
 
 // Program variables
 bool connected = 0;
@@ -65,12 +66,14 @@ void loop() {
 
 ///////////////////////////////////////////////////////////
 
-void activate_stepper(int id_note) {
+void activate_stepper(uint8_t id_note) {
   // Todo @Albert: send to Arduino
+  Arduino.println(id_note);
 }
 
 void debug_stepper(int id_stepper, int steps) {
   // Todo @Albert: send to Arduino
+  Arduino.println(id_stepper+","+steps);
 }
 
 void activate_servo(int id_servo) {
