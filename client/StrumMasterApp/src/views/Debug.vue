@@ -14,19 +14,19 @@
               <v-container>
 
                 <v-form ref="form">
-                  <p class="text-center">Stepper debug form<br><br></p>
+                  <p class="text-center">Calibrate stepper<br><br></p>
 
-                  <v-select v-model="stepperFunctionToUse" :items="functionOptions"
-                    label="Function to use" variant="outlined"></v-select>
+                  <v-select v-model="stepperFunctionToUse" :items="[1, 2]" label="Function to use"
+                    variant="outlined"></v-select>
 
-                  <v-slider v-model="stepperId" :min="0" :max="6" :step="1" thumb-label label="Stepper ID" ></v-slider>
+                  <v-slider v-model="stepperId" :min="0" :max="6" :step="1" thumb-label label="Stepper ID"></v-slider>
 
                   <v-text-field v-model="stepperValue" label="Value" variant="outlined"></v-text-field>
 
                   <v-btn @click="debugStepper" block class="mt-2">Debug Stepper</v-btn><br><br>
 
-                  <v-divider></v-divider>
-                  
+                  <v-divider></v-divider><br><br>
+
                   <p class="text-center">Test servo<br><br></p>
 
                   <v-slider v-model="servoId" :min="0" :max="6" :step="1" thumb-label label="Servo ID"></v-slider>
@@ -60,10 +60,6 @@ export default {
     snackbarText: '',
     snackbarColor: '',
     snackbarTimeout: 2000,
-    functionOptions: [
-      { name: "Make go to a note", value: 1 },
-      { name: "Make steps to stepper", value: 2 },
-    ],
   }),
   methods: {
     debugStepper() {
