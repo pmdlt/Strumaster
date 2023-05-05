@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import Tone from "tone";
+import { Midi } from 'tone';
 import TheMenuBar from '../components/Menu.vue'
 
 export default {
@@ -59,7 +59,7 @@ export default {
             reader.readAsArrayBuffer(this.file);
             reader.onload = async () => {
                 const buffer = reader.result;
-                const midi = await Tone.Midi.fromArrayBuffer(buffer);
+                const midi = await Midi.fromArrayBuffer(buffer);
                 const notes = midi.toNotes();
                 const params = new URLSearchParams({
                     channel: this.channel,
