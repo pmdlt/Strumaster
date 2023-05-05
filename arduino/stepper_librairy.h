@@ -30,16 +30,22 @@ StepperDriver StepperDriverConstructor(uint8_t stepPin, uint8_t dirPin, uint8_t 
 void updateSteppers(StepperDriver steppers[]);
 
 /**
+  Set the position goal of a stepper, i.e the number of steps required to reach the goal from 0
+*/
+void setGoal(StepperDriver* stepper, uint goal);
+
+/**
+  Make the stepper do a given number of steps (can be negative)
+*/
+void doSteps(StepperDriver* stepper, int steps);
+
+/**
   Stop all steppers. 
 */
 void stopSteppers(StepperDriver steppers[]);
 
 /**
-  Set the goal of a stepper, i.e the number of steps required to reach the goal from 0
-*/
-void setGoal(StepperDriver* stepper, uint goal, uint bloquedUntilTime);
-
-/**
   Return true if the stepper is blocked, false otherwise
 */
 bool isRunning(StepperDriver* stepper, uint currTime);
+

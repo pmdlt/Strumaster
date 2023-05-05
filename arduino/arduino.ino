@@ -22,25 +22,28 @@ void setup() {
   // translater initialisation
   for (int id = 0; id < 6; id++){
     for (int fret = 0; fret < 10; fret++){
-      translater[id*10 + fret] = {id, fret*100}; //tbd
+      translater[id*10 + fret] = {id, fret*100}; //tbd, 1er fret = position 0
     }
   }
 }
 
 void loop() {
-  uint8_t tmp = receiveNote(currNote);
-  if (tmp != 255) {
+  // we get a note
+  uint8_t tmp = listenToESP(currNote);
+  if (tmp != -1) {
     currNote = tmp;
     Note translation = translater[currNote];
     setGoal(&steppers[translation.string], translation.position);
   }
+
+  // Do a step for all steppers needing one
   updateSteppers(steppers);
 }
 
 /**
   Non-blocking function, which listen to the esp
-  @return A note id (0-59) if the ESP has sent a new one, 255 otherwise
+  @return A note id (0-59) if the ESP has sent a new one, -1 otherwise. Call "doSteps" if ESP require a stepper to do a certain # of steps
 */
-uint8_t receiveNote(uint8_t lastNote){
-  return 255;
+uint8_t listenToESP(uint8_t lastNote){
+  return -1;
 }

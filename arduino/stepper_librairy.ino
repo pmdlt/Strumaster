@@ -43,6 +43,10 @@ void setGoal(StepperDriver* stepper, uint goal){
   stepper->goal = goal;
 }
 
+void doSteps(StepperDriver* stepper, int steps){
+  stepper->goal = stepper->position + steps; 
+}
+
 void stopSteppers(StepperDriver steppers[]){
   for (uint i = 0; i < NUM_STEPPERS; ++i){
     steppers[i].goal = steppers[i].position;
