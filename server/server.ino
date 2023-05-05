@@ -19,6 +19,7 @@ ESP8266WebServer server(80);
 // Program variables
 bool connected = 0;
 bool is_playing_note = 0;
+uint8_t nbFrets = 10; // number of frets handled by strings
 
 // Servos pin attribution
 uint8_t servo1_pin = D4;
@@ -45,13 +46,13 @@ void setup() {
 
   // Commands handle
   server.on("/connect", handleConnect);
-  server.on("/play_note", handlePlayNote);
+  server.on("/play_note", handlePlayNote); // arg: id
   server.on("/stop", handleStop);
 
-  server.on("/debug_stepper", HTTP_GET, []() {
+  server.on("/debug_stepper", HTTP_GET, []() { // arg: function, id, value
     handleDebugStepper();
   });
-  server.on("/debug_servo", HTTP_GET, []() {
+  server.on("/debug_servo", HTTP_GET, []() { // arg: id
     handleDebugServo();
   });
   server.onNotFound(handleNotSupported);
@@ -64,13 +65,16 @@ void loop() {
 
 ///////////////////////////////////////////////////////////
 
-void activate_stepper(int id, int goal) {
-  
+void activate_stepper(int id_note) {
+  // Todo @Albert: send to Arduino
 }
 
-void activate_servo(int id) {
-  servo1.write(45);
-  servo1.write(0);
+void debug_stepper(int id_stepper, int steps) {
+  // Todo @Albert: send to Arduino
+}
+
+void activate_servo(int id_servo) {
+  // Todo @P-H: send to Adafruit
 }
 
 void handleConnect() {
@@ -78,8 +82,10 @@ void handleConnect() {
 }
 
 void handlePlayNote() {
-  activate_stepper(1, 0);
-  activate_servo(1);
+  int id = server.arg("id").toInt();
+  activate_stepper(id);
+  delay(1000); // FIXME bloquing, Ok for debug and if we only want to play 1 note, Must be changed for final
+  activate_servo(id/nbFrets);
 
   server.send(200, "text/plain", "");
 }
@@ -99,24 +105,14 @@ void handleDebugStepper() {
   int rtnv = 0;
 
   switch (function) {
-    // Make a stepper go to a certain position
+    // Make a stepper go to a certain note
     case 1:
+      activate_stepper(value);
       break;
 
     // Move the stepper <value> steps 
     case 2:
-      break;
-
-    // return the stepper position
-    case 3:
-      break;
-
-    // return the distance to go of the stepper
-    case 4:
-      break;
-
-    // Modify the delay of the steps 
-    case 5:
+      debug_stepper(id, value);
       break;
 
     default:
@@ -128,8 +124,6 @@ void handleDebugStepper() {
 
 void handleDebugServo() {
   int id = server.arg("id").toInt();
-  int value = server.arg("value").toInt();
 
-  servo[id].write(value);
-  server.send(200, "text/plain", "Executed.");
+  activate_servo(id);
 }
