@@ -66,14 +66,14 @@ void loop() {
 
 ///////////////////////////////////////////////////////////
 
-void activate_stepper(uint8_t id_note) {
+void activate_stepper(int id_note) {
   // Todo @Albert: send to Arduino
-  Arduino.println(id_note);
+  Arduino.printf("%d,\n", id_note);
 }
 
 void debug_stepper(int id_stepper, int steps) {
   // Todo @Albert: send to Arduino
-  Arduino.println(id_stepper+","+steps);
+  Arduino.printf("%d,%d,\n", id_stepper, steps);
 }
 
 void activate_servo(int id_servo) {
