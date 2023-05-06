@@ -11,6 +11,11 @@ const uint SERVO_DELAY = 500;
 void setupServos(uint pin1, uint pin2, uint pin3, uint pin4, uint pin5, uint pin6);
 
 /**
+ * Plays a single cord
+*/
+void playSingleCord(int cord);
+
+/**
  * Plays cords for which values are 1, usage to play 1rst and 5th cord: playCords(1, 0, 0, 0, 1, 0); 
 */
 void playCords(int cord1, int cord2, int cord3, int cord4, int cord5, int cord6);

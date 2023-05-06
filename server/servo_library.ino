@@ -24,11 +24,20 @@ void setupServos(uint pin1, uint pin2, uint pin3, uint pin4, uint pin5, uint pin
     setAllToMiddle();
 }
 
-// Plays cords for which values are 1, usage to play 1rst and 5th cord: playCords(1, 0, 0, 0, 1, 0);
 void playCords(int cord1, int cord2, int cord3, int cord4, int cord5, int cord6) {
   writeToServo(cord1 * MIN_ANGLE_PWM, cord2 * MIN_ANGLE_PWM, cord3 * MIN_ANGLE_PWM, cord4* MIN_ANGLE_PWM,cord5 * MIN_ANGLE_PWM, cord6 * MIN_ANGLE_PWM);
   delay(SERVO_DELAY);
   writeToServo(cord1 * MAX_ANGLE_PWM, cord2 * MAX_ANGLE_PWM, cord3 * MAX_ANGLE_PWM, cord4 * MAX_ANGLE_PWM,cord5 * MAX_ANGLE_PWM, cord6 * MAX_ANGLE_PWM);
+}
+
+void playSingleCord(int cord) {
+  int cord_values[6] = {0, 0, 0, 0, 0, 0};
+  cord_values[cord] = 1;
+
+  writeToServo(cord_values[0] * MIN_ANGLE_PWM, cord_values[1] * MIN_ANGLE_PWM, cord_values[2] * MIN_ANGLE_PWM, cord_values[3] * MIN_ANGLE_PWM, cord_values[4] * MIN_ANGLE_PWM, cord_values[5] * MIN_ANGLE_PWM);
+  delay(SERVO_DELAY);
+  writeToServo(cord_values[0] * MAX_ANGLE_PWM, cord_values[1] * MAX_ANGLE_PWM, cord_values[2] * MAX_ANGLE_PWM, cord_values[3] * MAX_ANGLE_PWM, cord_values[4] * MAX_ANGLE_PWM, cord_values[5] * MAX_ANGLE_PWM);
+
 }
 
 void stopAll() {

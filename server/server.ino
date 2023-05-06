@@ -2,8 +2,8 @@
 #include <ESP8266WebServer.h>
 #include <AccelStepper.h>
 #include <Wire.h>
+#include <SoftwareSerial.h>
 
-#include "stepper_librairy.h"
 #include "servo_library.h"
 
 // Webserver config
@@ -66,7 +66,7 @@ void debug_stepper(int id_stepper, int steps) {
 }
 
 void activate_servo(int id_servo) {
-  // Todo @P-H: send to Adafruit
+  playSingleCord(id_servo);
 }
 
 void handleConnect() {
