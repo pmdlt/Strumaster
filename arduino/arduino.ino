@@ -66,8 +66,8 @@ uint8_t listenToESP(){
         tokenIndexes[0] = index + 1;
         nbData += 1;
       }
+      index +=1;
     }
-
     if (nbData == 2) {
       // case where we have to move the stepper 
       doSteps(&steppers[splittedData[0]], splittedData[1]); 

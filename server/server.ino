@@ -1,9 +1,10 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include <Servo.h>
-#include <AccelStepper.h>
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
+#include <SoftwareSerial.h>
+
 
 // called this way, it uses the default address 0x40
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
@@ -59,6 +60,9 @@ void setup() {
   server.onNotFound(handleNotSupported);
 
   server.begin();
+
+
+  Arduino.println("");
 }
 void loop() {
   server.handleClient();
