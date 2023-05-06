@@ -32,7 +32,7 @@ void updateSteppers(StepperDriver steppers[]);
 /**
   Set the position goal of a stepper, i.e the number of steps required to reach the goal from 0
 */
-void setGoal(StepperDriver* stepper, uint goal);
+void setGoal(StepperDriver* stepper, int goal);
 
 /**
   Make the stepper do a given number of steps (can be negative)
