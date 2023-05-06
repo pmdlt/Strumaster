@@ -1,13 +1,10 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
-#include <Servo.h>
+#include <AccelStepper.h>
 #include <Wire.h>
-#include <Adafruit_PWMServoDriver.h>
-#include <SoftwareSerial.h>
 
-
-// called this way, it uses the default address 0x40
-Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
+#include "stepper_librairy.h"
+#include "servo_library.h"
 
 // Webserver config
 const char* ssid = "StrumMaster";
@@ -23,23 +20,11 @@ bool connected = 0;
 bool is_playing_note = 0;
 uint8_t nbFrets = 10; // number of frets handled by strings
 
-// Servos pin attribution
-uint8_t servo1_pin = D4;
-
-// Servos init
-Servo servo1;
-Servo servo[7] = {
-  Servo(), servo1
-};
-
 void setup() {
   Serial.begin(9600);
-  // Adafruit PCA9685 initialisation
-  pwm.begin();
-  pwm.setPWMFreq(1600);  // Maximum PWM frequency
 
-  // Servos pin attachment
-  servo[1].attach(servo1_pin);
+  // Servos init
+  setupServos(10, 11, 12, 13, 14, 15);
 
   // WiFi initialisation
   WiFi.softAP(ssid, password);
@@ -130,7 +115,22 @@ void handleDebugStepper() {
 }
 
 void handleDebugServo() {
-  int id = server.arg("id").toInt();
+  //int id = server.arg("id").toInt();
+  //int value = server.arg("value").toInt();
 
-  activate_servo(id);
+  playCords(1, 1, 1, 1, 1, 1);
+  delay(1000);
+
+  playCords(1, 0, 0, 0, 0, 0);
+  delay(1000);
+
+  playCords(1, 1, 1, 0, 0, 0);
+  delay(1000);
+
+  playCords(1, 0, 0, 1, 1, 1);
+  delay(1000);
+
+  playCords(1, 0, 1, 1, 0, 1);
+
+  server.send(200, "text/plain", "Executed on adafruit");
 }
