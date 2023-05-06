@@ -22,13 +22,13 @@ void updateSteppers(StepperDriver steppers[]){
   for (uint8_t i = 0; i < NUM_STEPPERS; ++i){
     StepperDriver* stepper = &steppers[i];
     
-    uint diff = stepper->goal - stepper->position;
-    if (!diff) continue;
+    int diff = stepper->goal - stepper->position;
+    if (diff == 0) continue;
 
     // Do the step in the right direction
-    if (!((diff > 0) ^ stepper->reversedDir)) digitalWrite(stepper->dir, HIGH); else digitalWrite(stepper->dir, LOW); 
+    if (!((diff > 0) == stepper->reversedDir)) digitalWrite(stepper->dir, HIGH); else digitalWrite(stepper->dir, LOW); 
     digitalWrite(stepper->step, HIGH);
-    delayMicroseconds(STEP_MICRODELAY);
+    delayMicroseconds(stepDelay);
     digitalWrite(stepper->step, LOW);
     stepper->position += diff > 0 ? 1 : -1;
   }
@@ -39,7 +39,7 @@ StepperDriver StepperDriverConstructor(uint8_t stepPin, uint8_t dirPin, uint8_t 
   return stepper;
 }
 
-void setGoal(StepperDriver* stepper, uint goal){
+void setGoal(StepperDriver* stepper, int goal){
   stepper->goal = goal;
 }
 

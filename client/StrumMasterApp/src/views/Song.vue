@@ -5,7 +5,7 @@
                 <v-row>
                     <v-col cols="12" sm="3">
                         <v-sheet rounded="lg">
-                            <the-menu-bar/>
+                            <the-menu-bar />
                         </v-sheet>
                     </v-col>
 
@@ -17,8 +17,9 @@
                                     <v-file-input v-model="file" label="MIDI File" variant="solo"></v-file-input>
 
                                     <p class="text-center">Parameters</p>
-                                    
-                                    <v-slider v-model="channel" :min="0" :max="16" :step="1" thumb-label label="MIDI Channel"></v-slider>
+
+                                    <v-slider v-model="channel" :min="0" :max="16" :step="1" thumb-label
+                                        label="MIDI Channel"></v-slider>
 
                                     <v-slider v-model="speed" :min="0" :max="100" thumb-label label="Speed"></v-slider>
 
@@ -34,12 +35,13 @@
 </template>
 
 <script>
+import { Midi } from 'tone';
 import TheMenuBar from '../components/Menu.vue'
 
 export default {
     components: {
-    TheMenuBar,
-  },
+        TheMenuBar,
+    },
     data: () => ({
         links: [
             "Dashboard",
@@ -52,25 +54,36 @@ export default {
         file: null,
     }),
     methods: {
-        sendAndPlay() {
-            const params = new URLSearchParams({
-                channel: this.channel,
-                speed: this.speed,
-                file: this.file,
-            });
-            const url = `http://192.168.1.1/play_midi?${params.toString()}`;
-            fetch(url, { method: "GET" })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error("Network response was not ok");
-                    }
-                    // handle successful response
-                })
-                .catch(error => {
-                    console.error("There was a problem with the network request:", error);
-                    // handle error
+        async sendAndPlay() {
+            const reader = new FileReader();
+            reader.readAsArrayBuffer(this.file);
+            reader.onload = async () => {
+                const buffer = reader.result;
+                const midi = await Midi.fromArrayBuffer(buffer);
+                const notes = midi.toNotes();
+                const params = new URLSearchParams({
+                    channel: this.channel,
+                    speed: this.speed,
+                    notes: JSON.stringify(notes),
                 });
-        }
-    }
-}
+                console.log(params.toString());
+                const url = `http://192.168.1.1/play_midi?${params.toString()}`;
+                fetch(url, { method: "GET" })
+                    .then((response) => {
+                        if (!response.ok) {
+                            throw new Error("Network response was not ok");
+                        }
+                        // handle successful response
+                    })
+                    .catch((error) => {
+                        console.error(
+                            "There was a problem with the network request:",
+                            error
+                        );
+                        // handle error
+                    });
+            };
+        },
+    },
+};
 </script>

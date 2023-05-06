@@ -28,3 +28,10 @@ export default {
   }
 }
 </script>
+
+<style>
+a.router-link-exact-active {
+  color: inherit;
+  text-decoration: none;
+}
+</style>
