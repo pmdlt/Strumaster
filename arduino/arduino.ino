@@ -1,6 +1,7 @@
 #define uint unsigned int
 
 #include "stepper_librairy.h"
+#include <string.h>
 #include <SoftwareSerial.h>
 
 
@@ -36,7 +37,7 @@ void setup() {
 
 void loop() {
   // we get a note
-  uint8_t tmp = listenToESP(currNote);
+  uint8_t tmp = listenToESP();
   if (tmp != -1) {
     currNote = tmp;
     Note translation = translater[currNote];
@@ -53,21 +54,32 @@ void loop() {
 */
 uint8_t listenToESP(){
   if (ESP.available()) { // Check if there's data available from the ESP8266
-    String data = ESP.readStringUntil('\n');
-    List<String> splittedData = split(data, ',');
-    if (splittedData.size() == 2) {
+    String rawData = ESP.readStringUntil('\n');
+    int splittedData[3] = {0, 0, 0};
+    size_t nbData = 0;
+    uint index = 0;
+    uint8_t tokenIndexes[2] = {0, 0};
+    while(index < rawData.length()) {
+      if (rawData.charAt(index) == ','){
+        tokenIndexes[1] = index;
+        splittedData[nbData] = rawData.substring(tokenIndexes[0], tokenIndexes[1]).toInt();
+        tokenIndexes[0] = index + 1;
+        nbData += 1;
+      }
+    }
+
+    if (nbData == 2) {
       // case where we have to move the stepper 
-      doSteps(steppers[splittedData[0].toInt()], splittedData[1].toInt()); 
+      doSteps(&steppers[splittedData[0]], splittedData[1]); 
       return -1; 
-    }else if (splittedData.size() == 1) {
+    } else if (nbData == 1) {
       // case where we have to change the current note
-      uint8_t note = splittedData[0].toInt();
+      uint8_t note = splittedData[0];
       
       if (note>=0 && note<60) return note; // return the note
 
       Serial.println("Invalid note received from ESP");
-    }else
-    {
+    } else {
       Serial.println("Invalid data received from ESP");
     }  
   }
