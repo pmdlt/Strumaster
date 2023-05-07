@@ -1,7 +1,7 @@
 <template>
   <v-app-bar class="px-3" color="white" flat density="compact">
     <v-spacer></v-spacer>
-    <v-tabs centered color="grey-darken-2">
+    <v-tabs centered color="grey-darken-2" exact-active-class="">
       <router-link to="/">
         <v-tab>Dashboard</v-tab>
       </router-link>
@@ -28,10 +28,3 @@ export default {
   }
 }
 </script>
-
-<style>
-a.router-link-exact-active {
-  color: inherit;
-  text-decoration: none;
-}
-</style>
