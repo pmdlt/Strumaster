@@ -33,7 +33,11 @@ void setup() {
 
   // Commands handle
   server.on("/connect", handleConnect);
-  server.on("/play_note", handlePlayNote); // arg: id
+
+  server.on("/play_note", HTTP_GET, []() { // arg: id
+    handlePlayNote();
+  });
+  
   server.on("/stop", handleStop);
 
   server.on("/debug_stepper", HTTP_GET, []() { // arg: function, id, value

@@ -30,7 +30,12 @@
 </template>
 
 <script>
+import TheMenuBar from '../components/Menu.vue'
+
 export default {
+  components: {
+    TheMenuBar,
+  },
   data: () => ({
     note: null,
     snackbarText: null,
@@ -40,7 +45,7 @@ export default {
   methods: {
     async playNote() {
       try {
-        const response = await fetch(`http://192.168.1.1/play_note?note=${this.note}`);
+        const response = await fetch(`http://192.168.1.1/play_note?id=${this.note}`);
         if (response.ok) {
           this.snackbarText = 'Note played successfully';
           this.snackbarColor = 'success';
