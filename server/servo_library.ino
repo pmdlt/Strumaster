@@ -8,6 +8,7 @@ uint pin3_servo;
 uint pin4_servo;
 uint pin5_servo;
 uint pin6_servo;
+uint servo_array[6] = {MIN_ANGLE_PWM, MIN_ANGLE_PWM, MIN_ANGLE_PWM, MIN_ANGLE_PWM, MIN_ANGLE_PWM, MIN_ANGLE_PWM};
 
 void setupServos(uint pin1, uint pin2, uint pin3, uint pin4, uint pin5, uint pin6) {
     // Adafruit PCA9685 initialisation
@@ -21,7 +22,7 @@ void setupServos(uint pin1, uint pin2, uint pin3, uint pin4, uint pin5, uint pin
     pin5_servo = pin5;
     pin6_servo = pin6;
 
-    setAllToMiddle();
+    writeToAllServos(MIN_ANGLE_PWM);
 }
 
 void playCords(int cord1, int cord2, int cord3, int cord4, int cord5, int cord6) {
@@ -34,10 +35,7 @@ void playSingleCord(int cord) {
   int cord_values[6] = {0, 0, 0, 0, 0, 0};
   cord_values[cord] = 1;
 
-  writeToServo(cord_values[0] * MIN_ANGLE_PWM, cord_values[1] * MIN_ANGLE_PWM, cord_values[2] * MIN_ANGLE_PWM, cord_values[3] * MIN_ANGLE_PWM, cord_values[4] * MIN_ANGLE_PWM, cord_values[5] * MIN_ANGLE_PWM);
-  delay(SERVO_DELAY);
-  writeToServo(cord_values[0] * MAX_ANGLE_PWM, cord_values[1] * MAX_ANGLE_PWM, cord_values[2] * MAX_ANGLE_PWM, cord_values[3] * MAX_ANGLE_PWM, cord_values[4] * MAX_ANGLE_PWM, cord_values[5] * MAX_ANGLE_PWM);
-
+  playCords(cord_values[0], cord_values[1], cord_values[2], cord_values[3], cord_values[4], cord_values[5]);
 }
 
 void stopAll() {

@@ -119,22 +119,9 @@ void handleDebugStepper() {
 }
 
 void handleDebugServo() {
-  //int id = server.arg("id").toInt();
-  //int value = server.arg("value").toInt();
+  int id = server.arg("id").toInt();
 
-  playCords(1, 1, 1, 1, 1, 1);
-  delay(1000);
-
-  playCords(1, 0, 0, 0, 0, 0);
-  delay(1000);
-
-  playCords(1, 1, 1, 0, 0, 0);
-  delay(1000);
-
-  playCords(1, 0, 0, 1, 1, 1);
-  delay(1000);
-
-  playCords(1, 0, 1, 1, 0, 1);
+  playSingleCord(id);
 
   server.send(200, "text/plain", "Executed on adafruit");
 }
