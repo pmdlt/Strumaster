@@ -18,7 +18,7 @@
 
                   <v-text-field v-model="note" label="Note" variant="outlined"></v-text-field>
 
-                  <v-btn @click="playNote" block class="mt-2">Debug Stepper</v-btn><br><br>
+                  <v-btn @click="playNote" block class="mt-2">Play note</v-btn><br><br>
                 </v-form>
               </v-container>
             </v-sheet>
