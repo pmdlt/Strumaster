@@ -1,5 +1,7 @@
 
 
+
+
 class Note {
     constructor(name, time_start, time_end) {
         this.name = name;
@@ -9,6 +11,8 @@ class Note {
 
 }
     
+
+let TIME_TO_MOVE_ONE_FRET = 0.1; // seconds
 
 let guitar = [
     ["E","F","F#","G","G#","A","A#","B","C","C#"],//,"D","D#"],
@@ -61,14 +65,16 @@ function chooseCord(notes) {
     for (let i = 0; i < notes.length; i++) {
         a = canPlay(notes[i], used_until, position);
         if (a.length > 0) {
-            result.push([a[0][0]*10 + a[0][1], notes[i].time_start]);
-            //console.log(notes[i].time_start, notes[i].name,"corde" ,a[0][0],"pos:", a[0][1],"was at",position[a[0][0]],used_until);         
+            result.push([a[0][0]*10 + a[0][1], notes[i].time_start, notes[i].time_end]);
             position[a[0][0]] = a[0][1];
-            //console.log(position,a[0][0],notes[i].time_start,notes[i].time_end);
+            // console.log(position,a[0][0],notes[i].time_start,notes[i].time_end);
+            // console.log(used_until.map(x => x>notes[i].time_start));
             used_until[a[0][0]] = notes[i].time_end;
         }
         else {
             console.log("ERROR: can't play note " + notes[i].name + " at time " + notes[i].time_start);
+            // console.log(position);
+            // console.log(used_until.map(x => x>notes[i].time_start));
         }
     }
     return result
@@ -78,11 +84,15 @@ function chooseCord(notes) {
 function canPlay(note, used_until,position) {
     temp= []
     for (let i = 0; i < 6; i++) {
+        // check if the cord is free
         if (note.time_start >= used_until[i]) {
+            // check if the note is in the cord
             if (guitar[i].includes(note.name)) {
                 let move = guitar[i].indexOf(note.name) - position[i];
-                temp.push([i, guitar[i].indexOf(note.name), move]);
-            
+                // check if the move is possible
+                if (used_until[i]+move*TIME_TO_MOVE_ONE_FRET <= note.time_start) {
+                  temp.push([i, guitar[i].indexOf(note.name), move]);
+                }
             }
         }
     }
