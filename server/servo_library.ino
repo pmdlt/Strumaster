@@ -25,10 +25,22 @@ void setupServos(uint pin1, uint pin2, uint pin3, uint pin4, uint pin5, uint pin
     writeToAllServos(MIN_ANGLE_PWM);
 }
 
-void playCords(int cord1, int cord2, int cord3, int cord4, int cord5, int cord6) {
-  writeToServo(cord1 * MIN_ANGLE_PWM, cord2 * MIN_ANGLE_PWM, cord3 * MIN_ANGLE_PWM, cord4* MIN_ANGLE_PWM,cord5 * MIN_ANGLE_PWM, cord6 * MIN_ANGLE_PWM);
-  delay(SERVO_DELAY);
-  writeToServo(cord1 * MAX_ANGLE_PWM, cord2 * MAX_ANGLE_PWM, cord3 * MAX_ANGLE_PWM, cord4 * MAX_ANGLE_PWM,cord5 * MAX_ANGLE_PWM, cord6 * MAX_ANGLE_PWM);
+void playCords(int cord0, int cord1, int cord2, int cord3, int cord4, int cord5) {
+  writeToServo(getPlayValue(0, cord0), getPlayValue(1, cord1), getPlayValue(2, cord2), getPlayValue(3, cord3), getPlayValue(4, cord4), getPlayValue(5, cord5));
+}
+
+int getPlayValue(int cord, int played) {
+  if (played == 0) {
+    return 0;
+  }
+
+  if (servo_array[cord] == MIN_ANGLE_PWM) {
+    servo_array[cord] = MAX_ANGLE_PWM;
+    return MAX_ANGLE_PWM;
+  } else {
+    servo_array[cord] = MIN_ANGLE_PWM;
+    return MIN_ANGLE_PWM;
+  }
 }
 
 void playSingleCord(int cord) {
