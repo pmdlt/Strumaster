@@ -67,7 +67,7 @@ export default {
                     notes: JSON.stringify(notes),
                 });
                 console.log(params.toString());
-                const url = `http://192.168.1.1/play_midi?${params.toString()}`;
+                const url = `http://192.168.174.140/play_midi?${params.toString()}`;
                 fetch(url, { method: "GET" })
                     .then((response) => {
                         if (!response.ok) {

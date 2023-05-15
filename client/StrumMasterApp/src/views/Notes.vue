@@ -45,7 +45,7 @@ export default {
   methods: {
     async playNote() {
       try {
-        const response = await fetch(`http://192.168.1.1/play_note?id=${this.note}`);
+        const response = await fetch(`http://192.168.174.140/play_note?id=${this.note}`);
         if (response.ok) {
           this.snackbarText = 'Note played successfully';
           this.snackbarColor = 'success';
