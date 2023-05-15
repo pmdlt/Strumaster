@@ -7,21 +7,6 @@
             <v-sheet rounded="lg">
               <v-container>
 
-                <v-btn block prepend-icon="mdi-stop-circle-outline" stacked variant="outlined" color="red">
-                  Emergency Stop
-                </v-btn>
-                <br>
-                <v-btn block prepend-icon="mdi-pause" variant="outlined" color="black">
-                  Pause
-                </v-btn>
-                <br>
-                <v-btn block prepend-icon="mdi-play" variant="outlined" color="green">
-                  continue
-                </v-btn>
-                <br>
-                <v-btn block prepend-icon="mdi-update" stacked variant="outlined" color="orange">
-                  Reset all motors
-                </v-btn>
 
               </v-container>
             </v-sheet>
@@ -30,21 +15,7 @@
           <v-col cols="12" sm="9">
             <v-sheet min-height="70vh" rounded="lg">
               <v-container>
-                <v-form ref="form">
-                  <p class="text-center">Insert a midi file to be played by the guitar<br><br></p>
-                  <v-file-input v-model="file" label="MIDI File" variant="solo"></v-file-input>
 
-                  <p class="text-center">Parameters</p>
-
-                  <p class="text-left">MIDI Channel<br></p>
-                  <v-slider v-model="channel" :min="0" :max="16" :step="1" thumb-label></v-slider>
-
-                  <div :class="text - h6">Speed<br></div>
-
-                  <v-slider v-model="speed" :min="0" :max="100" thumb-label></v-slider>
-
-                  <v-btn type="submit" block class="mt-2">Send and play</v-btn>
-                </v-form>
               </v-container>
             </v-sheet>
           </v-col>
@@ -56,37 +27,13 @@
 
 <script>
 export default {
-    data: () => ({
-        links: [
-            "Dashboard",
-            "Play song (via Midi)",
-            "Play notes",
-            "Debug and calibrate motors",
-        ],
-        speed: 0,
-        channel: 0,
-        file: null,
-    }),
-    methods: {
-        sendAndPlay() {
-            const params = new URLSearchParams({
-                channel: this.channel,
-                speed: this.speed,
-                file: this.file,
-            });
-            const url = `http://192.168.1.1/play_midi?${params.toString()}`;
-            fetch(url, { method: "GET" })
-                .then(response => {
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                // handle successful response
-            })
-                .catch(error => {
-                console.error("There was a problem with the network request:", error);
-                // handle error
-            });
-        }
-    }
+  data: () => ({
+
+
+  }),
+  methods: {
+
+
+  }
 }
 </script>
