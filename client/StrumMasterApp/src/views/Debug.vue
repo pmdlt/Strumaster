@@ -78,7 +78,7 @@ export default {
         })
     },
     debugServo() {
-      const url = `http://192.168.174.140/debug_stepper?function=${this.stepperId}`
+      const url = `http://192.168.174.140/debug_servo?iod=${this.servoId}`
       fetch(url)
         .then(response => {
           if (response.ok) {
