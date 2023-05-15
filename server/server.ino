@@ -7,9 +7,9 @@
 #include "servo_library.h"
 
 // Webserver config
-const char* ssid = "StrumMaster";
-const char* password = "12345678";
-IPAddress local_ip(192, 168, 1, 1);
+const char* ssid = "touche_pas_a_mon_wifi";
+const char* password = "pastouche";
+IPAddress local_ip(192, 168, 174, 140);
 IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 255, 0);
 ESP8266WebServer server(80);
@@ -18,7 +18,7 @@ SoftwareSerial Arduino(2, 3);
 // Program variables
 bool connected = 0;
 bool is_playing_note = 0;
-uint8_t nbFrets = 10; // number of frets handled by strings
+uint8_t nbFrets = 10;  // number of frets handled by strings
 
 void setup() {
   Serial.begin(9600);
@@ -27,23 +27,32 @@ void setup() {
   setupServos(10, 11, 12, 13, 14, 15);
 
   // WiFi initialisation
-  WiFi.softAP(ssid, password);
-  WiFi.softAPConfig(local_ip, gateway, subnet);
+  WiFi.begin(ssid, password);
+  int i = 0;
+  while (WiFi.status() != WL_CONNECTED) {  // Wait for the Wi-Fi to connect
+    delay(1000);
+    Serial.print(++i);
+    Serial.print(' ');
+  }
+  Serial.println('\n');
+  Serial.println("Connection established!");  
+  Serial.print("IP address:\t");
+  Serial.println(WiFi.localIP());         // Send the IP address of the ESP8266 to the computer
   delay(100);
 
   // Commands handle
   server.on("/connect", handleConnect);
 
-  server.on("/play_note", HTTP_GET, []() { // arg: id
+  server.on("/play_note", HTTP_GET, []() {  // arg: id
     handlePlayNote();
   });
-  
+
   server.on("/stop", handleStop);
 
-  server.on("/debug_stepper", HTTP_GET, []() { // arg: function, id, value
+  server.on("/debug_stepper", HTTP_GET, []() {  // arg: function, id, value
     handleDebugStepper();
   });
-  server.on("/debug_servo", HTTP_GET, []() { // arg: id
+  server.on("/debug_servo", HTTP_GET, []() {  // arg: id
     handleDebugServo();
   });
   server.onNotFound(handleNotSupported);
@@ -80,8 +89,8 @@ void handleConnect() {
 void handlePlayNote() {
   int id = server.arg("id").toInt();
   activate_stepper(id);
-  delay(1000); // FIXME bloquing, Ok for debug and if we only want to play 1 note, Must be changed for final
-  activate_servo(id/nbFrets);
+  delay(1000);  // FIXME bloquing, Ok for debug and if we only want to play 1 note, Must be changed for final
+  activate_servo(id / nbFrets);
 
   server.send(200, "text/plain", "");
 }
@@ -106,7 +115,7 @@ void handleDebugStepper() {
       activate_stepper(value);
       break;
 
-    // Move the stepper <value> steps 
+    // Move the stepper <value> steps
     case 2:
       debug_stepper(id, value);
       break;
