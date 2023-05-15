@@ -63,7 +63,7 @@ export default {
   }),
   methods: {
     debugStepper() {
-      const url = `https://app.strumaster.pmd.lt/server/debug_stepper?function=${this.stepperFunctionToUse}&id=${this.stepperId}&value=${this.stepperValue}`
+      const url = `https://192.168.1.1/debug_stepper?function=${this.stepperFunctionToUse}&id=${this.stepperId}&value=${this.stepperValue}`
       fetch(url)
         .then(response => {
           if (response.ok) {
@@ -78,7 +78,7 @@ export default {
         })
     },
     debugServo() {
-      const url = `https://app.strumaster.pmd.lt/server/debug_stepper?function=${this.stepperId}`
+      const url = `https://192.168.1.1/debug_stepper?function=${this.stepperId}`
       fetch(url)
         .then(response => {
           if (response.ok) {
