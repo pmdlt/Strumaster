@@ -21,11 +21,6 @@ export default defineConfig({
     }),
   ],
   define: { 'process.env': {} },
-  build: {
-    rollupOptions: {
-      external: ['three']
-    }
-  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
