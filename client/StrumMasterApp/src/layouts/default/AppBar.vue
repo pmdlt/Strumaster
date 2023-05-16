@@ -28,3 +28,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.router-link-exact-active .v-tab {
+  color: inherit !important;
+}
+</style>

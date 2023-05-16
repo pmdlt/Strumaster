@@ -3,48 +3,29 @@
     <v-main class="bg-grey-lighten-3">
       <v-container>
         <v-row>
-          <v-col cols="12" sm="3">
-            <v-sheet rounded="lg">
-              <v-container>
-
-                <v-btn block prepend-icon="mdi-stop-circle-outline" stacked variant="outlined" color="red">
-                  Emergency Stop
-                </v-btn>
-                <br>
-                <v-btn block prepend-icon="mdi-pause" variant="outlined" color="black">
-                  Pause
-                </v-btn>
-                <br>
-                <v-btn block prepend-icon="mdi-play" variant="outlined" color="green">
-                  continue
-                </v-btn>
-                <br>
-                <v-btn block prepend-icon="mdi-update" stacked variant="outlined" color="orange">
-                  Reset all motors
-                </v-btn>
-
-              </v-container>
-            </v-sheet>
-          </v-col>
-
-          <v-col cols="12" sm="9">
+          <v-col cols="12" sm="12">
             <v-sheet min-height="70vh" rounded="lg">
               <v-container>
-                <v-form ref="form">
-                  <p class="text-center">Insert a midi file to be played by the guitar<br><br></p>
-                  <v-file-input v-model="file" label="MIDI File" variant="solo"></v-file-input>
+                <h1 class="title text-center">StrumMaster</h1>
+                <model-viewer src="guitar.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls
+                  poster="poster.webp" shadow-intensity="0.89" exposure="0.18" shadow-softness="1"
+                  camera-orbit="4.077deg 83.83deg 1707m" field-of-view="30deg">
+                  <div class="progress-bar hide" slot="progress-bar">
+                    <div class="update-bar"></div>
+                  </div>
+                  <button slot="ar-button" id="ar-button">
+                    View in your space
+                  </button>
+                  <div id="ar-prompt">
+                    <img src="https://modelviewer.dev/shared-assets/icons/hand.png">
+                  </div>
+                </model-viewer>
 
-                  <p class="text-center">Parameters</p>
+                <p class="text-center">Welcome to the control center app of the StrumMaster project.<br>
 
-                  <p class="text-left">MIDI Channel<br></p>
-                  <v-slider v-model="channel" :min="0" :max="16" :step="1" thumb-label></v-slider>
-
-                  <div :class="text - h6">Speed<br></div>
-
-                  <v-slider v-model="speed" :min="0" :max="100" thumb-label></v-slider>
-
-                  <v-btn type="submit" block class="mt-2">Send and play</v-btn>
-                </v-form>
+                  We control the guitar.<br><br></p>
+                <img src="1.png" alt="Image 1" class="image">
+                <img src="2.png" alt="Image 2" class="image">
               </v-container>
             </v-sheet>
           </v-col>
@@ -55,38 +36,11 @@
 </template>
 
 <script>
+import { ModelViewer } from 'vue-model-viewer';
+
 export default {
-    data: () => ({
-        links: [
-            "Dashboard",
-            "Play song (via Midi)",
-            "Play notes",
-            "Debug and calibrate motors",
-        ],
-        speed: 0,
-        channel: 0,
-        file: null,
-    }),
-    methods: {
-        sendAndPlay() {
-            const params = new URLSearchParams({
-                channel: this.channel,
-                speed: this.speed,
-                file: this.file,
-            });
-            const url = `http://192.168.1.1/play_midi?${params.toString()}`;
-            fetch(url, { method: "GET" })
-                .then(response => {
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                // handle successful response
-            })
-                .catch(error => {
-                console.error("There was a problem with the network request:", error);
-                // handle error
-            });
-        }
-    }
-}
+  components: {
+    ModelViewer
+  }
+};
 </script>
