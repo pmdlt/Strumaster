@@ -35,28 +35,32 @@ void setup() {
     Serial.print(' ');
   }
   Serial.println('\n');
-  Serial.println("Connection established!");  
+  Serial.println("Connection established!");
   Serial.print("IP address:\t");
-  Serial.println(WiFi.localIP());         // Send the IP address of the ESP8266 to the computer
+  Serial.println(WiFi.localIP());  // Send the IP address of the ESP8266 to the computer
+
   server.enableCORS(true);
   delay(100);
 
   // Commands handle
   server.on("/connect", handleConnect);
+  server.on("/stop", handleStop);
+  server.on("/pause", handlePause);
+  server.on("/resume", handleResume);
+  server.on("/reset", handleReset);
+  server.onNotFound(handleNotSupported);
 
   server.on("/play_note", HTTP_GET, []() {  // arg: id
     handlePlayNote();
   });
 
-  server.on("/stop", handleStop);
-
   server.on("/debug_stepper", HTTP_GET, []() {  // arg: function, id, value
     handleDebugStepper();
   });
+
   server.on("/debug_servo", HTTP_GET, []() {  // arg: id
     handleDebugServo();
   });
-  server.onNotFound(handleNotSupported);
 
   server.begin();
 
@@ -89,6 +93,31 @@ void handleConnect() {
   server.send(200, "text/plain", "Connexion successful. Try to play a note :) !");
 }
 
+void handlePause() {
+  // Todo
+  server.send(200, "text/plain", "Song paused");
+}
+
+void handleResume() {
+  // Todo
+  server.send(200, "text/plain", "Song resumed");
+}
+
+void handleStop() {
+  // Todo
+  server.send(200, "text/plain", "All motor off.");
+}
+
+void handleReset() {
+  // Todo
+  server.send(200, "text/plain", "Device reseted.");
+}
+
+
+void handleNotSupported() {
+  server.send(404, "text/plain", "Command not supported.");
+}
+
 void handlePlayNote() {
   int id = server.arg("id").toInt();
   activate_stepper(id);
@@ -96,14 +125,6 @@ void handlePlayNote() {
   activate_servo(id / nbFrets);
 
   server.send(200, "text/plain", "");
-}
-
-void handleStop() {
-  server.send(200, "text/plain", "All motor off.");
-}
-
-void handleNotSupported() {
-  server.send(404, "text/plain", "Command not supported.");
 }
 
 void handleDebugStepper() {
