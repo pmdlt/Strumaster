@@ -38,6 +38,7 @@ void setup() {
   Serial.println("Connection established!");  
   Serial.print("IP address:\t");
   Serial.println(WiFi.localIP());         // Send the IP address of the ESP8266 to the computer
+  server.enableCORS(true);
   delay(100);
 
   // Commands handle
@@ -70,12 +71,14 @@ void loop() {
 
 void activate_stepper(int id_note) {
   // Todo @Albert: send to Arduino
-  Arduino.printf("%d,\n", id_note);
+  Serial.printf("%d,\n", id_note);
+  //Arduino.printf("%d,\n", id_note);
 }
 
 void debug_stepper(int id_stepper, int steps) {
   // Todo @Albert: send to Arduino
-  Arduino.printf("%d,%d,\n", id_stepper, steps);
+  Serial.printf("%d,%d,\n", id_stepper, steps);
+  // Arduino.printf("%d,%d,\n", id_stepper, steps);
 }
 
 void activate_servo(int id_servo) {
