@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { ModelViewer } from '@google/model-viewer/dist/model-viewer.js';
+import { ModelViewer } from '@google/model-viewer';
 
 export default {
   components: {
