@@ -24,8 +24,6 @@
                 <p class="text-center">Welcome to the control center app of the StrumMaster project.<br>
 
                   We control the guitar.<br><br></p>
-                <img src="1.png" alt="Image 1" class="image">
-                <img src="2.png" alt="Image 2" class="image">
               </v-container>
             </v-sheet>
           </v-col>
