@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { ModelViewer } from 'vue-model-viewer';
+import { ModelViewer } from '@google/model-viewer';
 
 export default {
   components: {
