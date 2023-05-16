@@ -34,11 +34,8 @@
 </template>
 
 <script>
-import { ModelViewer } from '@google/model-viewer';
+import '@google/model-viewer';
 
 export default {
-  components: {
-    ModelViewer
-  }
 };
 </script>
