@@ -55,29 +55,33 @@ export default {
     }),
     methods: {
         sendAndPlay() {
-            const reader = new FileReader();
-            reader.readAsArrayBuffer(this.file);
-            reader.onload = async () => {
-                const buffer = reader.result;
-                const midi = await Midi.fromArrayBuffer(buffer);
-                const notes = midi.toNotes();
-                console.log(notes);
+            if (this.file) {
+                const reader = new FileReader();
+                reader.onload = async () => {
+                    const buffer = reader.result;
+                    const midi = await Midi.fromArrayBuffer(buffer);
+                    const notes = midi.toNotes();
+                    console.log(notes);
 
-                /* const url = `http://192.168.174.140/play_midi?${this.toSend}}`;
-                fetch(url, { method: "GET" })
-                    .then(response => {
-                        if (response.ok) {
-                            this.showSnackbar(response.text(), 'success')
-                        } else {
-                            console.error(response)
-                            this.showSnackbar('An error occurred', 'warning')
-                        }
-                    })
-                    .catch(error => {
-                        console.error(error)
-                        this.showSnackbar('We lost connection with the board', 'error')
-                    }) */
-            };
+                    /* const url = `http://192.168.174.140/play_midi?${this.toSend}}`;
+                    fetch(url, { method: "GET" })
+                        .then(response => {
+                            if (response.ok) {
+                                this.showSnackbar(response.text(), 'success')
+                            } else {
+                                console.error(response)
+                                this.showSnackbar('An error occurred', 'warning')
+                            }
+                        })
+                        .catch(error => {
+                            console.error(error)
+                            this.showSnackbar('We lost connection with the board', 'error')
+                        }) */
+                };
+                reader.readAsArrayBuffer(this.file);
+            } else {
+                this.showSnackbar('Please select a MIDI file', 'warning');
+            }
         },
         showSnackbar(text, color) {
             this.snackbarText = text
