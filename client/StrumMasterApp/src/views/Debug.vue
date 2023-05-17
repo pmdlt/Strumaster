@@ -69,11 +69,13 @@ export default {
       fetch(url)
         .then(response => {
           if (response.ok) {
-            this.showSnackbar(response.text(), 'success')
+            return response.text();
           } else {
-            console.error(response)
             this.showSnackbar('An error occurred', 'warning')
           }
+        })
+        .then(response => {
+          this.showSnackbar(response, 'success');
         })
         .catch(error => {
           console.error(error)
@@ -85,10 +87,13 @@ export default {
       fetch(url)
         .then(response => {
           if (response.ok) {
-            this.showSnackbar(response.text(), 'success')
+            return response.text();
           } else {
             this.showSnackbar('An error occurred', 'warning')
           }
+        })
+        .then(response => {
+          this.showSnackbar(response, 'success');
         })
         .catch(error => {
           console.error(error)
