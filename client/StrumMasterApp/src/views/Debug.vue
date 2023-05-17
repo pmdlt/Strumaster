@@ -69,14 +69,15 @@ export default {
       fetch(url)
         .then(response => {
           if (response.ok) {
-            this.showSnackbar('Success', 'green')
+            this.showSnackbar(response.text(), 'success')
           } else {
-            this.showSnackbar('Error', 'red')
+            console.error(response)
+            this.showSnackbar('An error occurred', 'warning')
           }
         })
         .catch(error => {
           console.error(error)
-          this.showSnackbar('Error', 'red')
+          this.showSnackbar('We lost connection with the board', 'error')
         })
     },
     debugServo() {
@@ -84,14 +85,14 @@ export default {
       fetch(url)
         .then(response => {
           if (response.ok) {
-            this.showSnackbar('Success', 'green')
+            this.showSnackbar(response.text(), 'success')
           } else {
-            this.showSnackbar('Error', 'red')
+            this.showSnackbar('An error occurred', 'warning')
           }
         })
         .catch(error => {
           console.error(error)
-          this.showSnackbar('Error', 'red')
+          this.showSnackbar('We lost connection with the board', 'error')
         })
     },
     showSnackbar(text, color) {

@@ -3,7 +3,7 @@
     <v-spacer></v-spacer>
     <v-tabs centered color="grey-darken-2" exact-active-class="">
       <router-link to="/">
-        <v-tab>Dashboard</v-tab>
+        <v-tab>Home</v-tab>
       </router-link>
       <router-link to="/play-song">
         <v-tab>Play song (via Midi)</v-tab>
@@ -32,5 +32,14 @@ export default {
 <style>
 .router-link-exact-active .v-tab {
   color: inherit !important;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 </style>

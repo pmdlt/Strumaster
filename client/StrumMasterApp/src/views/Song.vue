@@ -31,6 +31,8 @@
                 </v-row>
             </v-container>
         </v-main>
+        <v-snackbar v-model="snackbarVisible" :color="snackbarColor" :timeout="snackbarTimeout">{{ snackbarText
+        }}</v-snackbar>
     </v-app>
 </template>
 
@@ -43,15 +45,13 @@ export default {
         TheMenuBar,
     },
     data: () => ({
-        links: [
-            "Dashboard",
-            "Play song (via Midi)",
-            "Play notes",
-            "Debug and calibrate motors",
-        ],
         speed: 0,
         channel: 0,
         file: null,
+        snackbarVisible: false,
+        snackbarText: '',
+        snackbarColor: '',
+        snackbarTimeout: 2000,
     }),
     methods: {
         async sendAndPlay() {
@@ -61,28 +61,28 @@ export default {
                 const buffer = reader.result;
                 const midi = await Midi.fromArrayBuffer(buffer);
                 const notes = midi.toNotes();
-                const params = new URLSearchParams({
-                    channel: this.channel,
-                    speed: this.speed,
-                    notes: JSON.stringify(notes),
-                });
-                console.log(params.toString());
-                const url = `http://192.168.174.140/play_midi?${params.toString()}`;
+                console.log(notes);
+
+                const url = `http://192.168.174.140/play_midi?${this.toSend}}`;
                 fetch(url, { method: "GET" })
-                    .then((response) => {
-                        if (!response.ok) {
-                            throw new Error("Network response was not ok");
+                    .then(response => {
+                        if (response.ok) {
+                            this.showSnackbar(response.text(), 'success')
+                        } else {
+                            console.error(response)
+                            this.showSnackbar('An error occurred', 'warning')
                         }
-                        // handle successful response
                     })
-                    .catch((error) => {
-                        console.error(
-                            "There was a problem with the network request:",
-                            error
-                        );
-                        // handle error
-                    });
+                    .catch(error => {
+                        console.error(error)
+                        this.showSnackbar('We lost connection with the board', 'error')
+                    })
             };
+        },
+        showSnackbar(text, color) {
+            this.snackbarText = text
+            this.snackbarColor = color
+            this.snackbarVisible = true
         },
     },
 };

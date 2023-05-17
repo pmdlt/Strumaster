@@ -26,6 +26,8 @@
         </v-row>
       </v-container>
     </v-main>
+    <v-snackbar v-model="snackbarVisible" :color="snackbarColor" :timeout="snackbarTimeout">{{ snackbarText
+    }}</v-snackbar>
   </v-app>
 </template>
 
@@ -38,30 +40,30 @@ export default {
   },
   data: () => ({
     note: null,
-    snackbarText: null,
-    snackbarColor: null,
     snackbarVisible: false,
+    snackbarText: '',
+    snackbarColor: '',
+    snackbarTimeout: 2000,
   }),
   methods: {
     async playNote() {
       try {
         const response = await fetch(`http://192.168.174.140/play_note?id=${this.note}`);
         if (response.ok) {
-          this.snackbarText = 'Note played successfully';
-          this.snackbarColor = 'success';
+          this.showSnackbar(response.text(), 'success')
         } else {
-          this.snackbarText = 'An error occurred while playing the note';
-          this.snackbarColor = 'error';
+          console.error(response)
+          this.showSnackbar('An error occurred', 'warning')
         }
       } catch (error) {
-        this.snackbarText = 'An error occurred while playing the note';
-        this.snackbarColor = 'error';
-      } finally {
-        this.snackbarVisible = true;
+        console.error(error)
+        this.showSnackbar('We lost connection with the board', 'error')
       }
     },
-    hideSnackbar() {
-      this.snackbarVisible = false;
+    showSnackbar(text, color) {
+      this.snackbarText = text
+      this.snackbarColor = color
+      this.snackbarVisible = true
     },
   },
 }
