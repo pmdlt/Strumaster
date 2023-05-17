@@ -54,7 +54,7 @@ export default {
         snackbarTimeout: 2000,
     }),
     methods: {
-        async sendAndPlay() {
+        sendAndPlay() {
             const reader = new FileReader();
             reader.readAsArrayBuffer(this.file);
             reader.onload = async () => {
