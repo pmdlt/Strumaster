@@ -7,8 +7,8 @@
 #include "servo_library.h"
 
 // Webserver config
-const char* ssid = "touche_pas_a_mon_wifi";
-const char* password = "pastouche";
+const char* ssid = "strumaster_control";
+const char* password = "12345678";
 IPAddress local_ip(192, 168, 174, 140);
 IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 255, 0);
@@ -27,17 +27,8 @@ void setup() {
   setupServos(10, 11, 12, 13, 14, 15);
 
   // WiFi initialisation
-  WiFi.begin(ssid, password);
-  int i = 0;
-  while (WiFi.status() != WL_CONNECTED) {  // Wait for the Wi-Fi to connect
-    delay(1000);
-    Serial.print(++i);
-    Serial.print(' ');
-  }
-  Serial.println('\n');
-  Serial.println("Connection established!");
-  Serial.print("IP address:\t");
-  Serial.println(WiFi.localIP());  // Send the IP address of the ESP8266 to the computer
+  WiFi.softAP(ssid, password);
+  WiFi.softAPConfig(local_ip, gateway, subnet);
 
   server.enableCORS(true);
   delay(100);
@@ -148,7 +139,7 @@ void handleDebugStepper() {
       return;
   }
 
-  server.send(200, "text/plain", "Executed. Return value : " + rtnv);
+  server.send(200, "text/plain", "Stepper moved.");
 }
 
 void handleDebugServo() {
@@ -156,5 +147,5 @@ void handleDebugServo() {
 
   playSingleCord(id);
 
-  server.send(200, "text/plain", "Executed on adafruit");
+  server.send(200, "text/plain", "Servo moved.");
 }
