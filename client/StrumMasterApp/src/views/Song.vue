@@ -23,7 +23,7 @@
 
                                     <v-slider v-model="speed" :min="0" :max="100" thumb-label label="Speed"></v-slider>
 
-                                    <v-btn type="submit" block class="mt-2">Send and play</v-btn>
+                                    <v-btn @click="sendAndPlay" block class="mt-2">Send and Play</v-btn>
                                 </v-form>
                             </v-container>
                         </v-sheet>
