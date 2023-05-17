@@ -60,7 +60,7 @@ export default {
                 const reader = new FileReader();
                 reader.onload = async () => {
                     const buffer = reader.result;
-                    const midi = await Midi.fromArrayBuffer(buffer);
+                    const midi = await Midi.fromArrayBuffer(new Uint8Array(buffer));
                     const notes = midi.toNotes();
                     console.log(notes);
 
@@ -79,8 +79,7 @@ export default {
                             this.showSnackbar('We lost connection with the board', 'error')
                         }) */
                 };
-                const blob = new Blob([this.file]);
-                reader.readAsArrayBuffer(blob);
+                reader.readAsArrayBuffer(this.file);
             } else {
                 this.showSnackbar('Please select a MIDI file', 'warning');
             }
