@@ -17,7 +17,7 @@
                     View in your space
                   </button>
                   <div id="ar-prompt">
-                    <img src="ar_hand_prompt.png">
+                    <img src="/public/ar_hand_prompt.png">
                   </div>
                 </model-viewer>
 
