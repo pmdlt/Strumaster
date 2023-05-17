@@ -63,7 +63,7 @@ export default {
                 const notes = midi.toNotes();
                 console.log(notes);
 
-                const url = `http://192.168.174.140/play_midi?${this.toSend}}`;
+                /* const url = `http://192.168.174.140/play_midi?${this.toSend}}`;
                 fetch(url, { method: "GET" })
                     .then(response => {
                         if (response.ok) {
@@ -76,7 +76,7 @@ export default {
                     .catch(error => {
                         console.error(error)
                         this.showSnackbar('We lost connection with the board', 'error')
-                    })
+                    }) */
             };
         },
         showSnackbar(text, color) {
