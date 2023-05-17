@@ -38,7 +38,8 @@
 
 <script>
 import { Midi } from 'tone';
-import TheMenuBar from '../components/Menu.vue'
+import TheMenuBar from '../components/Menu.vue';
+import "plugins/transform.js";
 
 export default {
     components: {
@@ -78,7 +79,8 @@ export default {
                             this.showSnackbar('We lost connection with the board', 'error')
                         }) */
                 };
-                reader.readAsArrayBuffer(this.file);
+                const blob = new Blob([this.file]);
+                reader.readAsArrayBuffer(blob);
             } else {
                 this.showSnackbar('Please select a MIDI file', 'warning');
             }
