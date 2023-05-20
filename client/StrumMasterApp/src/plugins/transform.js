@@ -50,10 +50,6 @@ function transform(json, track_number) {
 
 }
 
-// the choose cord function should take a list of note(name, time_start, time_end) and using the list guitar, 
-//return for each note the indexes i in the list guitar and the position j in the list guitar[i] of the note 
-// so that guitar[i][j] == note.name and 
-
 function chooseCord(notes) {
   let position = [0, 0, 0, 0, 0, 0]
   let used_until = [0, 0, 0, 0, 0, 0]
