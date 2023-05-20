@@ -39,7 +39,6 @@
 <script>
 import { Midi } from 'tone';
 import TheMenuBar from '../components/Menu.vue';
-import "plugins/transform.js";
 
 export default {
     components: {
@@ -55,40 +54,139 @@ export default {
         snackbarTimeout: 2000,
     }),
     methods: {
-        sendAndPlay() {
-            if (this.file) {
-                const reader = new FileReader();
-                reader.onload = async () => {
-                    const buffer = reader.result;
-                    const midi = await Midi.fromArrayBuffer(new Uint8Array(buffer));
-                    const notes = midi.toNotes();
-                    console.log(notes);
 
-                    /* const url = `http://192.168.174.140/play_midi?${this.toSend}}`;
-                    fetch(url, { method: "GET" })
-                        .then(response => {
-                            if (response.ok) {
-                                this.showSnackbar(response.text(), 'success')
-                            } else {
-                                console.error(response)
-                                this.showSnackbar('An error occurred', 'warning')
-                            }
-                        })
-                        .catch(error => {
-                            console.error(error)
-                            this.showSnackbar('We lost connection with the board', 'error')
-                        }) */
-                };
-                reader.readAsArrayBuffer(this.file);
-            } else {
-                this.showSnackbar('Please select a MIDI file', 'warning');
+        // take the midi file in this.file, parse it with toneJS and transform it with the function transform() and do a GET request to http://192.168.174.140/play_song?song=transformed_midi_file
+        sendAndPlay() {
+            if (!this.file) {
+                this.showSnackbar('Please select a MIDI file', 'error');
+                return;
             }
+
+            // Parse the MIDI file
+            const midiFile = Midi.fromUrl(this.file);
+
+            // Transform the MIDI file using the transform function
+            const csvToSend = transform(midiFile, this.channel);
+
+            // Send a GET request to play the transformed MIDI file
+            const url = `http://192.168.174.140/play_song?song=${csvToSend}`;
+            fetch(url)
+                .then(response => {
+                    if (response.ok) {
+                        return response.text();
+                    } else {
+                        this.showSnackbar('An error occurred', 'warning')
+                    }
+                })
+                .then(response => {
+                    this.showSnackbar(response, 'success');
+                })
+                .catch(error => {
+                    console.error(error)
+                    this.showSnackbar('We lost connection with the board', 'error')
+                })
         },
         showSnackbar(text, color) {
             this.snackbarText = text
             this.snackbarColor = color
             this.snackbarVisible = true
         },
+
     },
 };
+
+/// TRANSFORM NOTE ENGINE
+
+class Note {
+    constructor(name, time_start, time_end) {
+        this.name = name;
+        this.time_start = time_start;
+        this.time_end = time_end;
+    }
+
+}
+
+let TIME_TO_MOVE_ONE_FRET = 0.1; // seconds
+
+let guitar = [
+    ["E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#"],//,"D","D#"],
+    ["B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"],//,"A","A#"],
+    ["G", "G#", "A", "A#", "B", "C", "C#", "D", "D#", "E"],//,"F","F#"],
+    ["D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"],//,"C","C#"],
+    ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#"],//,"G","G#"],
+    ["E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#"],//,"D","D#"],
+]
+
+
+// take a json object and return a csv string
+
+function transform(json, track_number) {
+
+
+    json = json['tracks'][track_number]
+
+
+    let notes = []
+
+    for (let i = 0; i < json['notes'].length; i++) {
+        let note = json['notes'][i]
+        let time_start = note['time']
+        let time_end = time_start + note['duration']
+        let name = note['name'].replace(/\d+/g, '');// to do: handle octave
+        notes.push(new Note(name, time_start, time_end))
+    }
+
+    let result = chooseCord(notes)
+    // convert to csv
+    let csv = ""
+    for (let i = 0; i < result.length; i++) {
+        csv += result[i][1] + "," + result[i][0] + "\n"
+    }
+    return csv
+
+
+
+}
+
+function chooseCord(notes) {
+    let position = [0, 0, 0, 0, 0, 0]
+    let used_until = [0, 0, 0, 0, 0, 0]
+    let result = []
+    for (let i = 0; i < notes.length; i++) {
+        let a = canPlay(notes[i], used_until, position);
+        if (a.length > 0) {
+            result.push([a[0][0] * 10 + a[0][1], notes[i].time_start, notes[i].time_end]);
+            position[a[0][0]] = a[0][1];
+            // console.log(position,a[0][0],notes[i].time_start,notes[i].time_end);
+            // console.log(used_until.map(x => x>notes[i].time_start));
+            used_until[a[0][0]] = notes[i].time_end;
+        }
+        else {
+            console.log("ERROR: can't play note " + notes[i].name + " at time " + notes[i].time_start);
+            // console.log(position);
+            // console.log(used_until.map(x => x>notes[i].time_start));
+        }
+    }
+    return result
+}
+
+
+function canPlay(note, used_until, position) {
+    let temp = []
+    for (let i = 0; i < 6; i++) {
+        // check if the cord is free
+        if (note.time_start >= used_until[i]) {
+            // check if the note is in the cord
+            if (guitar[i].includes(note.name)) {
+                let move = guitar[i].indexOf(note.name) - position[i];
+                // check if the move is possible
+                if (used_until[i] + move * TIME_TO_MOVE_ONE_FRET <= note.time_start) {
+                    temp.push([i, guitar[i].indexOf(note.name), move]);
+                }
+            }
+        }
+    }
+    let a = temp.sort(function (a, b) { return a[2] - b[2] }).map(x => [x[0], x[1]]);
+    return a
+}
 </script>
