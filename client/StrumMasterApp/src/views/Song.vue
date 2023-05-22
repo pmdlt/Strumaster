@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { Midi } from 'tone';
+import * as Tone from 'tone'
 import TheMenuBar from '../components/Menu.vue';
 
 export default {
@@ -60,7 +60,7 @@ export default {
                 return;
             }
 
-            const midiFile = Midi.fromUrl(this.file);
+            const midiFile = Tone.Midi.fromUrl(this.file);
             const csvToSend = transform(midiFile, this.channel);
 
             const url = `http://192.168.174.140/play_song?song=${csvToSend}`;
