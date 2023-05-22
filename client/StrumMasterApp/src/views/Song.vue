@@ -54,21 +54,15 @@ export default {
         snackbarTimeout: 2000,
     }),
     methods: {
-
-        // take the midi file in this.file, parse it with toneJS and transform it with the function transform() and do a GET request to http://192.168.174.140/play_song?song=transformed_midi_file
         sendAndPlay() {
             if (!this.file) {
                 this.showSnackbar('Please select a MIDI file', 'error');
                 return;
             }
 
-            // Parse the MIDI file
             const midiFile = Midi.fromUrl(this.file);
-
-            // Transform the MIDI file using the transform function
             const csvToSend = transform(midiFile, this.channel);
 
-            // Send a GET request to play the transformed MIDI file
             const url = `http://192.168.174.140/play_song?song=${csvToSend}`;
             fetch(url)
                 .then(response => {
