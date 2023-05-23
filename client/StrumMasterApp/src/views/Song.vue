@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import * as Tone from 'tone'
+import { Midi } from '@tonejs/midi';
 import TheMenuBar from '../components/Menu.vue';
 
 export default {
@@ -54,31 +54,34 @@ export default {
         snackbarTimeout: 2000,
     }),
     methods: {
-        sendAndPlay() {
+        async sendAndPlay() {
             if (!this.file) {
                 this.showSnackbar('Please select a MIDI file', 'error');
                 return;
             }
 
-            const midiFile = Tone.Midi.fromUrl(this.file);
-            const csvToSend = transform(midiFile, this.channel);
+            const reader = new FileReader();
+            reader.onload = async (event) => {
+                const arrayBuffer = event.target.result;
+                const midiFile = new Midi(arrayBuffer);
+                const csvToSend = transform(midiFile, this.channel);
 
-            const url = `http://192.168.174.140/play_song?song=${csvToSend}`;
-            fetch(url)
-                .then(response => {
+                const url = `http://192.168.174.140/play_song?song=${csvToSend}`;
+                try {
+                    const response = await fetch(url);
                     if (response.ok) {
-                        return response.text();
+                        const text = await response.text();
+                        this.showSnackbar(text, 'success');
                     } else {
-                        this.showSnackbar('An error occurred', 'warning')
+                        this.showSnackbar('An error occurred', 'warning');
                     }
-                })
-                .then(response => {
-                    this.showSnackbar(response, 'success');
-                })
-                .catch(error => {
-                    console.error(error)
-                    this.showSnackbar('We lost connection with the board', 'error')
-                })
+                } catch (error) {
+                    console.error(error);
+                    this.showSnackbar('We lost connection with the board', 'error');
+                }
+            };
+
+            reader.readAsArrayBuffer(this.file);
         },
         showSnackbar(text, color) {
             this.snackbarText = text
