@@ -38,6 +38,8 @@
 
 <script>
 import { Midi } from '@tonejs/midi';
+import { readFileSync } from 'fs';
+
 import TheMenuBar from '../components/Menu.vue';
 
 export default {
@@ -59,26 +61,33 @@ export default {
                 this.showSnackbar('Please select a MIDI file', 'error');
                 return;
             }
+            try {
+                const midiData = readFileSync(this.file);
+                const midiFile = Midi.fromBytes(midiData);
+                const csvToSend = transform(midiFile, this.channel);
 
-            const midiFile = Midi.fromUrl(this.file);
-            const csvToSend = transform(midiFile, this.channel);
+                const url = `http://192.168.174.140/play_song?song=${csvToSend}`;
+                fetch(url)
+                    .then(response => {
+                        if (response.ok) {
+                            return response.text();
+                        } else {
+                            this.showSnackbar('An error occurred', 'warning')
+                        }
+                    })
+                    .then(response => {
+                        this.showSnackbar(response, 'success');
+                    })
+                    .catch(error => {
+                        console.error(error)
+                        this.showSnackbar('We lost connection with the board', 'error')
+                    })
 
-            const url = `http://192.168.174.140/play_song?song=${csvToSend}`;
-            fetch(url)
-                .then(response => {
-                    if (response.ok) {
-                        return response.text();
-                    } else {
-                        this.showSnackbar('An error occurred', 'warning')
-                    }
-                })
-                .then(response => {
-                    this.showSnackbar(response, 'success');
-                })
-                .catch(error => {
-                    console.error(error)
-                    this.showSnackbar('We lost connection with the board', 'error')
-                })
+            } catch (error) {
+                console.error(error);
+                this.showSnackbar('Error occurred while reading the MIDI file', 'error');
+            }
+
         },
         showSnackbar(text, color) {
             this.snackbarText = text
