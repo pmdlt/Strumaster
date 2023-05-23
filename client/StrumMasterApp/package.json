@@ -11,10 +11,10 @@
   "dependencies": {
     "@google/model-viewer": "^3.1.1",
     "@mdi/font": "7.0.96",
+    "@tonejs/midi": "^2.0.28",
     "core-js": "^3.8.3",
     "roboto-fontface": "*",
     "three": "^0.151.2",
-    "tone": "^14.7.77",
     "vue": "^3.2.13",
     "vue-router": "^4.0.0",
     "vuetify": "^3.0.0",
