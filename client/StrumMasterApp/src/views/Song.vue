@@ -38,7 +38,6 @@
 
 <script>
 import { Midi } from '@tonejs/midi';
-import { readFileSync } from 'fs';
 
 import TheMenuBar from '../components/Menu.vue';
 
@@ -61,9 +60,11 @@ export default {
                 this.showSnackbar('Please select a MIDI file', 'error');
                 return;
             }
-            try {
-                const midiData = readFileSync(this.file);
-                const midiFile = Midi.fromBytes(midiData);
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const midiData = event.target.result;
+                const midiFile = Midi.fromBytes(new Uint8Array(midiData));
                 const csvToSend = transform(midiFile, this.channel);
 
                 const url = `http://192.168.174.140/play_song?song=${csvToSend}`;
@@ -83,9 +84,12 @@ export default {
                         this.showSnackbar('We lost connection with the board', 'error')
                     })
 
-            } catch (error) {
-                console.error(error);
-                this.showSnackbar('Error occurred while reading the MIDI file', 'error');
+
+                reader.onerror = (event) => {
+                    console.error(event.target.error);
+                    this.showSnackbar('Error occurred while reading the MIDI file', 'error');
+                };
+                reader.readAsArrayBuffer(this.file);
             }
 
         },
