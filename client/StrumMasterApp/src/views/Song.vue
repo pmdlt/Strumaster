@@ -54,34 +54,31 @@ export default {
         snackbarTimeout: 2000,
     }),
     methods: {
-        async sendAndPlay() {
+        sendAndPlay() {
             if (!this.file) {
                 this.showSnackbar('Please select a MIDI file', 'error');
                 return;
             }
 
-            const reader = new FileReader();
-            reader.onload = async (event) => {
-                const arrayBuffer = event.target.result;
-                const midiFile = new Midi(arrayBuffer);
-                const csvToSend = transform(midiFile, this.channel);
+            const midiFile = Midi.fromUrl(this.file);
+            const csvToSend = transform(midiFile, this.channel);
 
-                const url = `http://192.168.174.140/play_song?song=${csvToSend}`;
-                try {
-                    const response = await fetch(url);
+            const url = `http://192.168.174.140/play_song?song=${csvToSend}`;
+            fetch(url)
+                .then(response => {
                     if (response.ok) {
-                        const text = await response.text();
-                        this.showSnackbar(text, 'success');
+                        return response.text();
                     } else {
-                        this.showSnackbar('An error occurred', 'warning');
+                        this.showSnackbar('An error occurred', 'warning')
                     }
-                } catch (error) {
-                    console.error(error);
-                    this.showSnackbar('We lost connection with the board', 'error');
-                }
-            };
-
-            reader.readAsArrayBuffer(this.file);
+                })
+                .then(response => {
+                    this.showSnackbar(response, 'success');
+                })
+                .catch(error => {
+                    console.error(error)
+                    this.showSnackbar('We lost connection with the board', 'error')
+                })
         },
         showSnackbar(text, color) {
             this.snackbarText = text
