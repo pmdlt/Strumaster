@@ -14,7 +14,7 @@
                             <v-container>
                                 <v-form ref="form">
                                     <p class="text-center">Insert a midi file to be played by the guitar<br><br></p>
-                                    <v-file-input v-model="file" label="MIDI File" variant="solo"></v-file-input>
+                                    <v-file-input label="MIDI File" variant="solo" @change="loadFile"></v-file-input>
 
                                     <p class="text-center">Parameters</p>
 
@@ -48,49 +48,64 @@ export default {
     data: () => ({
         speed: 0,
         channel: 0,
-        file: null,
+        midi: null,
         snackbarVisible: false,
         snackbarText: '',
         snackbarColor: '',
         snackbarTimeout: 2000,
     }),
     methods: {
+        loadFile(e) {
+            console.log("File on load...");
+            const files = e.target.files;
+            if (files.length > 0) {
+                const file = files[0];
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    console.log("File loaded");
+                    const arrayBuffer = e.target.result;
+                    Midi.fromArrayBuffer(arrayBuffer)
+                        .then((midi) => {
+                            this.midi = midi;
+                            console.log(this.midi);
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                            this.showSnackbar('Error loading MIDI file', 'error');
+                        });
+                };
+                reader.readAsArrayBuffer(file);
+            }
+        },
+
+
         sendAndPlay() {
-            if (!this.file) {
+            if (!this.midi) {
                 this.showSnackbar('Please select a MIDI file', 'error');
                 return;
             }
+            // const jsonMIDI = JSON.stringify(this.midi);
+            console.log("2");
+            console.log(this.midi);
+            const csvToSend = transform(this.midi, this.channel);
+            console.log(csvToSend);
 
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                const midiData = event.target.result;
-                const midiFile = Midi.fromBytes(new Uint8Array(midiData));
-                const csvToSend = transform(midiFile, this.channel);
-
-                const url = `http://192.168.174.140/play_song?song=${csvToSend}`;
-                fetch(url)
-                    .then(response => {
-                        if (response.ok) {
-                            return response.text();
-                        } else {
-                            this.showSnackbar('An error occurred', 'warning')
-                        }
-                    })
-                    .then(response => {
-                        this.showSnackbar(response, 'success');
-                    })
-                    .catch(error => {
-                        console.error(error)
-                        this.showSnackbar('We lost connection with the board', 'error')
-                    })
-
-
-                reader.onerror = (event) => {
-                    console.error(event.target.error);
-                    this.showSnackbar('Error occurred while reading the MIDI file', 'error');
-                };
-                reader.readAsArrayBuffer(this.file);
-            }
+            const url = `http://192.168.174.140/play_song?song=`; // UPDATE IT
+            fetch(url)
+                .then(response => {
+                    if (response.ok) {
+                        return response.text();
+                    } else {
+                        this.showSnackbar('An error occurred', 'warning')
+                    }
+                })
+                .then(response => {
+                    this.showSnackbar(response, 'success');
+                })
+                .catch(error => {
+                    console.error(error)
+                    this.showSnackbar('We lost connection with the board', 'error')
+                })
 
         },
         showSnackbar(text, color) {
@@ -150,8 +165,6 @@ function transform(json, track_number) {
         csv += result[i][1] + "," + result[i][0] + "\n"
     }
     return csv
-
-
 
 }
 
