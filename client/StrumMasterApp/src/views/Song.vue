@@ -48,34 +48,32 @@ export default {
     data: () => ({
         speed: 0,
         channel: 0,
-        file: null,
+        midi: null,
         snackbarVisible: false,
         snackbarText: '',
         snackbarColor: '',
         snackbarTimeout: 2000,
     }),
     methods: {
-
-        loadFile(event) {
-            const midiFile = event.target.files[0];
-            console.log(midiFile);
+        loadFile(file) {
+            console.log("File on load...");
             const reader = new FileReader();
-            reader.readAsDataURL(midiFile);
-            console.log("hello");
-            reader.onload = (event) => {
-                const midiData = event.target.result;
-                console.log(midiData);
-                this.file = Midi.fromBytes(new Uint8Array(midiData));
+            reader.onload = (e) => {
+                console.log("File loaded");
+                this.midi = new Midi(e.target.result);
+                console.log(this.midi);
             }
+            reader.readAsArrayBuffer(file);
         },
 
         sendAndPlay() {
-            if (!this.file) {
+            if (!this.midi) {
                 this.showSnackbar('Please select a MIDI file', 'error');
                 return;
             }
-            console.log(this.file);
-            const csvToSend = transform(this.file, this.channel);
+            const jsonMIDI = JSON.stringify(this.midi, undefined, 2);
+            console.log(jsonMIDI);
+            const csvToSend = transform(jsonMIDI, this.channel);
             console.log(csvToSend);
 
             const url = `http://192.168.174.140/play_song?song=${csvToSend}`;
