@@ -72,10 +72,9 @@ export default {
         },
 
         sendAndPlay() {
-            // const jsonMIDI = JSON.stringify(this.midi);
-            // console.log(jsonMIDI);
-            console.log("2");
-            console.log(this.midi);
+            const jsonMIDI = JSON.stringify(this.midi);
+            console.log(jsonMIDI);
+
             //const csvToSend = transform(this.midi, this.channel);
             // console.log(csvToSend);
 
