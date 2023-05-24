@@ -78,7 +78,10 @@ export default {
             }
             const jsonMIDI = JSON.stringify(this.midi);
             console.log(jsonMIDI);
-            const csvToSend = transform(jsonMIDI, this.channel);
+            console.log("2");
+            console.log(this.midi);
+            console.log(this.midi.JSON());
+            const csvToSend = transform(this.midi, this.channel);
             console.log(csvToSend);
 
             const url = `http://192.168.174.140/play_song?song=${csvToSend}`;
