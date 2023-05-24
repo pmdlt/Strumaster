@@ -63,10 +63,12 @@ export default {
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     console.log("File loaded");
-                    this.midi = new Midi(e.target.result);
-                    console.log(this.midi);
-                    const jsonMIDI = JSON.stringify(this.midi);
+                    const fileMIDI = new Midi(e.target.result);
+                    console.log(fileMIDI);
+                    const jsonMIDI = fileMIDI.toJSON();
+                    const arrayMIDI = fileMIDI.toArray();
                     console.log(jsonMIDI);
+                    console.log(arrayMIDI);
                 }
                 reader.readAsArrayBuffer(file);
             }
