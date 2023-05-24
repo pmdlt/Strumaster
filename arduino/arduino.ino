@@ -12,7 +12,14 @@ typedef struct {
 uint8_t currNote = -1;
 
 Note translater[60];
-StepperDriver steppers[3] = {StepperDriverConstructor(2, 5, 0), StepperDriverConstructor(3, 6, 0), StepperDriverConstructor(4, 7, 0)}; // Contains the stepper drivers
+StepperDriver steppers[6] = {
+  StepperDriverConstructor(2, 5, 0), 
+  StepperDriverConstructor(3, 6, 0), 
+  StepperDriverConstructor(4, 7, 0),
+  StepperDriverConstructor(8, 11, 0),
+  StepperDriverConstructor(9, 12, 0),
+  StepperDriverConstructor(10, 13, 0)
+  }; // Contains the stepper drivers
 SoftwareSerial ESP(0, 1); 
 //-------------
 
@@ -25,14 +32,17 @@ void setup() {
   for (int i = 2; i < 8; i++){
     pinMode(i, OUTPUT);
   }
-  steppersLibrairySetup(3, 1000);
+  steppersLibrairySetup(6, 1000);
 
   // translater initialisation
   for (int id = 0; id < 6; id++){
     for (int fret = 0; fret < 10; fret++){
-      translater[id*10 + fret] = {id, fret*100}; //tbd, 1er fret = position 0
+      translater[id*10 + fret] = {id, fret*100}; //tbd, 1er fret = position 0, 2e = 170 , 3e = 170 + 160, 4e = 170 + 160 + 150
     }
   }
+  translater[2*10 + 1].position = 170;
+  translater[2*10 + 2].position = 170 + 160;
+  translater[2*10 + 3].position = 170 + 160 + 150; 
 }
 
 void loop() {
@@ -55,6 +65,7 @@ void loop() {
 uint8_t listenToESP(){
   if (ESP.available()) { // Check if there's data available from the ESP8266
     String rawData = ESP.readStringUntil('\n');
+                                                        Serial.println(rawData);
     int splittedData[3] = {0, 0, 0};
     size_t nbData = 0;
     uint index = 0;

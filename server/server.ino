@@ -55,11 +55,12 @@ void setup() {
 
   server.begin();
 
-
+  setupTiming();
   Arduino.println("");
 }
 void loop() {
   server.handleClient();
+  loopTiming();
 }
 
 ///////////////////////////////////////////////////////////
