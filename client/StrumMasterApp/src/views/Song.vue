@@ -65,6 +65,8 @@ export default {
                     console.log("File loaded");
                     this.midi = new Midi(e.target.result);
                     console.log(this.midi);
+                    const jsonMIDI = JSON.stringify(this.midi);
+                    console.log(jsonMIDI);
                 }
                 reader.readAsArrayBuffer(file);
             }
@@ -72,8 +74,6 @@ export default {
         },
 
         sendAndPlay() {
-            const jsonMIDI = JSON.stringify(this.midi);
-            console.log(jsonMIDI);
 
             //const csvToSend = transform(this.midi, this.channel);
             // console.log(csvToSend);
