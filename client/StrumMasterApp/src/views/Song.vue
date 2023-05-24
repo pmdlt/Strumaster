@@ -63,9 +63,13 @@ export default {
 
             const reader = new FileReader();
             reader.onload = (event) => {
+                console.log(event.target.result);
                 const midiData = event.target.result;
+                console.log(midiData);
                 const midiFile = Midi.fromBytes(new Uint8Array(midiData));
+                console.log(midiFile);
                 const csvToSend = transform(midiFile, this.channel);
+                console.log(csvToSend);
 
                 const url = `http://192.168.174.140/play_song?song=${csvToSend}`;
                 fetch(url)
