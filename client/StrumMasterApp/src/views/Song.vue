@@ -79,9 +79,8 @@ export default {
             // const jsonMIDI = JSON.stringify(this.midi);
             console.log("2");
             console.log(this.midi);
-            console.log(this.midi.toJSON());
-            //const csvToSend = transform(this.midi, this.channel);
-            // console.log(csvToSend);
+            const csvToSend = transform(this.midi, this.channel);
+            console.log(csvToSend);
 
             const url = `http://192.168.174.140/play_song?song=`; // UPDATE IT
             fetch(url)
@@ -112,7 +111,7 @@ export default {
 
 /// TRANSFORM NOTE ENGINE
 
-/* class Note {
+class Note {
     constructor(name, time_start, time_end) {
         this.name = name;
         this.time_start = time_start;
@@ -159,8 +158,6 @@ function transform(json, track_number) {
     }
     return csv
 
-
-
 }
 
 function chooseCord(notes) {
@@ -203,5 +200,5 @@ function canPlay(note, used_until, position) {
     }
     let a = temp.sort(function (a, b) { return a[2] - b[2] }).map(x => [x[0], x[1]]);
     return a
-} */
+}
 </script>
