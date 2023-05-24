@@ -76,11 +76,10 @@ export default {
                 this.showSnackbar('Please select a MIDI file', 'error');
                 return;
             }
-            const jsonMIDI = JSON.stringify(this.midi);
-            console.log("1");
-            console.log(jsonMIDI);
+            // const jsonMIDI = JSON.stringify(this.midi);
             console.log("2");
             console.log(this.midi);
+            console.log(this.midi.toJSON());
             //const csvToSend = transform(this.midi, this.channel);
             // console.log(csvToSend);
 
