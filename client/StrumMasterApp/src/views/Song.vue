@@ -55,15 +55,20 @@ export default {
         snackbarTimeout: 2000,
     }),
     methods: {
-        loadFile(file) {
+        loadFile(e) {
             console.log("File on load...");
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                console.log("File loaded");
-                this.midi = new Midi(e.target.result);
-                console.log(this.midi);
+            const files = e.target.files;
+            if (files.length > 0) {
+                const file = files[0];
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    console.log("File loaded");
+                    this.midi = new Midi(e.target.result);
+                    console.log(this.midi);
+                }
+                reader.readAsArrayBuffer(file);
             }
-            reader.readAsArrayBuffer(file);
+
         },
 
         sendAndPlay() {
