@@ -41,17 +41,18 @@
         </v-row>
       </v-container>
     </v-main>
-    <v-snackbar v-model="snackbarVisible" :color="snackbarColor" :timeout="snackbarTimeout">{{ snackbarText
-    }}</v-snackbar>
+    <the-snack-bar />
   </v-app>
 </template>
 
 <script>
 import TheMenuBar from '../components/Menu.vue'
+import TheSnackBar from '../components/Snackbar.vue'
 
 export default {
   components: {
     TheMenuBar,
+    TheSnackBar
   },
   data: () => ({
     stepperFunctionToUse: 0,
@@ -71,15 +72,15 @@ export default {
           if (response.ok) {
             return response.text();
           } else {
-            this.showSnackbar('An error occurred', 'warning')
+            TheSnackBar.show('An error occurred', 'warning')
           }
         })
         .then(response => {
-          this.showSnackbar(response, 'success');
+          TheSnackBar.show(response, 'success');
         })
         .catch(error => {
           console.error(error)
-          this.showSnackbar('We lost connection with the board', 'error')
+          TheSnackBar.show('We lost connection with the board', 'error')
         })
     },
     debugServo() {
@@ -89,15 +90,15 @@ export default {
           if (response.ok) {
             return response.text();
           } else {
-            this.showSnackbar('An error occurred', 'warning')
+            TheSnackBar.show('An error occurred', 'warning')
           }
         })
         .then(response => {
-          this.showSnackbar(response, 'success');
+          TheSnackBar.show(response, 'success');
         })
         .catch(error => {
           console.error(error)
-          this.showSnackbar('We lost connection with the board', 'error')
+          TheSnackBar.show('We lost connection with the board', 'error')
         })
     },
     showSnackbar(text, color) {
