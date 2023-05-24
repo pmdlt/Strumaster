@@ -63,13 +63,21 @@ export default {
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     console.log("File loaded");
-                    this.midi = new Midi(e.target.result);
-                    console.log(this.midi);
-                }
+                    const arrayBuffer = e.target.result;
+                    Midi.fromArrayBuffer(arrayBuffer)
+                        .then((midi) => {
+                            this.midi = midi;
+                            console.log(this.midi);
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                            this.showSnackbar('Error loading MIDI file', 'error');
+                        });
+                };
                 reader.readAsArrayBuffer(file);
             }
-
         },
+
 
         sendAndPlay() {
             if (!this.midi) {
