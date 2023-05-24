@@ -56,8 +56,12 @@ export default {
     }),
     methods: {
 
-        loadFile() {
+        loadFile(event) {
+            const midiFile = event.target.files[0];
+            console.log(midiFile);
             const reader = new FileReader();
+            reader.readAsDataURL(midiFile);
+            console.log("hello");
             reader.onload = (event) => {
                 const midiData = event.target.result;
                 console.log(midiData);
