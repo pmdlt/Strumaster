@@ -1,83 +1,71 @@
 #include <CSV_Parser.h>
 #include <ArduinoQueue.h>
 
-float* duration;
+uint32_t* time_start;
+uint32_t* time_end;
 int* id;
-float* timeArray;
-float* velocity;
-int rowCount;
-int i = 0;
 
+typedef struct {
+  float start;
+  float end;
+  int id;
+} Note;
+
+int nbNotes;
 unsigned long startTime;
-unsigned long currentTime;
-unsigned long lastActivatedTime = 0;  // Track the last activated time
 
-ArduinoQueue<int> timeQueue;  // Queue to store activation times
+ArduinoQueue<Note> queues[6]; // Queues of the notes
+Note notes[6];
 
 
-void setupTiming() {
-  const char* csvData = "duration,id,time,velocity\n"
-                        "0.75,1,5.25,0.6929133858267716\n"
-                        "0.394874057291668,11,13.056699765625002,0.7165354330708661\n"
-                        "0.123456789,23,18.987654321,0.54321\n"
-                        "0.987654321,4,26.345678901,0.123456789\n"
-                        "0.54321,25,33.678901234,0.987654321\n"
-                        "0.246813575,16,41.345678901,0.7654321\n"
-                        "0.135791357,15,48.789012345,0.321987654\n"
-                        "0.987654321,22,56.876543210,0.987654321\n"
-                        "0.654321,6,64.567890123,0.432109876\n"
-                        "0.333333333,12,71.111111111,0.222222222\n";
+void setupTimings(char* csvData) {
+  csvData = "time_start,time_end,id\n"
+            "967,3870,12\n"
+            "1451,1935,42\n"
+            "1935,2419,31\n"
+            "2419,2903,0\n"
+            "2903,3387,31\n"
+            "3387,3870,42\n"
+            "3870,6774,10\n"
+            "4354,4838,40\n"
+            "4838,5322,26\n"
+            "5322,5806,0\n";
 
-  CSV_Parser csvParser(csvData, "fLff");
+  CSV_Parser csvParser(csvData, "uLuLL");
 
   // Retrieving parsed values
-  duration = (float*)csvParser["duration"];
-  id = (int*)csvParser["id"];
-  timeArray = (float*)csvParser["time"];
-  velocity = (float*)csvParser["velocity"];
+  time_start = (uint32_t*) csvParser["time_start"];
+  id = (int*) csvParser["id"];
+  time_end = (uint32_t*) csvParser["time_end"];
 
-  rowCount = csvParser.getRowsCount();
-
-  Serial.println("Parsed CSV Data:");
-  for (int i = 0; i < rowCount; i++) {
-    // Serial.print("Row ");
-    // Serial.print(i + 1);
-    // Serial.print(": duration=");
-    // Serial.print(duration[i]);
-    // Serial.print(", id=");
-    // Serial.print(id[i]);
-    // Serial.print(", time=");
-    // Serial.print(timeArray[i]);
-    // Serial.print(", velocity=");
-    // Serial.println(velocity[i]);
-    timeQueue.enqueue(timeArray[i] * 1000);
+  nbNotes = csvParser.getRowsCount();
+  for(int i = 0; i < 6; ++i){
+    queues[i] = ArduinoQueue<Note>(nbNotes);
   }
 
-  startTime = millis();
-  Serial.println("Start_timer");
+  for (int i = 0; i < nbNotes; i++) {
+    queues[id[i]/nbFrets].enqueue((Note) {time_start[i], time_end[i], id[i]});
+  }
 }
 
 void loopTiming() {
-  if (i < rowCount) {
-    currentTime = millis() - startTime;
+  unsigned long currentTime = millis() - startTime;
 
-    if (!timeQueue.isEmpty() && currentTime >= timeQueue.getHead() && currentTime > lastActivatedTime) {
-      // Serial.print("i: ");
-      // Serial.println(i);
-      // Serial.print("ID: ");
-      // Serial.print(id[i]);
-      // Serial.print(", Velocity: ");
-      // Serial.println(velocity[i]);
-      lastActivatedTime = currentTime;
-      timeQueue.dequeue();
-      i++;
-      activate_servo(id[i]/10);
-      activate_stepper(id[i]);
+  for (int i = 0; i < 6; i++){
+    if (currentTime >= notes[i].end){
+      notes[i] = queues[i].dequeue();
+      activate_stepper(notes[i].id);
     }
-
-    // servo_id = id[i]/10
+    if (currentTime >= notes[i].start){
+      activate_servo(notes[i].id/nbFrets);
+    }
   }
+}
 
-  // Other code in the loop
+void startPlaying(){
+  startTime = millis();
+  for (int i = 0; i < 6; i++){
+    notes[i] = (Note) {0, 0, 0};
+  }
 }
 

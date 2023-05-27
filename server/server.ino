@@ -18,7 +18,7 @@ ESP8266WebServer server(80);
 // Program variables
 bool connected = 0;
 bool is_playing_note = 0;
-uint8_t nbFrets = 10;  // number of frets handled by strings
+uint8_t nbFrets = 8;  // number of frets handled by strings
 
 void setup() {
   Serial.begin(9600);
@@ -53,10 +53,7 @@ void setup() {
     handleDebugServo();
   });
 
-  server.begin();
-
-  setupTiming();
-  
+  server.begin();  
 }
 void loop() {
   server.handleClient();
