@@ -21,6 +21,8 @@ StepperDriver steppers[6] = {
   StepperDriverConstructor(10, 13, 0)
   }; // Contains the stepper drivers
 SoftwareSerial ESP(0, 1); 
+
+uint8_t nbSteppers = 6;
 //-------------
 
 void setup() {
@@ -32,10 +34,10 @@ void setup() {
   for (int i = 2; i < 14; i++){
     pinMode(i, OUTPUT);
   }
-  steppersLibrairySetup(6, 1000);
+  steppersLibrairySetup(nbSteppers, 1000);
 
   // translater initialisation
-  for (int id = 0; id < 6; id++){
+  for (int id = 0; id < nbSteppers; id++){
     for (int fret = 0; fret < 10; fret++){
       translater[id*10 + fret] = {id, fret*100}; //tbd, 1er fret = position 0, 2e = 170 , 3e = 170 + 160, 4e = 170 + 160 + 150
     }
@@ -64,6 +66,12 @@ void resetStepper(uint8_t id){
 
 void reverseStepper(uint8_t id){
   steppers[id].reversedDir = !steppers[id].reversedDir;
+}
+
+void resetAllSteppers(){
+  for (int id = 0; id < nbSteppers; id++){
+    resetStepper(id);
+  }
 }
 
 /**

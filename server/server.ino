@@ -108,6 +108,7 @@ void handleStop() {
 
 void handleReset() {
   // Todo
+  Serial.println("-3,");
   server.send(200, "text/plain", "Device reseted.");
 }
 
