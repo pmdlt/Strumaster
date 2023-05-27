@@ -128,10 +128,22 @@ void handlePlayNote() {
 void handleDebugStepper() {
   int id = server.arg("id").toInt();
   int value = server.arg("value").toInt();
-  int function = server.arg("function").toInt();
+  String function = server.arg("function").toString()
   int rtnv = 0;
 
-  switch (function) {
+  if (function == "Note") {
+    rtnv = 1;
+  } else if (function == "Steps") {
+    rtnv = 2;
+  } else if (function == "Reset") {
+    rtnv = 3;
+  } else if (function == "Reverse") {
+    rtnv = 4;
+  } else {
+    return;
+  }
+
+  switch (rtnv) {
     // Make a stepper go to a certain note
     case 1:
       activate_stepper(value);
@@ -140,6 +152,16 @@ void handleDebugStepper() {
     // Move the stepper <value> steps
     case 2:
       debug_stepper(id, value);
+      break;
+
+    // Reset the stepper's position
+    case 3:
+      reset_stepper(id);
+      break;
+
+    // Reverse the stepper
+    case 4:
+      reverse_stepper(id);
       break;
 
     default:
