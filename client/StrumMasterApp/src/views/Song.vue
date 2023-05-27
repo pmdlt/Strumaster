@@ -48,7 +48,7 @@ export default {
     data: () => ({
         speed: 0,
         channel: 0,
-        midi: null,
+        notes: null,
         snackbarVisible: false,
         snackbarText: '',
         snackbarColor: '',
@@ -66,9 +66,10 @@ export default {
                     const fileMIDI = new Midi(e.target.result);
                     console.log(fileMIDI);
                     const jsonMIDI = fileMIDI.toJSON();
-                    const arrayMIDI = fileMIDI.toArray();
                     console.log(jsonMIDI);
-                    console.log(arrayMIDI);
+                    const transformed = transform(jsonMIDI, this.channel);
+                    console.log(transformed);
+                    this.notes = transformed;
                 }
                 reader.readAsArrayBuffer(file);
             }
@@ -109,7 +110,7 @@ export default {
 
 /// TRANSFORM NOTE ENGINE
 
-/* class Note {
+class Note {
     constructor(name, time_start, time_end) {
         this.name = name;
         this.time_start = time_start;
@@ -200,5 +201,5 @@ function canPlay(note, used_until, position) {
     }
     let a = temp.sort(function (a, b) { return a[2] - b[2] }).map(x => [x[0], x[1]]);
     return a
-} */
+}
 </script>
