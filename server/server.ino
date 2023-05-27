@@ -13,7 +13,7 @@ IPAddress local_ip(192, 168, 174, 140);
 IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 255, 0);
 ESP8266WebServer server(80);
-SoftwareSerial Arduino(2, 3);
+
 
 // Program variables
 bool connected = 0;
@@ -56,7 +56,7 @@ void setup() {
   server.begin();
 
   setupTiming();
-  Arduino.println("");
+  
 }
 void loop() {
   server.handleClient();
@@ -68,13 +68,19 @@ void loop() {
 void activate_stepper(int id_note) {
   // Todo @Albert: send to Arduino
   Serial.printf("%d,\n", id_note);
-  //Arduino.printf("%d,\n", id_note);
 }
 
 void debug_stepper(int id_stepper, int steps) {
   // Todo @Albert: send to Arduino
   Serial.printf("%d,%d,\n", id_stepper, steps);
-  // Arduino.printf("%d,%d,\n", id_stepper, steps);
+}
+
+void reverse_stepper(int id_stepper) { 
+  Serial.printf("rev,%d,\n", id_stepper);
+}
+
+void reset_stepper(int id_stepper) { 
+  Serial.printf("res,%d,\n", id_stepper);
 }
 
 void activate_servo(int id_servo) {

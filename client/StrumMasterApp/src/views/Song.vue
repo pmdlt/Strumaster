@@ -192,8 +192,8 @@ function chooseCord(notes) {
         else {
             console.error("Error during the transformation process : ", '\n',
                 "Can't play note ", notes[i].name, " at time ", notes[i].time_start, '\n',
-                "Note object: ", notes[i]), '\n',
-                "Resolution : note was skipped";
+                "Note object: ", notes[i], '\n',
+                "Resolution : note was skipped");
             // console.log(position);
             // console.log(used_until.map(x => x>notes[i].time_start));
         }
