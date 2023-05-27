@@ -16,8 +16,6 @@ ArduinoQueue<int> timeQueue;  // Queue to store activation times
 
 
 void setupTiming() {
-  Serial.begin(9600);
-
   const char* csvData = "duration,id,time,velocity\n"
                         "0.75,1,5.25,0.6929133858267716\n"
                         "0.394874057291668,11,13.056699765625002,0.7165354330708661\n"

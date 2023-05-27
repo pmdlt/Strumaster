@@ -129,7 +129,7 @@ void handlePlayNote() {
 void handleDebugStepper() {
   int id = server.arg("id").toInt();
   int value = server.arg("value").toInt();
-  String function = server.arg("function").toString()
+  String function = server.arg("function");
   int rtnv = 0;
 
   if (function == "Note") {
