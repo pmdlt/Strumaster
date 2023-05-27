@@ -91,22 +91,30 @@ uint8_t listenToESP(){
 
       
       //case reset
-      if (String(splittedData[0]) == "res") {
-        resetStepper(steppers);
+      if (splittedData[0] == -1) {
+        reverseStepper(splittedData[1]);
         return -1;
       } 
       
       // case reverse
-      if (String(splittedData[0]) == "rev")
+      if (String(splittedData[0]) == -2)
       {
-        reverseStepper(steppers);
+        resetStepper(splittedData[1]); 
         return -1;
       } 
+
+      
       // case where we have to move the stepper 
       doSteps(&steppers[splittedData[0]], splittedData[1]); 
       return -1; 
     } else if (nbData == 1) {
       // case where we have to change the current note
+
+      if (String(splittedData[0]) == -3)
+      {
+        resetAllSteppers(); 
+        return -1;
+      } 
       uint8_t note = splittedData[0];
       
       if (note>=0 && note<60) return note; // return the note

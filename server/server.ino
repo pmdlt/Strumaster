@@ -76,11 +76,11 @@ void debug_stepper(int id_stepper, int steps) {
 }
 
 void reverse_stepper(int id_stepper) { 
-  Serial.printf("rev,%d,\n", id_stepper);
+  Serial.printf("%d,%d,\n",-1, id_stepper);
 }
 
 void reset_stepper(int id_stepper) { 
-  Serial.printf("res,%d,\n", id_stepper);
+  Serial.printf("%d,%d,\n",-2, id_stepper);
 }
 
 void activate_servo(int id_servo) {
