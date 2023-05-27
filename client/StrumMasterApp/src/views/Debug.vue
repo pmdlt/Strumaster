@@ -16,7 +16,7 @@
                 <v-form ref="form">
                   <p class="text-center">Calibrate stepper<br><br></p>
 
-                  <v-select v-model="stepperFunctionToUse" :items="[1, 2]" label="Function to use"
+                  <v-select v-model="stepperFunctionToUse" :items="['Note', 'Steps', 'Reset', 'Reverse']" label="Function to use"
                     variant="outlined"></v-select>
 
                   <v-slider v-model="stepperId" :min="0" :max="5" :step="1" thumb-label label="Stepper ID"
@@ -55,7 +55,7 @@ export default {
     TheSnackBar
   },
   data: () => ({
-    stepperFunctionToUse: 0,
+    stepperFunctionToUse: null,
     stepperId: 1,
     stepperValue: null,
     servoId: 1,
