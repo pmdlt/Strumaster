@@ -56,23 +56,24 @@ export default {
     }),
     methods: {
         loadFile(e) {
-            console.log("File provided, loading...");
+            console.log("1. File provided, loading...");
             const files = e.target.files;
             if (files.length > 0) {
                 const file = files[0];
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    console.log("File loaded");
-
+                    console.log("2. File loaded");
+                    console.log("3. File transforming to MIDI...");
                     const MIDIfile = new Midi(e.target.result);
                     const MIDIjson = MIDIfile.toJSON();
                     console.log(MIDIjson);
 
+                    console.log("4. File transforming to notes...");
                     const transformed = transform(MIDIjson, this.channel);
                     console.log(transformed);
 
                     this.notes = transformed;
-                    console.log("File transformed");
+                    console.log("5. File transformed and ready to be sent");
                 }
                 reader.readAsArrayBuffer(file);
             }
@@ -86,9 +87,16 @@ export default {
                 return;
             }
 
-            const url = `http://192.168.174.140/play_song?song=` + JSON.stringify(this.notes) + `&speed=` + this.speed;
-            console.log("Sending request to: " + url);
-            fetch(url)
+            const url = `http://192.168.174.140/play_song`;
+            console.log("Sending POST request to: " + url);
+
+            fetch(url, {
+                method: "POST",
+                body: JSON.stringify(this.notes),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            })
                 .then(response => {
                     if (response.ok) {
                         return response.text();
@@ -158,9 +166,9 @@ function transform(json, track_number) {
 
     let result = chooseCord(notes)
     // convert to csv
-    let csv = ""
+    let csv = "time,id\n"
     for (let i = 0; i < result.length; i++) {
-        csv += result[i][1] + "," + result[i][0] + "\n"
+        csv += result[i][1] + "," + result[i][2] + "," + result[i][0] + "\n"
     }
     return csv
 
@@ -182,7 +190,11 @@ function chooseCord(notes) {
             used_until[a[0][0]] = notes[i].time_end;
         }
         else {
-            console.error("Can't play note " + notes[i].name + " at time " + notes[i].time_start);
+            console.error("Error during the transformation process : ", '\n',
+                "Can't play note ", notes[i].name, " at time ", notes[i].time_start, '\n',
+                "position: ", position, '\n',
+                "used_until: ", used_until, '\n',
+                "notes: ", notes[i]);
             // console.log(position);
             // console.log(used_until.map(x => x>notes[i].time_start));
         }
