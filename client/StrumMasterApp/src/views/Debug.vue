@@ -19,7 +19,7 @@
                   <v-select v-model="stepperFunctionToUse" :items="[1, 2]" label="Function to use"
                     variant="outlined"></v-select>
 
-                  <v-slider v-model="stepperId" :min="0" :max="6" :step="1" thumb-label label="Stepper ID"
+                  <v-slider v-model="stepperId" :min="0" :max="5" :step="1" thumb-label label="Stepper ID"
                     @input="stepperId = $event"></v-slider>
 
                   <v-text-field v-model="stepperValue" label="Value" variant="outlined"></v-text-field>
@@ -30,7 +30,7 @@
 
                   <p class="text-center">Test servo<br><br></p>
 
-                  <v-slider v-model="servoId" :min="0" :max="6" :step="1" thumb-label label="Servo ID"
+                  <v-slider v-model="servoId" :min="0" :max="5" :step="1" thumb-label label="Servo ID"
                     @input="servoId = $event"></v-slider>
 
                   <v-btn @click="debugServo" block class="mt-2">Move Servo</v-btn>

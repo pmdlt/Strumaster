@@ -66,11 +66,11 @@ export default {
                     console.log("3. File transforming to MIDI...");
                     const MIDIfile = new Midi(e.target.result);
                     const MIDIjson = MIDIfile.toJSON();
-                    console.log(MIDIjson);
+                    console.log("MIDI File:", MIDIjson);
 
                     console.log("4. File transforming to notes...");
                     const transformed = transform(MIDIjson, this.channel);
-                    console.log(transformed);
+                    console.log("Notes:", '\n', transformed);
 
                     this.notes = transformed;
                     console.log("5. File transformed and ready to be sent");
@@ -166,7 +166,7 @@ function transform(json, track_number) {
 
     let result = chooseCord(notes)
     // convert to csv
-    let csv = "time,id\n"
+    let csv = "time_start,time_end,id\n"
     for (let i = 0; i < result.length; i++) {
         csv += result[i][1] + "," + result[i][2] + "," + result[i][0] + "\n"
     }
@@ -192,9 +192,8 @@ function chooseCord(notes) {
         else {
             console.error("Error during the transformation process : ", '\n',
                 "Can't play note ", notes[i].name, " at time ", notes[i].time_start, '\n',
-                "position: ", position, '\n',
-                "used_until: ", used_until, '\n',
-                "notes: ", notes[i]);
+                "Note object: ", notes[i]), '\n',
+                "Resolution : note was skipped";
             // console.log(position);
             // console.log(used_until.map(x => x>notes[i].time_start));
         }

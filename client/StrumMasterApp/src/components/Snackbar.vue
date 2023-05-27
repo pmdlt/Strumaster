@@ -5,13 +5,15 @@
 
 <script>
 export default {
-    methods: {
-        data: () => ({
+    data() {
+        return {
             snackbarVisible: false,
             snackbarText: '',
             snackbarColor: '',
             snackbarTimeout: 2000,
-        }),
+        }
+    },
+    methods: {
         showSnackbar(text, color) {
             this.snackbarText = text
             this.snackbarColor = color
@@ -22,7 +24,7 @@ export default {
     mounted() {
         const thisInstance = this
         this.$root.$on('showSnackbar', function () {
-            thisInstance.show()
+            thisInstance.showSnackbar()
         })
     }
 }
