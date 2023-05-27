@@ -19,7 +19,7 @@
                   <v-select v-model="stepperFunctionToUse" :items="[1, 2]" label="Function to use"
                     variant="outlined"></v-select>
 
-                  <v-slider v-model="stepperId" :min="0" :max="6" :step="1" thumb-label label="Stepper ID"
+                  <v-slider v-model="stepperId" :min="0" :max="5" :step="1" thumb-label label="Stepper ID"
                     @input="stepperId = $event"></v-slider>
 
                   <v-text-field v-model="stepperValue" label="Value" variant="outlined"></v-text-field>
@@ -30,7 +30,7 @@
 
                   <p class="text-center">Test servo<br><br></p>
 
-                  <v-slider v-model="servoId" :min="0" :max="6" :step="1" thumb-label label="Servo ID"
+                  <v-slider v-model="servoId" :min="0" :max="5" :step="1" thumb-label label="Servo ID"
                     @input="servoId = $event"></v-slider>
 
                   <v-btn @click="debugServo" block class="mt-2">Move Servo</v-btn>
@@ -59,10 +59,6 @@ export default {
     stepperId: 1,
     stepperValue: null,
     servoId: 1,
-    snackbarVisible: false,
-    snackbarText: '',
-    snackbarColor: '',
-    snackbarTimeout: 2000,
   }),
   methods: {
     debugStepper() {
@@ -72,15 +68,15 @@ export default {
           if (response.ok) {
             return response.text();
           } else {
-            TheSnackBar.show('An error occurred', 'warning')
+            this.$root.$emit('showSnackbar', 'An error occurred', 'warning');
           }
         })
         .then(response => {
-          TheSnackBar.show(response, 'success');
+          this.$root.$emit('showSnackbar', response, 'success');
         })
         .catch(error => {
           console.error(error)
-          TheSnackBar.show('We lost connection with the board', 'error')
+          this.$root.$emit('showSnackbar', 'We lost connection with the board', 'error');
         })
     },
     debugServo() {
@@ -90,22 +86,17 @@ export default {
           if (response.ok) {
             return response.text();
           } else {
-            TheSnackBar.show('An error occurred', 'warning')
+            this.$root.$emit('showSnackbar', 'An error occurred', 'warning');
           }
         })
         .then(response => {
-          TheSnackBar.show(response, 'success');
+          this.$root.$emit('showSnackbar', response, 'success');
         })
         .catch(error => {
           console.error(error)
-          TheSnackBar.show('We lost connection with the board', 'error')
+          this.$root.$emit('showSnackbar', 'We lost connection with the board', 'error');
         })
-    },
-    showSnackbar(text, color) {
-      this.snackbarText = text
-      this.snackbarColor = color
-      this.snackbarVisible = true
-    },
+    }
   },
 }
 </script>

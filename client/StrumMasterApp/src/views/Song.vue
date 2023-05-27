@@ -48,7 +48,7 @@ export default {
     data: () => ({
         speed: 0,
         channel: 0,
-        midi: null,
+        notes: null,
         snackbarVisible: false,
         snackbarText: '',
         snackbarColor: '',
@@ -56,19 +56,24 @@ export default {
     }),
     methods: {
         loadFile(e) {
-            console.log("File on load...");
+            console.log("1. File provided, loading...");
             const files = e.target.files;
             if (files.length > 0) {
                 const file = files[0];
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    console.log("File loaded");
-                    const fileMIDI = new Midi(e.target.result);
-                    console.log(fileMIDI);
-                    const jsonMIDI = fileMIDI.toJSON();
-                    const arrayMIDI = fileMIDI.toArray();
-                    console.log(jsonMIDI);
-                    console.log(arrayMIDI);
+                    console.log("2. File loaded");
+                    console.log("3. File transforming to MIDI...");
+                    const MIDIfile = new Midi(e.target.result);
+                    const MIDIjson = MIDIfile.toJSON();
+                    console.log("MIDI File:", MIDIjson);
+
+                    console.log("4. File transforming to notes...");
+                    const transformed = transform(MIDIjson, this.channel);
+                    console.log("Notes:", '\n', transformed);
+
+                    this.notes = transformed;
+                    console.log("5. File transformed and ready to be sent");
                 }
                 reader.readAsArrayBuffer(file);
             }
@@ -76,16 +81,27 @@ export default {
         },
 
         sendAndPlay() {
+            console.log("Send and play button pressed");
+            if (this.notes == null) {
+                this.showSnackbar('The file provided cannot be transformed and played', 'error')
+                return;
+            }
 
-            //const csvToSend = transform(this.midi, this.channel);
-            // console.log(csvToSend);
+            const url = `http://192.168.174.140/play_song`;
+            console.log("Sending POST request to: " + url);
 
-            const url = `http://192.168.174.140/play_song?song=`; // UPDATE IT
-            fetch(url)
+            fetch(url, {
+                method: "POST",
+                body: JSON.stringify(this.notes),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            })
                 .then(response => {
                     if (response.ok) {
                         return response.text();
                     } else {
+                        console.error(response)
                         this.showSnackbar('An error occurred', 'warning')
                     }
                 })
@@ -109,7 +125,7 @@ export default {
 
 /// TRANSFORM NOTE ENGINE
 
-/* class Note {
+class Note {
     constructor(name, time_start, time_end) {
         this.name = name;
         this.time_start = time_start;
@@ -150,9 +166,9 @@ function transform(json, track_number) {
 
     let result = chooseCord(notes)
     // convert to csv
-    let csv = ""
+    let csv = "time_start,time_end,id\n"
     for (let i = 0; i < result.length; i++) {
-        csv += result[i][1] + "," + result[i][0] + "\n"
+        csv += result[i][1] + "," + result[i][2] + "," + result[i][0] + "\n"
     }
     return csv
 
@@ -174,7 +190,10 @@ function chooseCord(notes) {
             used_until[a[0][0]] = notes[i].time_end;
         }
         else {
-            console.log("ERROR: can't play note " + notes[i].name + " at time " + notes[i].time_start);
+            console.error("Error during the transformation process : ", '\n',
+                "Can't play note ", notes[i].name, " at time ", notes[i].time_start, '\n',
+                "Note object: ", notes[i]), '\n',
+                "Resolution : note was skipped";
             // console.log(position);
             // console.log(used_until.map(x => x>notes[i].time_start));
         }
@@ -200,5 +219,5 @@ function canPlay(note, used_until, position) {
     }
     let a = temp.sort(function (a, b) { return a[2] - b[2] }).map(x => [x[0], x[1]]);
     return a
-} */
+}
 </script>
