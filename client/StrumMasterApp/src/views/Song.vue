@@ -56,20 +56,23 @@ export default {
     }),
     methods: {
         loadFile(e) {
-            console.log("File on load...");
+            console.log("File provided, loading...");
             const files = e.target.files;
             if (files.length > 0) {
                 const file = files[0];
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     console.log("File loaded");
-                    const fileMIDI = new Midi(e.target.result);
-                    console.log(fileMIDI);
-                    const jsonMIDI = fileMIDI.toJSON();
-                    console.log(jsonMIDI);
-                    const transformed = transform(jsonMIDI, this.channel);
+
+                    const MIDIfile = new Midi(e.target.result);
+                    const MIDIjson = MIDIfile.toJSON();
+                    console.log(MIDIjson);
+
+                    const transformed = transform(MIDIjson, this.channel);
                     console.log(transformed);
+
                     this.notes = transformed;
+                    console.log("File transformed");
                 }
                 reader.readAsArrayBuffer(file);
             }
@@ -77,16 +80,20 @@ export default {
         },
 
         sendAndPlay() {
+            console.log("Send and play button pressed");
+            if (this.notes == null) {
+                this.showSnackbar('The file provided cannot be transformed and played', 'error')
+                return;
+            }
 
-            //const csvToSend = transform(this.midi, this.channel);
-            // console.log(csvToSend);
-
-            const url = `http://192.168.174.140/play_song?song=`; // UPDATE IT
+            const url = `http://192.168.174.140/play_song?song=` + JSON.stringify(this.notes) + `&speed=` + this.speed;
+            console.log("Sending request to: " + url);
             fetch(url)
                 .then(response => {
                     if (response.ok) {
                         return response.text();
                     } else {
+                        console.error(response)
                         this.showSnackbar('An error occurred', 'warning')
                     }
                 })
@@ -175,7 +182,7 @@ function chooseCord(notes) {
             used_until[a[0][0]] = notes[i].time_end;
         }
         else {
-            console.log("ERROR: can't play note " + notes[i].name + " at time " + notes[i].time_start);
+            console.error("Can't play note " + notes[i].name + " at time " + notes[i].time_start);
             // console.log(position);
             // console.log(used_until.map(x => x>notes[i].time_start));
         }
