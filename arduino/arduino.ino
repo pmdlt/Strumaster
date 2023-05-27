@@ -29,7 +29,7 @@ void setup() {
   Serial.begin(9600);
 
   // Steppers initialisation
-  for (int i = 2; i < 8; i++){
+  for (int i = 2; i < 14; i++){
     pinMode(i, OUTPUT);
   }
   steppersLibrairySetup(6, 1000);
@@ -56,6 +56,14 @@ void loop() {
 
   // Do a step for all steppers needing one
   updateSteppers(steppers);
+}
+
+void resetStepper(uint8_t id){
+  steppers[id].position = 0;
+}
+
+void reverseStepper(uint8_t id){
+  steppers[id].reversedDir = !steppers[id].reversedDir;
 }
 
 /**
