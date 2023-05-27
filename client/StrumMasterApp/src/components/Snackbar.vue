@@ -12,11 +12,17 @@ export default {
             snackbarColor: '',
             snackbarTimeout: 2000,
         }),
-        show(text, color) {
+        showSnackbar(text, color) {
             this.snackbarText = text
             this.snackbarColor = color
             this.snackbarVisible = true
         },
+    },
+    mounted() {
+        const thisInstance = this
+        this.$root.$on('showSnackbar', function () {
+            thisInstance.show()
+        })
     }
 }
 </script>

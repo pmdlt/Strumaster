@@ -59,10 +59,6 @@ export default {
     stepperId: 1,
     stepperValue: null,
     servoId: 1,
-    snackbarVisible: false,
-    snackbarText: '',
-    snackbarColor: '',
-    snackbarTimeout: 2000,
   }),
   methods: {
     debugStepper() {
@@ -72,15 +68,15 @@ export default {
           if (response.ok) {
             return response.text();
           } else {
-            TheSnackBar.show('An error occurred', 'warning')
+            this.$root.$emit('showSnackbar', 'An error occurred', 'warning');
           }
         })
         .then(response => {
-          TheSnackBar.show(response, 'success');
+          this.$root.$emit('showSnackbar', response, 'success');
         })
         .catch(error => {
           console.error(error)
-          TheSnackBar.show('We lost connection with the board', 'error')
+          this.$root.$emit('showSnackbar', 'We lost connection with the board', 'error');
         })
     },
     debugServo() {
@@ -90,22 +86,17 @@ export default {
           if (response.ok) {
             return response.text();
           } else {
-            TheSnackBar.show('An error occurred', 'warning')
+            this.$root.$emit('showSnackbar', 'An error occurred', 'warning');
           }
         })
         .then(response => {
-          TheSnackBar.show(response, 'success');
+          this.$root.$emit('showSnackbar', response, 'success');
         })
         .catch(error => {
           console.error(error)
-          TheSnackBar.show('We lost connection with the board', 'error')
+          this.$root.$emit('showSnackbar', 'We lost connection with the board', 'error');
         })
-    },
-    showSnackbar(text, color) {
-      this.snackbarText = text
-      this.snackbarColor = color
-      this.snackbarVisible = true
-    },
+    }
   },
 }
 </script>
