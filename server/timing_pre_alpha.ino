@@ -1,18 +1,18 @@
 #include <CSV_Parser.h>
 #include <ArduinoQueue.h>
 
-uint32_t* time_start;
-uint32_t* time_end;
-int* id;
+// ms
+// As sometimes one note finish at the same time than another note should begin, we decided to fix the duration of 
+// each note, so that the note is played, but the stepper isn't blocked by it for too long
+#define NOTE_DURATION 300
 
 typedef struct {
   float start;
   float end;
-  int id;
+  int   id;
 } Note;
 
-int nbNotes;
-unsigned long startTime;
+unsigned long startTime = 0;
 
 ArduinoQueue<Note> queues[6]; // Queues of the notes
 Note notes[6];
@@ -34,38 +34,41 @@ void setupTimings(char* csvData) {
   CSV_Parser csvParser(csvData, "uLuLL");
 
   // Retrieving parsed values
-  time_start = (uint32_t*) csvParser["time_start"];
-  id = (int*) csvParser["id"];
-  time_end = (uint32_t*) csvParser["time_end"];
+  uint32_t* time_start  = (uint32_t*) csvParser["time_start"];
+//  uint32_t* time_end    = (uint32_t*) csvParser["time_end"];
+  int*      id          = (int*) csvParser["id"];
 
-  nbNotes = csvParser.getRowsCount();
+  // building the queues
+  uint32_t nbNotes = csvParser.getRowsCount();
   for(int i = 0; i < 6; ++i){
     queues[i] = ArduinoQueue<Note>(nbNotes);
   }
-
   for (int i = 0; i < nbNotes; i++) {
-    queues[id[i]/nbFrets].enqueue((Note) {time_start[i], time_end[i], id[i]});
+    queues[id[i]/nbFrets].enqueue((Note) {time_start[i], time_start[i] + NOTE_DURATION, id[i]});
+  }
+
+  // setup to begin to play
+  startTime = millis();
+  for (int i = 0; i < 6; i++){
+    notes[i] = (Note) {0, 0, 0};
   }
 }
 
 void loopTiming() {
   unsigned long currentTime = millis() - startTime;
+  if (startTime = 0) return;
 
+// We check all the string queues 
   for (int i = 0; i < 6; i++){
+    // if a note has reached its play timing, we activate the servo
+    if (currentTime >= notes[i].start){
+      activate_servo(notes[i].id/nbFrets);
+    }
+    // if a note has ended, we move to the next one
     if (currentTime >= notes[i].end){
       notes[i] = queues[i].dequeue();
       activate_stepper(notes[i].id);
     }
-    if (currentTime >= notes[i].start){
-      activate_servo(notes[i].id/nbFrets);
-    }
-  }
-}
-
-void startPlaying(){
-  startTime = millis();
-  for (int i = 0; i < 6; i++){
-    notes[i] = (Note) {0, 0, 0};
   }
 }
 
