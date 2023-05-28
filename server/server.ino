@@ -41,8 +41,7 @@ void setup() {
   server.on("/reset", handleReset);
   server.onNotFound(handleNotSupported);
 
-server.on("/upload", HTTP_POST, [](){ server.send(200); }, handleFileUpload);
-
+  server.on("/play_song/", handlePlaySong); // HTTP_POST
 
   server.on("/play_note", HTTP_GET, []() {  // arg: id
     handlePlayNote();
@@ -112,9 +111,16 @@ void handleReset() {
   server.send(200, "text/plain", "Device reseted.");
 }
 
-
 void handleNotSupported() {
   server.send(404, "text/plain", "Command not supported.");
+}
+
+void handlePlaySong() {
+  if (server.method() != HTTP_POST) {
+    server.send(405, "text/plain", "Method Not Allowed");
+  } else {
+    server.send(200, "text/plain", "POST body was:\n" + server.arg("plain"));
+  }
 }
 
 void handlePlayNote() {
