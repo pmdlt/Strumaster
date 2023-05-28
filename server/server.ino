@@ -41,6 +41,9 @@ void setup() {
   server.on("/reset", handleReset);
   server.onNotFound(handleNotSupported);
 
+server.on("/upload", HTTP_POST, [](){ server.send(200); }, handleFileUpload);
+
+
   server.on("/play_note", HTTP_GET, []() {  // arg: id
     handlePlayNote();
   });
@@ -72,12 +75,12 @@ void debug_stepper(int id_stepper, int steps) {
   Serial.printf("%d,%d,\n", id_stepper, steps);
 }
 
-void reverse_stepper(int id_stepper) { 
-  Serial.printf("%d,%d,\n",-1, id_stepper);
+void reverse_stepper(int id_stepper) {
+  Serial.printf("%d,%d,\n", -1, id_stepper);
 }
 
-void reset_stepper(int id_stepper) { 
-  Serial.printf("%d,%d,\n",-2, id_stepper);
+void reset_stepper(int id_stepper) {
+  Serial.printf("%d,%d,\n", -2, id_stepper);
 }
 
 void activate_servo(int id_servo) {
