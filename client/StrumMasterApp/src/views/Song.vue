@@ -92,10 +92,7 @@ export default {
 
             fetch(url, {
                 method: "POST",
-                body: this.notes,
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8"
-                }
+                body: this.notes
             })
                 .then(response => {
                     if (response.ok) {
