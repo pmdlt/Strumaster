@@ -23,6 +23,9 @@ void setupServos(uint pin1, uint pin2, uint pin3, uint pin4, uint pin5, uint pin
     pin6_servo = pin6;
 
     writeToAllServos(MIN_ANGLE_PWM);
+    writeToAllServos(MAX_ANGLE_PWM);
+    writeToAllServos(MIN_ANGLE_PWM);
+    
 }
 
 void playCords(int cord0, int cord1, int cord2, int cord3, int cord4, int cord5) {
@@ -68,5 +71,8 @@ void writeToServo(int value1, int value2, int value3, int value4, int value5, in
 }
 
 void writeToAllServos(int value) {
+  for (int i = 0; i < 6: ++i) {
+      servo_array[i] = value;
+    }
   writeToServo(value, value, value, value, value, value);
 }

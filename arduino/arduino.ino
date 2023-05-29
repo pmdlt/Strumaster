@@ -103,7 +103,7 @@ uint8_t listenToESP(){
       } 
       
       // case reset
-      if (String(splittedData[0]) == -2) {
+      if (splittedData[0] == -2) {
         resetStepper(splittedData[1]); 
         return -1;
       } 
@@ -114,7 +114,7 @@ uint8_t listenToESP(){
     } else if (nbData == 1) {
       // case where we have to change the current note
 
-      if (String(splittedData[0]) == -3)
+      if (splittedData[0] == -3)
       {
         resetAllSteppers(); 
         return -1;

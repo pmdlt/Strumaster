@@ -14,9 +14,9 @@
               <v-container>
 
                 <v-form ref="form">
-                  <p class="text-center">Calibrate stepper<br><br></p>
+                  <p class="text-center">Use functions to debug stepper<br><br></p>
 
-                  <v-select v-model="stepperFunctionToUse" :items="['Note', 'Steps', 'Reset', 'Reverse']"
+                  <v-select v-model="stepperFunctionToUse" :items="['Note', 'Steps', 'Reset', 'Reverse', 'Calibrate']"
                     label="Function to use" variant="outlined"></v-select>
 
                   <v-slider v-model="stepperId" :min="0" :max="5" :step="1" thumb-label label="Stepper ID"
@@ -24,7 +24,26 @@
 
                   <v-text-field v-model="stepperValue" label="Value" variant="outlined"></v-text-field>
 
-                  <v-btn @click="debugStepper" block class="mt-2">Debug Stepper</v-btn><br><br>
+                  <v-btn @click="debugStepper" block class="mt-2">Send to Stepper</v-btn><br><br>
+
+                  <v-divider></v-divider><br><br>
+
+                  <p class="text-center">Calibrate Steppers<br><br></p>
+
+                  <v-row v-for="id in 6" :key="id">
+                    <v-col>
+                      <v-btn @click="calibrate(id - 1)" prepend-icon="mdi-location-enter" block variant="tonal"
+                        color="orange" class="mt-2">
+                        Calibrate Stepper {{ id - 1 }}
+                      </v-btn>
+                    </v-col>
+                    <v-col>
+                      <v-btn @click="reverse(id - 1)" prepend-icon="mdi-keyboard-tab-reverse" block variant="tonal"
+                        color="blue" class="mt-2">
+                        Reverse Stepper {{ id - 1 }}
+                      </v-btn>
+                    </v-col>
+                  </v-row><br><br>
 
                   <v-divider></v-divider><br><br>
 
@@ -33,7 +52,8 @@
                   <v-slider v-model="servoId" :min="0" :max="5" :step="1" thumb-label label="Servo ID"
                     @input="servoId = $event"></v-slider>
 
-                  <v-btn @click="debugServo" block class="mt-2">Move Servo</v-btn>
+                  <v-btn @click="debugServo" block class="mt-2">Send to Servo</v-btn>
+
                 </v-form>
               </v-container>
             </v-sheet>
@@ -104,6 +124,18 @@ export default {
           console.error(error)
           this.showSnackbar('We lost connection with the board', 'error')
         })
+    },
+    calibrate(id) {
+      this.stepperId = id;
+      this.stepperValue = null;
+      this.stepperFunctionToUse = "Calibrate";
+      this.debugStepper();
+    },
+    reverse(id) {
+      this.stepperId = id;
+      this.stepperValue = null;
+      this.stepperFunctionToUse = "Reverse";
+      this.debugStepper();
     },
     showSnackbar(text, color) {
       this.snackbarText = text
