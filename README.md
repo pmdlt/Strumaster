@@ -23,12 +23,14 @@ The ultimate goal of the Strumaster project is a guitar that can play itself, pr
 - 1x Buck converter (12V to 5V)
 - 1x Adafruit PCA9685
 - 2x CNC shield
-- 6x stepper motor drivers
-- 6x stepper motors
-- 6x servos
-- 10x 6Mx65 screws
+- 6x stepper motor driver
+- 6x stepper motor
+- 6x stepper motor timing Belt Pulley
+- 100cm of timing belt
+- 6x servo
+- 10x 6Mx65 screw
 - 10x 6M nuts
-- ?x 3Mx10 screws
+- ?x 3Mx10 screw
 - a lot of wires
 - zip-ties
 
