@@ -150,7 +150,7 @@ void handleDebugStepper() {
   String function = server.arg("function");
   int rtnv = 0;
 
-  if (function == "Note") {
+  if        (function == "Note") {
     rtnv = 1;
   } else if (function == "Steps") {
     rtnv = 2;

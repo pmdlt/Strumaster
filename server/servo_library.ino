@@ -23,7 +23,7 @@ void setupServos(uint pin1, uint pin2, uint pin3, uint pin4, uint pin5, uint pin
     pin6_servo = pin6;
 
     writeToAllServos(MIN_ANGLE_PWM);
-    for (int i = 0; i < 6: ++i) {
+    for (int i = 0; i < 6; ++i) {
       playSingleCord(i);
       delay(200);
     }
