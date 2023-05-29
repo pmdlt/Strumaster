@@ -47,6 +47,7 @@
                             Calibrate Stepper {{ id - 1 }}
                           </v-btn>
                         </v-col>
+                        <v-divider></v-divider>
                         <v-col>
                           <v-btn @click="reverse(id - 1)" block variant="tonal" color="blue" class="mt-2">
                             Reverse Stepper {{ id - 1 }}
