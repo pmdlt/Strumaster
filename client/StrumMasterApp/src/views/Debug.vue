@@ -76,7 +76,9 @@ export default {
           }
         })
         .then(response => {
-          this.showSnackbar(response, 'success');
+          if (response) {
+            this.showSnackbar(response, 'success');
+          }
         })
         .catch(error => {
           console.error(error)
@@ -94,7 +96,9 @@ export default {
           }
         })
         .then(response => {
-          this.showSnackbar(response, 'success');
+          if (response) {
+            this.showSnackbar(response, 'success');
+          }
         })
         .catch(error => {
           console.error(error)
