@@ -84,7 +84,7 @@ export default {
         async loadSelection() {
             console.log("1. Selection provided, loading...");
             const url = "https://strumaster.netlify.app/midi/" + this.midi_selection + ".mid";
-            const MIDIfile = await Midi.fromUrl(url);
+            const MIDIfile = await Midi.fromUrl(url)
             console.log("2. File transforming to MIDI...");
             this.createSong(MIDIfile);
         },
@@ -115,7 +115,7 @@ export default {
 
             fetch(url, {
                 method: "POST",
-                body: this.notes
+                body: csvForDebug
             })
                 .then(response => {
                     if (response.ok) {
@@ -191,6 +191,8 @@ let guitar = [
     ["F2", "F#2", "G2", "G#2", "A2", "A#2", "B2", "C2", "C#2"],//,"D","D#"],
 
 ]
+
+const csvForDebug = "time_start,time_end,id\n0,1000,40\n1000,2000,40\n0,2000,3000,40\n3000,4000,42\n4000,6000,44\n6000,8000,42\n8000,9000,40\n9000,10000,44\n10000,11000,42\n11000,12000,42\n12000,14000,40\n";
 
 
 // take a json object and return a csv string
