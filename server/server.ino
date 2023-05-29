@@ -36,7 +36,7 @@ void setup() {
   server.on("/stop", handleStop);
   server.on("/pause", handlePause);
   server.on("/resume", handleResume);
-  server.on("/play", handlePlay);
+  server.on("/play_song", handlePlay);
   server.on("/reset", handleReset);
   server.onNotFound(handleNotSupported);
 
