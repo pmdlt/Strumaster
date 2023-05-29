@@ -26,8 +26,10 @@
                   between your PC and the board, not you and the internet.<br>
                   <br>
                 </p>
-                <v-img contain :width="300" src="@/assets/1.png" />
-                <v-img contain :width="300" src="@/assets/2.png" />
+                <div id="img-cont">
+                  <v-img contain :width="500" src="@/assets/1.png" />
+                  <v-img contain :width="500" src="@/assets/2.png" />
+                </div>
               </v-container>
             </v-sheet>
           </v-col>
@@ -41,3 +43,11 @@
 export default {
 };
 </script>
+
+<style>
+#img-cont {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+</style>
