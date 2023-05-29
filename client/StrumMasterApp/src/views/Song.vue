@@ -3,18 +3,24 @@
         <v-main class="bg-grey-lighten-3">
             <v-container>
                 <v-row>
-                    <v-col cols="12" sm="4">
+                    <v-col cols="12" sm="3">
                         <v-sheet rounded="lg">
                             <the-menu-bar />
                         </v-sheet>
                     </v-col>
 
-                    <v-col cols="12" sm="8">
+                    <v-col cols="12" sm="9">
                         <v-sheet min-height="70vh" rounded="lg">
                             <v-container>
                                 <v-form ref="form">
-                                    <p class="text-center">Insert a midi file to be played by the guitar<br><br></p>
+                                    <p class="text-center">Insert a midi file to be played by the guitar :<br><br></p>
                                     <v-file-input label="MIDI File" variant="solo" @change="loadFile"></v-file-input>
+
+                                    <p class="text-center">or select it from our selection :</p>
+
+                                    <v-autocomplete label="Pre-selection of songs"
+                                        :items="['note_scale_for_debug_10bpm', 'note_scale_for_debug_20bpm']"
+                                        variant="solo" @change="loadSelection"></v-autocomplete>
 
                                     <p class="text-center">Parameters</p>
 
