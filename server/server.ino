@@ -17,8 +17,8 @@ ESP8266WebServer server(80);
 
 // Program variables
 bool connected = 0;
-bool is_playing_note = 0;
-uint8_t nbFrets = 8;  // number of frets handled by strings
+bool is_playing = false;
+uint8_t nbFrets = 10;  // number of frets handled by strings
 
 void setup() {
   Serial.begin(9600);
@@ -29,8 +29,6 @@ void setup() {
   // WiFi initialisation
   WiFi.softAP(ssid, password);
   WiFi.softAPConfig(local_ip, gateway, subnet);
-
-  server.enableCORS(true);
   delay(100);
 
   // Commands handle
@@ -38,12 +36,14 @@ void setup() {
   server.on("/stop", handleStop);
   server.on("/pause", handlePause);
   server.on("/resume", handleResume);
+  server.on("/play", handlePlay);
   server.on("/reset", handleReset);
   server.onNotFound(handleNotSupported);
 
-  server.on("/play_song", HTTP_POST, []() {  // arg: POST_plain
-    handlePlaySong();
+  server.on("/load_song", HTTP_POST, []() {  // arg: POST_plain
+    handleLoad();
   });
+  server.on("/load_song", HTTP_OPTIONS, handleCORS);
 
   server.on("/play_note", HTTP_GET, []() {  // arg: id
     handlePlayNote();
@@ -57,23 +57,22 @@ void setup() {
     handleDebugServo();
   });
 
+  server.enableCORS(true);
   server.begin();  
-  setupTimings(NULL);
+  
 }
 void loop() {
   server.handleClient();
-  loopTiming();
+  if (is_playing) loopTiming();
 }
 
 ///////////////////////////////////////////////////////////
 
 void activate_stepper(int id_note) {
-  // Todo @Albert: send to Arduino
   Serial.printf("%d,\n", id_note);
 }
 
 void debug_stepper(int id_stepper, int steps) {
-  // Todo @Albert: send to Arduino
   Serial.printf("%d,%d,\n", id_stepper, steps);
 }
 
@@ -97,37 +96,43 @@ void activate_servo(int id_servo) {
 }
 
 void handleConnect() {
-  server.send(200, "text/plain", "Connexion successful. Try to play a note :) !");
+  server.send(200, "text/plain", "Connexion successful. Try to play a note !");
 }
 
 void handlePause() {
-  // Todo
+  is_playing = false;
   server.send(200, "text/plain", "Song paused");
 }
 
 void handleResume() {
-  // Todo
+  is_playing = true;
   server.send(200, "text/plain", "Song resumed");
 }
 
+void handlePlay() {
+  startPlaying();
+  server.send(200, "text/plain", "Song started ! Enjoy the song !");
+}
+
 void handleStop() {
-  // Todo
-  server.send(200, "text/plain", "All motor off.");
+  setupTimings("time_start,time_end,id\n");
+  server.send(200, "text/plain", "All motor off");
 }
 
 void handleReset() {
   // Todo
   Serial.println("-3,");
-  server.send(200, "text/plain", "Device reseted.");
+  server.send(200, "text/plain", "Device reinitialized");
 }
 
 void handleNotSupported() {
-  server.send(404, "text/plain", "Command not supported.");
+  server.send(501, "text/plain", "Command not supported");
 }
 
-void handlePlaySong() {
-    activate_servo(1);
-    server.send(200, "text/plain", "POST body was:\n" + server.arg("plain"));
+void handleLoad() {
+    setupTimings(server.arg("plain").c_str());
+    is_playing = true;
+    server.send(200, "text/plain", "Song was sent to the guitar. File was correctly loaded !");
 }
 
 void handlePlayNote() {
@@ -136,7 +141,7 @@ void handlePlayNote() {
   delay(1000);  // FIXME bloquing, Ok for debug and if we only want to play 1 note, Must be changed for final
   activate_servo(id / nbFrets);
 
-  server.send(200, "text/plain", "");
+  server.send(200, "text/plain", "Note sent and played");
 }
 
 void handleDebugStepper() {
@@ -188,7 +193,7 @@ void handleDebugStepper() {
       return;
   }
 
-  server.send(200, "text/plain", "Stepper moved.");
+  server.send(200, "text/plain", "Debug function received by ESP !");
 }
 
 void handleDebugServo() {
@@ -197,4 +202,12 @@ void handleDebugServo() {
   playSingleCord(id);
 
   server.send(200, "text/plain", "Servo moved.");
+}
+
+void handleCORS() {
+  server.sendHeader("Access-Control-Allow-Origin", "*");
+  server.sendHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+  server.sendHeader("Access-Control-Max-Age", "10000");
+  server.sendHeader("Access-Control-Allow-Headers", "Content-Type");
+  server.send(204);
 }

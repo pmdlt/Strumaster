@@ -46,19 +46,26 @@ export default {
     snackbarTimeout: 2000,
   }),
   methods: {
-    async playNote() {
-      try {
-        const response = await fetch(`http://192.168.174.140/play_note?id=${this.note}`);
-        if (response.ok) {
-          this.showSnackbar(response.text(), 'success')
-        } else {
-          console.error(response)
-          this.showSnackbar('An error occurred', 'warning')
-        }
-      } catch (error) {
-        console.error(error)
-        this.showSnackbar('We lost connection with the board', 'error')
-      }
+    playNote() {
+      const url = `http://192.168.174.140/play_note?id=${this.note}`
+      console.log("Sending GET request to: " + url);
+      fetch(url)
+        .then(response => {
+          if (response.ok) {
+            return response.text();
+          } else {
+            this.showSnackbar('An error occurred', 'warning')
+          }
+        })
+        .then(response => {
+          if (response) {
+            this.showSnackbar(response, 'success');
+          }
+        })
+        .catch(error => {
+          console.error(error)
+          this.showSnackbar('We lost connection with the board', 'error')
+        })
     },
     showSnackbar(text, color) {
       this.snackbarText = text

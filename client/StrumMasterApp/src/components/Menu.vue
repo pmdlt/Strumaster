@@ -20,8 +20,8 @@
       Pause
     </v-btn>
     <br>
-    <v-btn block prepend-icon="mdi-play" variant="outlined" color="green" @click="sendGetRequest('continue')">
-      continue
+    <v-btn block prepend-icon="mdi-play" variant="outlined" color="green" @click="sendGetRequest('resume')">
+      Resume
     </v-btn>
     <br>
     <v-snackbar v-model="snackbarVisible" :color="snackbarColor" :timeout="snackbarTimeout">{{ snackbarText
@@ -40,6 +40,7 @@ export default {
   methods: {
     sendGetRequest(button) {
       const url = `http://192.168.174.140/${button}`
+      console.log("Sending GET request to: " + url);
       fetch(url)
         .then(response => {
           if (response.ok) {
@@ -49,7 +50,9 @@ export default {
           }
         })
         .then(response => {
-          this.showSnackbar(response, 'success');
+          if (response) {
+            this.showSnackbar(response, 'success');
+          }
         })
         .catch(error => {
           console.error(error)

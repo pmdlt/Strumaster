@@ -19,7 +19,7 @@
                   <v-select v-model="stepperFunctionToUse" :items="['Note', 'Steps', 'Reset', 'Reverse']"
                     label="Function to use" variant="outlined"></v-select>
 
-                  <v-slider v-model="stepperId" :min="0" :max="6" :step="1" thumb-label label="Stepper ID"
+                  <v-slider v-model="stepperId" :min="0" :max="5" :step="1" thumb-label label="Stepper ID"
                     @input="stepperId = $event"></v-slider>
 
                   <v-text-field v-model="stepperValue" label="Value" variant="outlined"></v-text-field>
@@ -30,7 +30,7 @@
 
                   <p class="text-center">Test servo<br><br></p>
 
-                  <v-slider v-model="servoId" :min="0" :max="6" :step="1" thumb-label label="Servo ID"
+                  <v-slider v-model="servoId" :min="0" :max="5" :step="1" thumb-label label="Servo ID"
                     @input="servoId = $event"></v-slider>
 
                   <v-btn @click="debugServo" block class="mt-2">Move Servo</v-btn>
@@ -66,6 +66,7 @@ export default {
   methods: {
     debugStepper() {
       const url = `http://192.168.174.140/debug_stepper?function=${this.stepperFunctionToUse}&id=${this.stepperId}&value=${this.stepperValue}`
+      console.log("Sending GET request to: " + url);
       fetch(url)
         .then(response => {
           if (response.ok) {
@@ -75,7 +76,9 @@ export default {
           }
         })
         .then(response => {
-          this.showSnackbar(response, 'success');
+          if (response) {
+            this.showSnackbar(response, 'success');
+          }
         })
         .catch(error => {
           console.error(error)
@@ -93,7 +96,9 @@ export default {
           }
         })
         .then(response => {
-          this.showSnackbar(response, 'success');
+          if (response) {
+            this.showSnackbar(response, 'success');
+          }
         })
         .catch(error => {
           console.error(error)

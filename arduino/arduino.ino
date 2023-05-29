@@ -15,12 +15,12 @@ uint8_t currNote = -1;
 
 Note translater[60];
 StepperDriver steppers[6] = {
-  StepperDriverConstructor(2, 5, 0), 
-  StepperDriverConstructor(3, 6, 0), 
-  StepperDriverConstructor(4, 7, 0),
-  StepperDriverConstructor(8, 11, 0),
-  StepperDriverConstructor(9, 12, 0),
-  StepperDriverConstructor(10, 13, 0)
+  StepperDriverConstructor(2,   5,    false), 
+  StepperDriverConstructor(3,   6,    false), 
+  StepperDriverConstructor(4,   7,    true),
+  StepperDriverConstructor(8,   11,   false),
+  StepperDriverConstructor(9,   12,   true),
+  StepperDriverConstructor(10,  13,   false)
   }; // Contains the stepper drivers
 SoftwareSerial ESP(0, 1); 
 
@@ -96,21 +96,17 @@ uint8_t listenToESP(){
       index +=1;
     }
     if (nbData == 2) {
-
-      
-      //case reset
+      //case reverse
       if (splittedData[0] == -1) {
         reverseStepper(splittedData[1]);
         return -1;
       } 
       
-      // case reverse
-      if (String(splittedData[0]) == -2)
-      {
+      // case reset
+      if (String(splittedData[0]) == -2) {
         resetStepper(splittedData[1]); 
         return -1;
       } 
-
       
       // case where we have to move the stepper 
       doSteps(&steppers[splittedData[0]], splittedData[1]); 
