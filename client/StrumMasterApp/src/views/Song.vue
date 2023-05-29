@@ -23,7 +23,9 @@
 
                                     <v-slider v-model="speed" :min="0" :max="100" thumb-label label="Speed"></v-slider>
 
-                                    <v-btn @click="sendAndPlay" block class="mt-2">Send and Play</v-btn>
+                                    <v-btn @click="loadSong" block class="mt-2">Send and load the song into the
+                                        guitar</v-btn>
+                                    <v-btn @click="playSong" block class="mt-2">Play song</v-btn>
                                 </v-form>
                             </v-container>
                         </v-sheet>
@@ -80,14 +82,14 @@ export default {
 
         },
 
-        sendAndPlay() {
-            console.log("Send and play button pressed");
+        loadSong() {
+            console.log("Load song button clicked");
             if (this.notes == null) {
                 this.showSnackbar('The file provided cannot be transformed and played', 'error')
                 return;
             }
 
-            const url = `http://192.168.174.140/play_song`;
+            const url = `http://192.168.174.140/load_song`;
             console.log("Sending POST request to: " + url);
 
             fetch(url, {
@@ -112,6 +114,27 @@ export default {
                     this.showSnackbar('We lost connection with the board', 'error')
                 })
 
+        },
+        playSong() {
+            const url = `http://192.168.174.140/play_song`
+            console.log("Sending GET request to: " + url);
+            fetch(url)
+                .then(response => {
+                    if (response.ok) {
+                        return response.text();
+                    } else {
+                        this.showSnackbar('An error occurred', 'warning')
+                    }
+                })
+                .then(response => {
+                    if (response) {
+                        this.showSnackbar(response, 'success');
+                    }
+                })
+                .catch(error => {
+                    console.error(error)
+                    this.showSnackbar('We lost connection with the board', 'error')
+                })
         },
         showSnackbar(text, color) {
             this.snackbarText = text
@@ -158,7 +181,6 @@ function transform(json, track_number) {
 
     let notes = []
     let GLOBAL_START_TIME = json['notes'][0]['time']
-    console.log("GLOBAL_START_TIME", GLOBAL_START_TIME)
 
     for (let i = 0; i < json['notes'].length; i++) {
         let note = json['notes'][i]
@@ -175,8 +197,6 @@ function transform(json, track_number) {
         csv += result[i][1] + "," + result[i][2] + "," + result[i][0] + "\n"
     }
     return csv
-
-
 
 }
 
