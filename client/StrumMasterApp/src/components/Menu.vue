@@ -9,9 +9,13 @@
     <v-btn block prepend-icon="mdi-connection" variant="tonal" color="blue" @click="sendGetRequest('connect')">
       Test connection
     </v-btn>
+    <br>
     <v-btn block prepend-icon="mdi-update" variant="tonal" color="orange" @click="sendGetRequest('reset')">
       Reset all motors
     </v-btn>
+    <br>
+    <v-divider></v-divider>
+    <br>
     <v-btn block prepend-icon="mdi-pause" variant="outlined" color="black" @click="sendGetRequest('pause')">
       Pause
     </v-btn>
