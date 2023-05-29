@@ -96,7 +96,6 @@ export default {
             })
                 .then(response => {
                     if (response.ok) {
-                        console.log(response);
                         return response.text();
                     } else {
                         console.error(response)

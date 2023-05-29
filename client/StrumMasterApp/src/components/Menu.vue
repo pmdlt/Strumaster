@@ -20,8 +20,8 @@
       Pause
     </v-btn>
     <br>
-    <v-btn block prepend-icon="mdi-play" variant="outlined" color="green" @click="sendGetRequest('continue')">
-      continue
+    <v-btn block prepend-icon="mdi-play" variant="outlined" color="green" @click="sendGetRequest('resume')">
+      Resume
     </v-btn>
     <br>
     <v-snackbar v-model="snackbarVisible" :color="snackbarColor" :timeout="snackbarTimeout">{{ snackbarText
