@@ -19,15 +19,15 @@
 
                   Then click the button below to test your connection with the board.<br><br>
                 </p>
-                <v-divider></v-divider>
+                <v-divider></v-divider><br>
                 <p class="text-center">Please remove strong HTTPS security for this website in your browser in order to
                   communicate with the board.<br>
                   Don't worry, security is not an issue here, we are not sending any sensitive data. Also, it's just
                   between your PC and the board, not you and the internet.<br>
                   <br>
                 </p>
-                <v-img contain height="300" src="@/assets/1.png" />
-                <v-img contain height="300" src="@/assets/2.png" />
+                <v-img contain src="@/assets/1.png" />
+                <v-img contain src="@/assets/2.png" />
               </v-container>
             </v-sheet>
           </v-col>
@@ -38,16 +38,6 @@
 </template>
 
 <script>
-import '@google/model-viewer';
-
 export default {
 };
 </script>
-
-<style>
-model-viewer {
-  width: 100%;
-  height: 90%;
-  background-color: #ffffff;
-}
-</style>

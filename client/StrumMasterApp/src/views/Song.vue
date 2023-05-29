@@ -46,7 +46,7 @@ export default {
         TheMenuBar,
     },
     data: () => ({
-        speed: 0,
+        speed: 45,
         channel: 0,
         notes: null,
         snackbarVisible: false,
@@ -118,6 +118,7 @@ export default {
             this.snackbarText = text
             this.snackbarColor = color
             this.snackbarVisible = true
+            console.log("Snackbar showed: ", text)
         },
 
     },

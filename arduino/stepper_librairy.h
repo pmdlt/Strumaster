@@ -4,7 +4,7 @@ typedef struct StepperDriver {
   uint8_t dir;
 
   // 1 = clockwise, 0 = counterclockwise todo (i think, to be verified)
-  uint8_t reversedDir;
+  bool reversedDir;
 
   uint position;
   uint goal;

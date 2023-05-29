@@ -31,6 +31,9 @@ void updateSteppers(StepperDriver steppers[]){
     delayMicroseconds(stepDelay);
     digitalWrite(stepper->step, LOW);
     stepper->position += diff > 0 ? 1 : -1;
+
+    // small fix for heating
+    digitalWrite(stepper->dir, LOW);
   }
 }
 
