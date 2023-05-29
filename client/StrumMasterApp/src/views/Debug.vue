@@ -130,6 +130,8 @@ export default {
       this.stepperValue = null;
       this.stepperFunctionToUse = "Calibrate";
       this.debugStepper();
+      this.stepperFunctionToUse = "Steps";
+      this.stepperValue = -10;
     },
     reverse(id) {
       this.stepperId = id;
