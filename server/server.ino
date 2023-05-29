@@ -17,7 +17,7 @@ ESP8266WebServer server(80);
 
 // Program variables
 bool connected = 0;
-bool is_playing_note = 0;
+bool is_playing = false;
 uint8_t nbFrets = 8;  // number of frets handled by strings
 
 void setup() {
@@ -62,18 +62,16 @@ void setup() {
 }
 void loop() {
   server.handleClient();
-  loopTiming();
+  if (is_playing) loopTiming();
 }
 
 ///////////////////////////////////////////////////////////
 
 void activate_stepper(int id_note) {
-  // Todo @Albert: send to Arduino
   Serial.printf("%d,\n", id_note);
 }
 
 void debug_stepper(int id_stepper, int steps) {
-  // Todo @Albert: send to Arduino
   Serial.printf("%d,%d,\n", id_stepper, steps);
 }
 
@@ -94,18 +92,17 @@ void handleConnect() {
 }
 
 void handlePause() {
-  // Todo
+  is_playing = false;
   server.send(200, "text/plain", "Song paused");
 }
 
 void handleResume() {
-  // Todo
-  setupTimings(NULL);
+  is_playing = true;
   server.send(200, "text/plain", "Song resumed");
 }
 
 void handleStop() {
-  // Todo
+  setupTimings("time_start,time_end,id\n");
   server.send(200, "text/plain", "All motor off");
 }
 
@@ -121,6 +118,7 @@ void handleNotSupported() {
 
 void handlePlaySong() {
     setupTimings(server.arg("plain").c_str());
+    is_playing = true;
     server.send(200, "text/plain", "Song was sent to the guitar. Enjoy the vibe !");
 }
 
