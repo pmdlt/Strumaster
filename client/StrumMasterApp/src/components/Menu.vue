@@ -12,7 +12,6 @@
     <v-btn block prepend-icon="mdi-update" variant="tonal" color="orange" @click="sendGetRequest('reset')">
       Reset all motors
     </v-btn>
-    <v-divider></v-divider>
     <v-btn block prepend-icon="mdi-pause" variant="outlined" color="black" @click="sendGetRequest('pause')">
       Pause
     </v-btn>
