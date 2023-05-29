@@ -164,13 +164,13 @@ let TIME_TO_MOVE_ONE_FRET = 240;
 let TIME_NOTE = 500;
 
 let guitar = [
-    ["F", "F#", "G", "G#", "A", "A#", "B", "C", "C#"],//,"D","D#"],
-    ["A#", "B", "C", "C#", "D", "D#", "E", "F", "F#"],//,"G","G#"],
-    ["D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"],//,"C","C#"],
-    ["G#", "A", "A#", "B", "C", "C#", "D", "D#", "E"],//,"F","F#"],
-    ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"],//,"A","A#"],
-    ["F", "F#", "G", "G#", "A", "A#", "B", "C", "C#"],//,"D","D#"],
-
+    ["F7", "F#7", "G7", "G#7", "A6", "A#6", "B6", "C6", "C#6"],//,"D","D#"],
+    ["A#6", "B6", "C6", "C#6", "D5", "D#5", "E5", "F5", "F#5"],//,"G","G#"],
+    ["D#5", "E5", "F5", "F#5", "G4", "G#4", "A4", "A#4", "B3"],//,"C","C#"],
+    ["G#4", "A4", "A#4", "B3", "C3", "C#3", "D3", "D#3", "E2"],//,"F","F#"],
+    ["C3", "C#3", "D3", "D#3", "E2", "F2", "F#2", "G2", "G#2"],//,"A","A#"],
+    ["F2", "F#2", "G2", "G#2", "A2", "A#2", "B2", "C2", "C#2"],//,"D","D#"],
+  
 ]
 
 
@@ -190,7 +190,7 @@ function transform(json, track_number) {
         let note = json['notes'][i]
         let time_start = Math.floor(note['time'] * 1000 - GLOBAL_START_TIME)
         let time_end = Math.floor(time_start + Math.min(note['duration'] * 1000, TIME_NOTE) - GLOBAL_START_TIME)
-        let name = note['name'].replace(/\d+/g, '');// to do: handle octave
+        let name = note['name']//.replace(/\d+/g, '');// to do: handle octave
         notes.push(new Note(name, time_start, time_end))
     }
 
