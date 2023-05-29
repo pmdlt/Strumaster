@@ -3,13 +3,13 @@
         <v-main class="bg-grey-lighten-3">
             <v-container>
                 <v-row>
-                    <v-col cols="12" sm="3">
+                    <v-col cols="12" sm="5">
                         <v-sheet rounded="lg">
                             <the-menu-bar />
                         </v-sheet>
                     </v-col>
 
-                    <v-col cols="12" sm="9">
+                    <v-col cols="12" sm="7">
                         <v-sheet min-height="70vh" rounded="lg">
                             <v-container>
                                 <v-form ref="form">
@@ -183,7 +183,7 @@ function transform(json, track_number) {
 
 
     let notes = []
-    let GLOBAL_START_TIME = json['notes'][0]['time']-2000
+    let GLOBAL_START_TIME = json['notes'][0]['time'] - 2000
     console.log("GLOBAL_START_TIME", GLOBAL_START_TIME)
 
     for (let i = 0; i < json['notes'].length; i++) {
