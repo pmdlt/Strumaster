@@ -43,7 +43,7 @@
                         Reverse Stepper {{ id - 1 }}
                       </v-btn>
                     </v-col>
-                  </v-row>
+                  </v-row><br><br>
 
                   <v-divider></v-divider><br><br>
 
@@ -52,7 +52,7 @@
                   <v-slider v-model="servoId" :min="0" :max="5" :step="1" thumb-label label="Servo ID"
                     @input="servoId = $event"></v-slider>
 
-                  <v-btn @click="debugServo" block class="mt-2">Send to Servo</v-btn><br><br>
+                  <v-btn @click="debugServo" block class="mt-2">Send to Servo</v-btn>
 
                 </v-form>
               </v-container>
