@@ -16,7 +16,7 @@
                 <v-form ref="form">
                   <p class="text-center">Calibrate stepper<br><br></p>
 
-                  <v-select v-model="stepperFunctionToUse" :items="['Note', 'Steps', 'Reset', 'Reverse']"
+                  <v-select v-model="stepperFunctionToUse" :items="['Note', 'Steps', 'Reset', 'Reverse', 'Calibrate']"
                     label="Function to use" variant="outlined"></v-select>
 
                   <v-slider v-model="stepperId" :min="0" :max="5" :step="1" thumb-label label="Stepper ID"
@@ -34,6 +34,28 @@
                     @input="servoId = $event"></v-slider>
 
                   <v-btn @click="debugServo" block class="mt-2">Move Servo</v-btn>
+
+                  <v-divider></v-divider><br><br>
+
+                  <p class="text-center">Calibrate Steppers<br><br></p>
+
+                  <v-row>
+                    <v-col v-for="id in 6" :key="id">
+                      <v-row>
+                        <v-col cols="2">
+                          <v-btn @click="calibrate(id - 1)" block variant="tonal" color="orange" class="mt-2">
+                            Calibrate Stepper {{ id - 1 }}
+                          </v-btn>
+                        </v-col>
+                        <v-col cols="2">
+                          <v-btn @click="reverse(id - 1)" block variant="tonal" color="blue" class="mt-2">
+                            Reverse Stepper {{ id - 1 }}
+                          </v-btn>
+                        </v-col>
+                      </v-row>
+                    </v-col>
+                  </v-row>
+
                 </v-form>
               </v-container>
             </v-sheet>
@@ -104,6 +126,18 @@ export default {
           console.error(error)
           this.showSnackbar('We lost connection with the board', 'error')
         })
+    },
+    calibrate(id) {
+      this.stepperId = id;
+      this.stepperValue = null;
+      this.stepperFunctionToUse = "Calibrate";
+      this.debugStepper();
+    },
+    reverse(id) {
+      this.stepperId = id;
+      this.stepperValue = null;
+      this.stepperFunctionToUse = "Reverse";
+      this.debugStepper();
     },
     showSnackbar(text, color) {
       this.snackbarText = text
