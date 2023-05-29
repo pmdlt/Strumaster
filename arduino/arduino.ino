@@ -15,12 +15,12 @@ uint8_t currNote = -1;
 
 Note translater[60];
 StepperDriver steppers[6] = {
-  StepperDriverConstructor(2, 5, 0), 
-  StepperDriverConstructor(3, 6, 0), 
-  StepperDriverConstructor(4, 7, 0),
-  StepperDriverConstructor(8, 11, 0),
-  StepperDriverConstructor(9, 12, 0),
-  StepperDriverConstructor(10, 13, 0)
+  StepperDriverConstructor(2,   5,    false), 
+  StepperDriverConstructor(3,   6,    false), 
+  StepperDriverConstructor(4,   7,    true),
+  StepperDriverConstructor(8,   11,   false),
+  StepperDriverConstructor(9,   12,   true),
+  StepperDriverConstructor(10,  13,   false)
   }; // Contains the stepper drivers
 SoftwareSerial ESP(0, 1); 
 
