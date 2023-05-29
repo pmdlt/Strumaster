@@ -34,7 +34,7 @@ void setupTimings(const char* csvData) {
   startTime = millis();
   for (int i = 0; i < 6; i++){
     if (queues[i].isEmpty()) {
-      notes[i].id == -1;
+      notes[i].id = -1;
       break;
     }
     notes[i] = queues[i].dequeue();
@@ -55,7 +55,7 @@ void loopTiming() {
     // if a note has ended, we move to the next one
     if (notes[i].id != -1 && currentTime >= notes[i].end){
       if (queues[i].isEmpty()) {
-        notes[i].id == -1;
+        notes[i].id = -1;
         break;
       }
       notes[i] = queues[i].dequeue();
