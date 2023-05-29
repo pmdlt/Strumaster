@@ -40,7 +40,7 @@
                   <p class="text-center">Calibrate Steppers<br><br></p>
 
                   <v-row>
-                    <v-col v-for="id in 6" :key="id" cols="12" sm="4">
+                    <v-col v-for="id in 6" :key="id">
                       <v-row>
                         <v-col cols="2">
                           <v-btn @click="calibrate(id - 1)" block variant="tonal" color="orange" class="mt-2">
