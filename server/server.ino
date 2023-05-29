@@ -116,7 +116,7 @@ void handleReset() {
 }
 
 void handleNotSupported() {
-  server.send(404, "text/plain", "Command not supported.");
+  server.send(501, "text/plain", "Command not supported.");
 }
 
 void handlePlaySong() {
@@ -176,7 +176,7 @@ void handleDebugStepper() {
       return;
   }
 
-  server.send(200, "text/plain", "Stepper moved.");
+  server.send(200, "text/plain", "Debug function received by ESP !");
 }
 
 void handleDebugServo() {
