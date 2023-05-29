@@ -82,8 +82,8 @@ export default {
 
         },
         async loadSelection() {
-            console.log("1. Selection provided, loading...");
             const url = "https://strumaster.netlify.app/midi/" + this.midi_selection + ".mid";
+            console.log("1. Loading MIDI from: " + url);
             const MIDIfile = await Midi.fromUrl(url)
             console.log("2. File transforming to MIDI...");
             this.createSong(MIDIfile);
