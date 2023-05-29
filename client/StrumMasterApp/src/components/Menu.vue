@@ -6,6 +6,13 @@
       Emergency Stop
     </v-btn>
     <br>
+    <v-btn block prepend-icon="mdi-connection" variant="tonal" color="blue" @click="sendGetRequest('connect')">
+      Test connection
+    </v-btn>
+    <v-btn block prepend-icon="mdi-update" variant="tonal" color="orange" @click="sendGetRequest('reset')">
+      Reset all motors
+    </v-btn>
+    <v-divider></v-divider>
     <v-btn block prepend-icon="mdi-pause" variant="outlined" color="black" @click="sendGetRequest('pause')">
       Pause
     </v-btn>
@@ -14,27 +21,43 @@
       continue
     </v-btn>
     <br>
-    <v-btn block prepend-icon="mdi-update" variant="tonal" color="orange" @click="sendGetRequest('reset')">
-      Reset all motors
-    </v-btn>
-
+    <v-snackbar v-model="snackbarVisible" :color="snackbarColor" :timeout="snackbarTimeout">{{ snackbarText
+    }}</v-snackbar>
   </v-container>
 </template>
 
 <script>
 export default {
+  data: () => ({
+    snackbarVisible: false,
+    snackbarText: '',
+    snackbarColor: '',
+    snackbarTimeout: 2000,
+  }),
   methods: {
     sendGetRequest(button) {
-      fetch(`http://192.168.174.140/${button}`)
+      const url = `http://192.168.174.140/${button}`
+      fetch(url)
         .then(response => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+          if (response.ok) {
+            return response.text();
+          } else {
+            this.showSnackbar('An error occurred', 'warning')
           }
-          return response.text();
         })
-        .then(data => console.log(data))
-        .catch(error => console.error(error));
-    }
+        .then(response => {
+          this.showSnackbar(response, 'success');
+        })
+        .catch(error => {
+          console.error(error)
+          this.showSnackbar('We lost connection with the board', 'error')
+        })
+    },
+    showSnackbar(text, color) {
+      this.snackbarText = text
+      this.snackbarColor = color
+      this.snackbarVisible = true
+    },
   }
 }
 </script>
