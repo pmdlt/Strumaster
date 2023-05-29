@@ -26,8 +26,8 @@
                   between your PC and the board, not you and the internet.<br>
                   <br>
                 </p>
-                <v-img contain src="@/assets/1.png" />
-                <v-img contain src="@/assets/2.png" />
+                <v-img contain :width="300" src="@/assets/1.png" />
+                <v-img contain :width="300" src="@/assets/2.png" />
               </v-container>
             </v-sheet>
           </v-col>
