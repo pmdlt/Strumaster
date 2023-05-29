@@ -66,6 +66,7 @@ export default {
   methods: {
     debugStepper() {
       const url = `http://192.168.174.140/debug_stepper?function=${this.stepperFunctionToUse}&id=${this.stepperId}&value=${this.stepperValue}`
+      console.log("Sending GET request to: " + url);
       fetch(url)
         .then(response => {
           if (response.ok) {
