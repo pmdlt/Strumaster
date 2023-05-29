@@ -87,7 +87,7 @@ export default {
                 return;
             }
 
-            const url = `https://echo.hoppscotch.io/`;
+            const url = `http://192.168.174.140/play_song`;
             console.log("Sending POST request to: " + url);
 
             fetch(url, {
