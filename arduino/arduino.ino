@@ -96,21 +96,17 @@ uint8_t listenToESP(){
       index +=1;
     }
     if (nbData == 2) {
-
-      
-      //case reset
+      //case reverse
       if (splittedData[0] == -1) {
         reverseStepper(splittedData[1]);
         return -1;
       } 
       
-      // case reverse
-      if (String(splittedData[0]) == -2)
-      {
+      // case reset
+      if (String(splittedData[0]) == -2) {
         resetStepper(splittedData[1]); 
         return -1;
       } 
-
       
       // case where we have to move the stepper 
       doSteps(&steppers[splittedData[0]], splittedData[1]); 
