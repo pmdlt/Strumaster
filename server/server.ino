@@ -41,7 +41,9 @@ void setup() {
   server.on("/reset", handleReset);
   server.onNotFound(handleNotSupported);
 
-  server.on("/play_song/", handlePlaySong); // HTTP_POST
+  server.on("/play_song", HTTP_POST, []() {  // arg: POST_plain
+    handlePlaySong();
+  });
 
   server.on("/play_note", HTTP_GET, []() {  // arg: id
     handlePlayNote();
@@ -116,11 +118,8 @@ void handleNotSupported() {
 }
 
 void handlePlaySong() {
-  if (server.method() != HTTP_POST) {
-    server.send(405, "text/plain", "Method Not Allowed");
-  } else {
+    activate_servo(1);
     server.send(200, "text/plain", "POST body was:\n" + server.arg("plain"));
-  }
 }
 
 void handlePlayNote() {
