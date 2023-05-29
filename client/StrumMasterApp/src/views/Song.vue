@@ -3,13 +3,13 @@
         <v-main class="bg-grey-lighten-3">
             <v-container>
                 <v-row>
-                    <v-col cols="12" sm="5">
+                    <v-col cols="12" sm="4">
                         <v-sheet rounded="lg">
                             <the-menu-bar />
                         </v-sheet>
                     </v-col>
 
-                    <v-col cols="12" sm="7">
+                    <v-col cols="12" sm="8">
                         <v-sheet min-height="70vh" rounded="lg">
                             <v-container>
                                 <v-form ref="form">
@@ -170,7 +170,7 @@ let guitar = [
     ["G#", "A", "A#", "B", "C", "C#", "D", "D#", "E"],//,"F","F#"],
     ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"],//,"A","A#"],
     ["F", "F#", "G", "G#", "A", "A#", "B", "C", "C#"],//,"D","D#"],
-  
+
 ]
 
 
