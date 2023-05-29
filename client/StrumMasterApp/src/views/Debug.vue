@@ -41,15 +41,18 @@
 
                   <v-row>
                     <v-col v-for="id in 6" :key="id" cols="12" sm="4">
-                      <v-btn @click="calibrate(id)" block variant="tonal" color="orange" class="mt-2">Calibrate Stepper {{
-                        id }}</v-btn>
-                    </v-col>
-                  </v-row>
-
-                  <v-row>
-                    <v-col v-for="id in 6" :key="id" cols="12" sm="4">
-                      <v-btn @click="reverse(id)" block variant="tonal" color="blue" class="mt-2">Reverse Stepper {{ id
-                      }}</v-btn>
+                      <v-row>
+                        <v-col cols="6">
+                          <v-btn @click="calibrate(id - 1)" block variant="tonal" color="orange" class="mt-2">
+                            Calibrate Stepper {{ id - 1 }}
+                          </v-btn>
+                        </v-col>
+                        <v-col cols="6">
+                          <v-btn @click="reverse(id - 1)" block variant="tonal" color="blue" class="mt-2">
+                            Reverse Stepper {{ id - 1 }}
+                          </v-btn>
+                        </v-col>
+                      </v-row>
                     </v-col>
                   </v-row>
 
