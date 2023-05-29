@@ -71,7 +71,7 @@ void writeToServo(int value1, int value2, int value3, int value4, int value5, in
 }
 
 void writeToAllServos(int value) {
-  for (int i = 0; i < 6: ++i) {
+  for (int i = 0; i < 6; ++i) {
       servo_array[i] = value;
     }
   writeToServo(value, value, value, value, value, value);
