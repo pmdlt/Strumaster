@@ -37,7 +37,7 @@ void setup() {
   server.on("/pause", handlePause);
   server.on("/resume", handleResume);
   server.on("/play_song", handlePlay);
-  server.on("/reset", handleReset);
+  server.on("/reset_all", handleReset); 
   server.onNotFound(handleNotSupported);
 
   server.on("/load_song", HTTP_POST, []() {  // arg: POST_plain
@@ -66,7 +66,7 @@ void loop() {
   if (is_playing) loopTiming();
 }
 
-///////////////////////////////////////////////////////////
+//----------------- debug functions
 
 void activate_stepper(int id_note) {
   Serial.printf("%d,\n", id_note);
@@ -76,8 +76,7 @@ void debug_stepper(int id_stepper, int steps) {
   Serial.printf("%d,%d,\n", id_stepper, steps);
 }
 
-
-void calibrate_stepper(int id_stepper) {
+void trigger_stepper(int id_stepper) {
   debug_stepper(id_stepper, 10);
   delay(100);
   debug_stepper(id_stepper, -10);
@@ -88,12 +87,20 @@ void reverse_stepper(int id_stepper) {
 }
 
 void reset_stepper(int id_stepper) {
+  Serial.printf("%d,%d,\n", -4, id_stepper);
+}
+
+void calibrate_stepper(int id_stepper){
   Serial.printf("%d,%d,\n", -2, id_stepper);
 }
 
 void activate_servo(int id_servo) {
   playSingleCord(id_servo);
 }
+
+
+
+//----------------- request handling functions 
 
 void handleConnect() {
   server.send(200, "text/plain", "Connexion successful. Try to play a note !");
@@ -122,8 +129,7 @@ void handleStop() {
 }
 
 void handleReset() {
-  // Todo
-  Serial.println("-3,");
+  Serial.println("-5,");
   server.send(200, "text/plain", "Device reinitialized");
 }
 
@@ -140,7 +146,7 @@ void handleLoad() {
 void handlePlayNote() {
   int id = server.arg("id").toInt();
   activate_stepper(id);
-  delay(1000);  // FIXME bloquing, Ok for debug and if we only want to play 1 note, Must be changed for final
+  delay(1500);
   activate_servo(id / nbFrets);
 
   server.send(200, "text/plain", "Note sent and played");
@@ -152,7 +158,7 @@ void handleDebugStepper() {
   String function = server.arg("function");
   int rtnv = 0;
 
-  if        (function == "Note") {
+  if        (function == "PlayNote") {
     rtnv = 1;
   } else if (function == "Steps") {
     rtnv = 2;
@@ -160,8 +166,12 @@ void handleDebugStepper() {
     rtnv = 3;
   } else if (function == "Reverse") {
     rtnv = 4;
+  } else if (function == "Trigger") {
+    rtnv = 5; //todo
   } else if (function == "Calibrate"){
-    rtnv = 5;
+    rtnv = 6; //todo
+  } else if (function == "CalibrateAll"){
+    rtnv = 7; //todo
   } else {
     return;
   }
@@ -187,9 +197,19 @@ void handleDebugStepper() {
       reverse_stepper(id);
       break;
 
+    // Trigger
     case 5:
+      trigger_stepper(id);
+      break;
+    
+    // calibrate
+    case 6:
       calibrate_stepper(id);
       break;
+
+    // calibrate all
+    case 7:
+      Serial.println("-3");
 
     default:
       return;
