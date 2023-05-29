@@ -1,11 +1,6 @@
 #include <CSV_Parser.h>
 #include <ArduinoQueue.h>
 
-// ms
-// As sometimes one note finish at the same time than another note should begin, we decided to fix the duration of 
-// each note, so that the note is played, but the stepper isn't blocked by it for too long
-#define NOTE_DURATION 300
-
 typedef struct {
   float start;
   float end;
@@ -30,13 +25,13 @@ void setupTimings(char* csvData) {
             "4354,4838,40\n"
             "4838,5322,26\n"
             "5322,5806,0\n";
-    csvData = "time_start,time_end,id\n";
+    // csvData = "time_start,time_end,id\n";
 
   CSV_Parser csvParser(csvData, "uLuLL");
 
   // Retrieving parsed values
   uint32_t* time_start  = (uint32_t*) csvParser["time_start"];
-//  uint32_t* time_end    = (uint32_t*) csvParser["time_end"];
+  uint32_t* time_end    = (uint32_t*) csvParser["time_end"];
   int*      id          = (int*) csvParser["id"];
 
   // building the queues
@@ -45,30 +40,34 @@ void setupTimings(char* csvData) {
     queues[i] = ArduinoQueue<Note>(nbNotes);
   }
   for (int i = 0; i < nbNotes; i++) {
-    queues[id[i]/nbFrets].enqueue((Note) {time_start[i], time_start[i] + NOTE_DURATION, id[i]});
+    queues[id[i]/nbFrets].enqueue((Note) {time_start[i], time_end[i], id[i]});
   }
 
   // setup to begin to play
   startTime = millis();
   for (int i = 0; i < 6; i++){
-    notes[i] = {0, 0, 0};
+    notes[i] = queues[i].dequeue();
+    activate_servo(notes[i].id);
   }
 }
 
 void loopTiming() {
   unsigned long currentTime = millis() - startTime;
-  if (startTime = 0) return;
+  if (startTime == 0) return;
 
-// We check all the string queues 
+  // We check all the string queues 
   for (int i = 0; i < 6; i++){
     // if a note has reached its play timing, we activate the servo
-    if (node[i] != nullptr && currentTime >= notes[i].start){
+    if (notes[i].id != -1 && currentTime >= notes[i].start){
       activate_servo(notes[i].id/nbFrets);
     }
     // if a note has ended, we move to the next one
-    if (node[i] != nullptr && currentTime >= notes[i].end){
+    if (notes[i].id != -1 && currentTime >= notes[i].end){
+      if (queues[i].isEmpty()) {
+        notes[i].id == -1;
+        break;
+      }
       notes[i] = queues[i].dequeue();
-      if (node[i] == nullptr) break;
       activate_stepper(notes[i].id);
     }
   }
