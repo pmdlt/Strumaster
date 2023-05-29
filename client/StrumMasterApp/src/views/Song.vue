@@ -162,8 +162,8 @@ function transform(json, track_number) {
 
     for (let i = 0; i < json['notes'].length; i++) {
         let note = json['notes'][i]
-        let time_start = math.floor(note['time']*1000-GLOBAL_START_TIME)
-        let time_end = math.floor(time_start + math.min(note['duration']*1000,TIME_NOTE)-GLOBAL_START_TIME)
+        let time_start = Math.floor(note['time']*1000-GLOBAL_START_TIME)
+        let time_end = Math.floor(time_start + math.min(note['duration']*1000,TIME_NOTE)-GLOBAL_START_TIME)
         let name = note['name'].replace(/\d+/g, '');// to do: handle octave
         notes.push(new Note(name, time_start, time_end))
     }
