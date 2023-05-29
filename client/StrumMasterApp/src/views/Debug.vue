@@ -14,7 +14,7 @@
               <v-container>
 
                 <v-form ref="form">
-                  <p class="text-center">Calibrate stepper<br><br></p>
+                  <p class="text-center">Use functions to debug stepper<br><br></p>
 
                   <v-select v-model="stepperFunctionToUse" :items="['Note', 'Steps', 'Reset', 'Reverse', 'Calibrate']"
                     label="Function to use" variant="outlined"></v-select>
@@ -24,16 +24,7 @@
 
                   <v-text-field v-model="stepperValue" label="Value" variant="outlined"></v-text-field>
 
-                  <v-btn @click="debugStepper" block class="mt-2">Debug Stepper</v-btn><br><br>
-
-                  <v-divider></v-divider><br><br>
-
-                  <p class="text-center">Test servo<br><br></p>
-
-                  <v-slider v-model="servoId" :min="0" :max="5" :step="1" thumb-label label="Servo ID"
-                    @input="servoId = $event"></v-slider>
-
-                  <v-btn @click="debugServo" block class="mt-2">Move Servo</v-btn><br><br>
+                  <v-btn @click="debugStepper" block class="mt-2">Send to Stepper</v-btn><br><br>
 
                   <v-divider></v-divider><br><br>
 
@@ -53,6 +44,15 @@
                       </v-btn>
                     </v-col>
                   </v-row>
+
+                  <v-divider></v-divider><br><br>
+
+                  <p class="text-center">Test servo<br><br></p>
+
+                  <v-slider v-model="servoId" :min="0" :max="5" :step="1" thumb-label label="Servo ID"
+                    @input="servoId = $event"></v-slider>
+
+                  <v-btn @click="debugServo" block class="mt-2">Send to Servo</v-btn><br><br>
 
                 </v-form>
               </v-container>
