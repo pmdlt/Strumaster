@@ -34,7 +34,7 @@ void setupTimings(const char* csvData) {
   startTime = millis();
   for (int i = 0; i < 6; i++){
     if (queues[i].isEmpty()) {
-      notes[i].id = -1;
+      notes[i].id = -1; // -1 is to signify that this string has an empty queue and the servo should not activate
       break;
     }
     notes[i] = queues[i].dequeue();
@@ -49,8 +49,9 @@ void loopTiming() {
   // We check all the string queues 
   for (int i = 0; i < 6; i++){
     // if a note has reached its play timing, we activate the servo
-    if (notes[i].id != -1 && currentTime >= notes[i].start){
+    if (notes[i].id != -1 && notes[i].id != 2 && currentTime >= notes[i].start){ // we set id = -2 in order to not activate the servo several times
       activate_servo(notes[i].id/nbFrets);
+      notes[i].id = -2;
     }
     // if a note has ended, we move to the next one
     if (notes[i].id != -1 && currentTime >= notes[i].end){
