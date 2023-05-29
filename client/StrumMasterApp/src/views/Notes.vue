@@ -19,6 +19,19 @@
                   <v-text-field v-model="note" label="Note" variant="outlined"></v-text-field>
 
                   <v-btn @click="playNote" block class="mt-2">Play note</v-btn><br><br>
+
+                  <v-divider></v-divider><br><br>
+
+                  <p class="text-center">Click the note you want to play<br><br></p>
+
+                  <v-col v-for="stepper_id in 6" :key="stepper_id">
+                    <v-row v-for="fret_id in 8" :key="fret_id">
+                      <v-btn @click="clickNote((stepper_id - 1) * 10 + (fret_id - 1))" block variant="tonal" class="mt-2">
+                        Play id {{ (stepper_id - 1) * 10 + (fret_id - 1) }}
+                      </v-btn>
+                    </v-row>
+                  </v-col>
+
                 </v-form>
               </v-container>
             </v-sheet>
@@ -66,6 +79,10 @@ export default {
           console.error(error)
           this.showSnackbar('We lost connection with the board', 'error')
         })
+    },
+    clickNote(id) {
+      this.note = id
+      this.playNote()
     },
     showSnackbar(text, color) {
       this.snackbarText = text

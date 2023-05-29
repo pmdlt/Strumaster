@@ -36,7 +36,7 @@ void setup() {
   server.on("/stop", handleStop);
   server.on("/pause", handlePause);
   server.on("/resume", handleResume);
-  server.on("/play", handlePlay);
+  server.on("/play_song", handlePlay);
   server.on("/reset", handleReset);
   server.onNotFound(handleNotSupported);
 
@@ -150,7 +150,7 @@ void handleDebugStepper() {
   String function = server.arg("function");
   int rtnv = 0;
 
-  if (function == "Note") {
+  if        (function == "Note") {
     rtnv = 1;
   } else if (function == "Steps") {
     rtnv = 2;
