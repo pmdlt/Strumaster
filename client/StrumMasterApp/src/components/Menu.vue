@@ -40,6 +40,7 @@ export default {
   methods: {
     sendGetRequest(button) {
       const url = `http://192.168.174.140/${button}`
+      console.log("Sending GET request to: " + url);
       fetch(url)
         .then(response => {
           if (response.ok) {
