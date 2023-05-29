@@ -158,7 +158,7 @@ function transform(json, track_number) {
 
 
     let notes = []
-    let GLOBAL_START_TIME = json['notes'][0]['time']
+    let GLOBAL_START_TIME = json['notes'][0]['time']-2000
     console.log("GLOBAL_START_TIME", GLOBAL_START_TIME)
 
     for (let i = 0; i < json['notes'].length; i++) {
@@ -216,7 +216,7 @@ function canPlay(note, used_until, position) {
             if (guitar[i].includes(note.name)) {
                 let move = guitar[i].indexOf(note.name) - position[i];
                 // check if the move is possible or if it's the first note
-                if (used_until[i] + move * TIME_TO_MOVE_ONE_FRET <= note.time_start || note.time_start == 0) {
+                if (used_until[i] + move * TIME_TO_MOVE_ONE_FRET <= note.time_start) {
                     temp.push([i, guitar[i].indexOf(note.name), move]);
                 }
             }
