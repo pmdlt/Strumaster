@@ -24,13 +24,13 @@
 
                   <p class="text-center">Click the note you want to play<br><br></p>
 
-                  <v-col v-for="stepper_id in 6" :key="stepper_id">
-                    <v-row v-for="fret_id in 8" :key="fret_id">
-                      <v-btn @click="clickNote((stepper_id - 1) * 10 + (fret_id - 1))" block variant="tonal" class="mt-2">
-                        Play id {{ (stepper_id - 1) * 10 + (fret_id - 1) }}
+                  <v-row v-for="stepper_id in 6" :key="stepper_id">
+                    <v-col v-for="fret_id in 8" :key="fret_id">
+                      <v-btn @click="clickNote('' + (stepper_id - 1) + (fret_id - 1))" block variant="tonal" class="mt-2">
+                        Play id {{ '' + (stepper_id - 1) + (fret_id - 1) }}
                       </v-btn>
-                    </v-row>
-                  </v-col>
+                    </v-col>
+                  </v-row>
 
                 </v-form>
               </v-container>
@@ -81,6 +81,7 @@ export default {
         })
     },
     clickNote(id) {
+
       this.note = id
       this.playNote()
     },
