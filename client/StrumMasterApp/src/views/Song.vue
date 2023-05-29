@@ -19,8 +19,8 @@
                                     <p class="text-center">or select it from the list:<br><br></p>
 
                                     <v-autocomplete label="Pre-selection of songs" v-model="midi_selection"
-                                        :items="['note_scale_for_debug_10bpm', 'note_scale_for_debug_20bpm']" variant="solo"
-                                        @change="loadSelection"></v-autocomplete>
+                                        :items="['note_scale_for_debug_10bpm', 'note_scale_for_debug_20bpm']"
+                                        variant="solo"></v-autocomplete>
 
                                     <p class="text-center">Parameters:</p>
 
@@ -99,8 +99,12 @@ export default {
             this.notes = transformed;
             console.log("4. File transformed and ready to be sent");
         },
-        loadSong() {
+        async loadSong() {
             console.log("Load song button clicked");
+
+            if (this.midi_selection != null) {
+                await this.loadSelection();
+            }
             if (this.notes == null) {
                 this.showSnackbar('The file provided cannot be transformed and played', 'error')
                 return;
