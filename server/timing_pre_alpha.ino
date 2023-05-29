@@ -31,7 +31,6 @@ void setupTimings(const char* csvData) {
   }
 
   // setup to begin to play
-  startTime = millis();
   for (int i = 0; i < 6; i++){
     if (queues[i].isEmpty()) {
       notes[i].id = -1; // -1 is to signify that this string has an empty queue and the servo should not activate
@@ -63,5 +62,9 @@ void loopTiming() {
       activate_stepper(notes[i].id);
     }
   }
+}
+
+void startPlaying() {
+  startTime = millis();
 }
 

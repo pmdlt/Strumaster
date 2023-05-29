@@ -36,13 +36,14 @@ void setup() {
   server.on("/stop", handleStop);
   server.on("/pause", handlePause);
   server.on("/resume", handleResume);
+  server.on("/play", handlePlay);
   server.on("/reset", handleReset);
   server.onNotFound(handleNotSupported);
 
-  server.on("/play_song", HTTP_POST, []() {  // arg: POST_plain
-    handlePlaySong();
+  server.on("/load_song", HTTP_POST, []() {  // arg: POST_plain
+    handleLoad();
   });
-  server.on("/play_song", HTTP_OPTIONS, handleCORS);
+  server.on("/load_song", HTTP_OPTIONS, handleCORS);
 
   server.on("/play_note", HTTP_GET, []() {  // arg: id
     handlePlayNote();
@@ -101,6 +102,11 @@ void handleResume() {
   server.send(200, "text/plain", "Song resumed");
 }
 
+void handlePlay() {
+  startPlaying();
+  server.send(200, "text/plain", "Song started ! Enjoy the song !");
+}
+
 void handleStop() {
   setupTimings("time_start,time_end,id\n");
   server.send(200, "text/plain", "All motor off");
@@ -116,10 +122,10 @@ void handleNotSupported() {
   server.send(501, "text/plain", "Command not supported");
 }
 
-void handlePlaySong() {
+void handleLoad() {
     setupTimings(server.arg("plain").c_str());
     is_playing = true;
-    server.send(200, "text/plain", "Song was sent to the guitar. Enjoy the vibe !");
+    server.send(200, "text/plain", "Song was sent to the guitar. File was correctly loaded !");
 }
 
 void handlePlayNote() {
