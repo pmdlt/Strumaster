@@ -33,6 +33,10 @@ void setupTimings(const char* csvData) {
   // setup to begin to play
   startTime = millis();
   for (int i = 0; i < 6; i++){
+    if (queues[i].isEmpty()) {
+      notes[i].id == -1;
+      break;
+    }
     notes[i] = queues[i].dequeue();
     activate_stepper(notes[i].id);
   }
