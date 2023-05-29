@@ -42,12 +42,12 @@
                   <v-row>
                     <v-col v-for="id in 6" :key="id" cols="12" sm="4">
                       <v-row>
-                        <v-col cols="6">
+                        <v-col cols="2">
                           <v-btn @click="calibrate(id - 1)" block variant="tonal" color="orange" class="mt-2">
                             Calibrate Stepper {{ id - 1 }}
                           </v-btn>
                         </v-col>
-                        <v-col cols="6">
+                        <v-col cols="2">
                           <v-btn @click="reverse(id - 1)" block variant="tonal" color="blue" class="mt-2">
                             Reverse Stepper {{ id - 1 }}
                           </v-btn>
