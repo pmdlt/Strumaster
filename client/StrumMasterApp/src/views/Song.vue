@@ -115,7 +115,7 @@ export default {
 
             fetch(url, {
                 method: "POST",
-                body: csvForDebug
+                body: this.notes,
             })
                 .then(response => {
                     if (response.ok) {
