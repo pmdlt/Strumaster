@@ -110,11 +110,13 @@ void handleResume() {
 }
 
 void handlePlay() {
+  is_playing = true;
   startPlaying();
-  server.send(200, "text/plain", "Song started ! Enjoy the song !");
+  server.send(200, "text/plain", "Song started ! Enjoy !");
 }
 
 void handleStop() {
+  is_playing = false;
   setupTimings("time_start,time_end,id\n");
   server.send(200, "text/plain", "All motor off");
 }
@@ -131,7 +133,7 @@ void handleNotSupported() {
 
 void handleLoad() {
     setupTimings(server.arg("plain").c_str());
-    is_playing = true;
+    is_playing = false;
     server.send(200, "text/plain", "Song was sent to the guitar. File was correctly loaded !");
 }
 
