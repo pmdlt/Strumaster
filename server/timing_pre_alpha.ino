@@ -51,7 +51,7 @@ void setupTimings(char* csvData) {
   // setup to begin to play
   startTime = millis();
   for (int i = 0; i < 6; i++){
-    notes[i] = (Note) {900000.0, 900000.0, 0}; // {0, 0, 0}
+    notes[i] = {0, 0, 0};
   }
 }
 
@@ -62,12 +62,13 @@ void loopTiming() {
 // We check all the string queues 
   for (int i = 0; i < 6; i++){
     // if a note has reached its play timing, we activate the servo
-    if (currentTime >= notes[i].start){
+    if (node[i] != nullptr && currentTime >= notes[i].start){
       activate_servo(notes[i].id/nbFrets);
     }
     // if a note has ended, we move to the next one
-    if (currentTime >= notes[i].end){
+    if (node[i] != nullptr && currentTime >= notes[i].end){
       notes[i] = queues[i].dequeue();
+      if (node[i] == nullptr) break;
       activate_stepper(notes[i].id);
     }
   }

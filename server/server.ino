@@ -58,7 +58,7 @@ void setup() {
   });
 
   server.begin();  
-  setupTimings(NULL);
+  
 }
 void loop() {
   server.handleClient();
@@ -100,6 +100,7 @@ void handlePause() {
 
 void handleResume() {
   // Todo
+  setupTimings(NULL);
   server.send(200, "text/plain", "Song resumed");
 }
 
