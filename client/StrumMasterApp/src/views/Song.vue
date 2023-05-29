@@ -13,16 +13,16 @@
                         <v-sheet min-height="70vh" rounded="lg">
                             <v-container>
                                 <v-form ref="form">
-                                    <p class="text-center">Insert a midi file to be played by the guitar :<br><br></p>
+                                    <p class="text-center">Insert a midi file to be played by the guitar:<br><br></p>
                                     <v-file-input label="MIDI File" variant="solo" @change="loadFile"></v-file-input>
 
-                                    <p class="text-center">or select it from our selection :<br><br></p>
+                                    <p class="text-center">or select it from the list:<br><br></p>
 
-                                    <v-autocomplete label="Pre-selection of songs"
+                                    <v-autocomplete label="Pre-selection of songs" v-model="midi_selection"
                                         :items="['note_scale_for_debug_10bpm', 'note_scale_for_debug_20bpm']" variant="solo"
                                         @change="loadSelection"></v-autocomplete>
 
-                                    <p class="text-center">Parameters</p>
+                                    <p class="text-center">Parameters:</p>
 
                                     <v-slider v-model="channel" :min="0" :max="16" :step="1" thumb-label
                                         label="MIDI Channel"></v-slider>
@@ -59,6 +59,7 @@ export default {
         speed: 45,
         channel: 0,
         notes: null,
+        midi_selection: null,
         snackbarVisible: false,
         snackbarText: '',
         snackbarColor: '',
@@ -72,24 +73,32 @@ export default {
                 const file = files[0];
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    console.log("2. File loaded");
-                    console.log("3. File transforming to MIDI...");
+                    console.log("2. File transforming to MIDI...");
                     const MIDIfile = new Midi(e.target.result);
-                    const MIDIjson = MIDIfile.toJSON();
-                    console.log("MIDI File:", MIDIjson);
-
-                    console.log("4. File transforming to notes...");
-                    const transformed = transform(MIDIjson, this.channel);
-                    console.log("Notes:", '\n', transformed);
-
-                    this.notes = transformed;
-                    console.log("5. File transformed and ready to be sent");
+                    this.createSong(MIDIfile);
                 }
                 reader.readAsArrayBuffer(file);
             }
 
         },
+        async loadSelection() {
+            console.log("1. Selection provided, loading...");
+            const url = "https://strumaster.netlify.app/midi/" + this.midi_selection + ".mid";
+            const MIDIfile = await Midi.fromUrl(url);
+            console.log("2. File transforming to MIDI...");
+            this.createSong(MIDIfile);
+        },
+        createSong(MIDIfile) {
+            const MIDIjson = MIDIfile.toJSON();
+            console.log("MIDI File:", MIDIjson);
 
+            console.log("3. File transforming to notes...");
+            const transformed = transform(MIDIjson, this.channel);
+            console.log("Notes:", '\n', transformed);
+
+            this.notes = transformed;
+            console.log("4. File transformed and ready to be sent");
+        },
         loadSong() {
             console.log("Load song button clicked");
             if (this.notes == null) {
