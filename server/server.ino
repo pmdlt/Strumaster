@@ -29,8 +29,6 @@ void setup() {
   // WiFi initialisation
   WiFi.softAP(ssid, password);
   WiFi.softAPConfig(local_ip, gateway, subnet);
-
-  server.enableCORS(true);
   delay(100);
 
   // Commands handle
@@ -44,6 +42,7 @@ void setup() {
   server.on("/play_song", HTTP_POST, []() {  // arg: POST_plain
     handlePlaySong();
   });
+  server.on("/play_song", HTTP_OPTIONS, handleCORS);
 
   server.on("/play_note", HTTP_GET, []() {  // arg: id
     handlePlayNote();
@@ -57,6 +56,7 @@ void setup() {
     handleDebugServo();
   });
 
+  server.enableCORS(true);
   server.begin();  
   
 }
@@ -185,4 +185,12 @@ void handleDebugServo() {
   playSingleCord(id);
 
   server.send(200, "text/plain", "Servo moved.");
+}
+
+void handleCORS() {
+  server.sendHeader("Access-Control-Allow-Origin", "*");
+  server.sendHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+  server.sendHeader("Access-Control-Max-Age", "10000");
+  server.sendHeader("Access-Control-Allow-Headers", "Content-Type");
+  server.send(204);
 }

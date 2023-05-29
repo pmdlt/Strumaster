@@ -92,13 +92,11 @@ export default {
 
             fetch(url, {
                 method: "POST",
-                body: JSON.stringify(this.notes),
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8"
-                }
+                body: this.notes
             })
                 .then(response => {
                     if (response.ok) {
+                        console.log(response);
                         return response.text();
                     } else {
                         console.error(response)
@@ -135,9 +133,9 @@ class Note {
 
 }
 
-let TIME_TO_MOVE_ONE_FRET = 240; 
+let TIME_TO_MOVE_ONE_FRET = 240;
 
-let TIME_NOTE = 500; 
+let TIME_NOTE = 500;
 
 let guitar = [
     ["F", "F#", "G", "G#", "A", "A#", "B", "C", "C#"],//,"D","D#"],
@@ -163,8 +161,8 @@ function transform(json, track_number) {
 
     for (let i = 0; i < json['notes'].length; i++) {
         let note = json['notes'][i]
-        let time_start = Math.floor(note['time']*1000-GLOBAL_START_TIME)
-        let time_end = Math.floor(time_start + Math.min(note['duration']*1000,TIME_NOTE)-GLOBAL_START_TIME)
+        let time_start = Math.floor(note['time'] * 1000 - GLOBAL_START_TIME)
+        let time_end = Math.floor(time_start + Math.min(note['duration'] * 1000, TIME_NOTE) - GLOBAL_START_TIME)
         let name = note['name'].replace(/\d+/g, '');// to do: handle octave
         notes.push(new Note(name, time_start, time_end))
     }
@@ -173,7 +171,7 @@ function transform(json, track_number) {
     // convert to csv
     let csv = "time_start,time_end,id\n"
     for (let i = 0; i < result.length; i++) {
-        csv += result[i][1] + "," + result[i][2]+ "," + result[i][0] + "\n"
+        csv += result[i][1] + "," + result[i][2] + "," + result[i][0] + "\n"
     }
     return csv
 
