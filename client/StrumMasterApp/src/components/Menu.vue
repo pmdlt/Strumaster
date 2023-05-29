@@ -56,6 +56,7 @@ export default {
       this.snackbarText = text
       this.snackbarColor = color
       this.snackbarVisible = true
+      console.log("Snackbar showed: ", text)
     },
   }
 }
