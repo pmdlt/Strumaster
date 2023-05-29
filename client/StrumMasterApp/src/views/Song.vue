@@ -16,11 +16,11 @@
                                     <p class="text-center">Insert a midi file to be played by the guitar :<br><br></p>
                                     <v-file-input label="MIDI File" variant="solo" @change="loadFile"></v-file-input>
 
-                                    <p class="text-center">or select it from our selection :</p>
+                                    <p class="text-center">or select it from our selection :<br><br></p>
 
                                     <v-autocomplete label="Pre-selection of songs"
-                                        :items="['note_scale_for_debug_10bpm', 'note_scale_for_debug_20bpm']"
-                                        variant="solo" @change="loadSelection"></v-autocomplete>
+                                        :items="['note_scale_for_debug_10bpm', 'note_scale_for_debug_20bpm']" variant="solo"
+                                        @change="loadSelection"></v-autocomplete>
 
                                     <p class="text-center">Parameters</p>
 
@@ -29,7 +29,7 @@
 
                                     <v-slider v-model="speed" :min="0" :max="100" thumb-label label="Speed"></v-slider>
 
-                                    <v-btn @click="loadSong" block prepend-icon="mdi-send" class="mt-2">Send and load the
+                                    <v-btn @click="loadSong" block prepend-icon="mdi-upload" class="mt-2">Upload the
                                         song into the
                                         guitar</v-btn>
                                     <v-btn @click="playSong" block prepend-icon="mdi-play" variant="tonal" color="green"
@@ -176,7 +176,7 @@ let guitar = [
     ["G#4", "A4", "A#4", "B3", "C3", "C#3", "D3", "D#3", "E2"],//,"F","F#"],
     ["C3", "C#3", "D3", "D#3", "E2", "F2", "F#2", "G2", "G#2"],//,"A","A#"],
     ["F2", "F#2", "G2", "G#2", "A2", "A#2", "B2", "C2", "C#2"],//,"D","D#"],
-  
+
 ]
 
 
@@ -190,7 +190,6 @@ function transform(json, track_number) {
 
     let notes = []
     let GLOBAL_START_TIME = json['notes'][0]['time'] - 2000
-    console.log("GLOBAL_START_TIME", GLOBAL_START_TIME)
 
     for (let i = 0; i < json['notes'].length; i++) {
         let note = json['notes'][i]
