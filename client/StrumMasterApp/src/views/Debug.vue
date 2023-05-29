@@ -33,7 +33,7 @@
                   <v-slider v-model="servoId" :min="0" :max="5" :step="1" thumb-label label="Servo ID"
                     @input="servoId = $event"></v-slider>
 
-                  <v-btn @click="debugServo" block class="mt-2">Move Servo</v-btn>
+                  <v-btn @click="debugServo" block class="mt-2">Move Servo</v-btn><br><br>
 
                   <v-divider></v-divider><br><br>
 
@@ -41,12 +41,14 @@
 
                   <v-row v-for="id in 6" :key="id">
                     <v-col>
-                      <v-btn @click="calibrate(id - 1)" block variant="tonal" color="orange" class="mt-2">
+                      <v-btn @click="calibrate(id - 1)" prepend-icon="mdi-location-enter" block variant="tonal"
+                        color="orange" class="mt-2">
                         Calibrate Stepper {{ id - 1 }}
                       </v-btn>
                     </v-col>
                     <v-col>
-                      <v-btn @click="reverse(id - 1)" block variant="tonal" color="blue" class="mt-2">
+                      <v-btn @click="reverse(id - 1)" prepend-icon="mdi-keyboard-tab-reverse" block variant="tonal"
+                        color="blue" class="mt-2">
                         Reverse Stepper {{ id - 1 }}
                       </v-btn>
                     </v-col>
