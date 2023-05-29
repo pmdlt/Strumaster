@@ -14,19 +14,6 @@ Note notes[6];
 
 
 void setupTimings(const char* csvData) {
-  csvData = "time_start,time_end,id\n"
-            "967,3870,12\n"
-            "1451,1935,42\n"
-            "1935,2419,31\n"
-            "2419,2903,0\n"
-            "2903,3387,31\n"
-            "3387,3870,42\n"
-            "3870,6774,10\n"
-            "4354,4838,40\n"
-            "4838,5322,26\n"
-            "5322,5806,0\n";
-    // csvData = "time_start,time_end,id\n";
-
   CSV_Parser csvParser(csvData, "uLuLL");
 
   // Retrieving parsed values
@@ -47,7 +34,7 @@ void setupTimings(const char* csvData) {
   startTime = millis();
   for (int i = 0; i < 6; i++){
     notes[i] = queues[i].dequeue();
-    activate_servo(notes[i].id);
+    activate_stepper(notes[i].id);
   }
 }
 
