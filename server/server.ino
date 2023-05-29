@@ -58,6 +58,7 @@ void setup() {
   });
 
   server.begin();  
+  setupTimings(NULL);
 }
 void loop() {
   server.handleClient();

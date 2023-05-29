@@ -4,6 +4,8 @@
 #include <string.h>
 #include <SoftwareSerial.h>
 
+const int frets[9] = {0,220,420,610,790,960,1120,1275,1425};
+
 
 typedef struct {
   uint8_t string; // stepper id
@@ -39,12 +41,9 @@ void setup() {
   // translater initialisation
   for (int id = 0; id < nbSteppers; id++){
     for (int fret = 0; fret < 10; fret++){
-      translater[id*10 + fret] = {id, fret*100}; //tbd, 1er fret = position 0, 2e = 170 , 3e = 170 + 160, 4e = 170 + 160 + 150
+      translater[id*10 + fret] = {id, frets[fret]}; //tbd, 1er fret = position 0, 2e = 170 , 3e = 170 + 160, 4e = 170 + 160 + 150
     }
   }
-  translater[2*10 + 1].position = 170;
-  translater[2*10 + 2].position = 170 + 160;
-  translater[2*10 + 3].position = 170 + 160 + 150; 
 }
 
 void loop() {
@@ -62,6 +61,7 @@ void loop() {
 
 void resetStepper(uint8_t id){
   steppers[id].position = 0;
+  steppers[id].goal = 0;
 }
 
 void reverseStepper(uint8_t id){
