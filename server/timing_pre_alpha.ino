@@ -30,6 +30,7 @@ void setupTimings(char* csvData) {
             "4354,4838,40\n"
             "4838,5322,26\n"
             "5322,5806,0\n";
+    csvData = "time_start,time_end,id\n";
 
   CSV_Parser csvParser(csvData, "uLuLL");
 
@@ -50,7 +51,7 @@ void setupTimings(char* csvData) {
   // setup to begin to play
   startTime = millis();
   for (int i = 0; i < 6; i++){
-    notes[i] = (Note) {0, 0, 0};
+    notes[i] = (Note) {900000.0, 900000.0, 0}; // {0, 0, 0}
   }
 }
 
