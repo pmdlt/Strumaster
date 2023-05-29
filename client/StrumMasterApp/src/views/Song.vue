@@ -23,9 +23,11 @@
 
                                     <v-slider v-model="speed" :min="0" :max="100" thumb-label label="Speed"></v-slider>
 
-                                    <v-btn @click="loadSong" block class="mt-2">Send and load the song into the
+                                    <v-btn @click="loadSong" block prepend-icon="mdi-send" class="mt-2">Send and load the
+                                        song into the
                                         guitar</v-btn>
-                                    <v-btn @click="playSong" block class="mt-2">Play song</v-btn>
+                                    <v-btn @click="playSong" block prepend-icon="mdi-play" variant="tonal" color="green"
+                                        class="mt-2">Play song</v-btn>
                                 </v-form>
                             </v-container>
                         </v-sheet>
