@@ -19,8 +19,7 @@
                                     <p class="text-center">or select it from the list:<br><br></p>
 
                                     <v-autocomplete label="Pre-selection of songs" v-model="midi_selection"
-                                        :items="['note_scale_for_debug_10bpm', 'note_scale_for_debug_20bpm']"
-                                        variant="solo"></v-autocomplete>
+                                        :items="['gamme_debug_10bpm', 'gamme_debug_20bpm']" variant="solo"></v-autocomplete>
 
                                     <p class="text-center">Parameters:</p>
 
@@ -82,7 +81,7 @@ export default {
 
         },
         async loadSelection() {
-            const url = "https://github.com/pmdlt/Strumaster/raw/main/client/StrumMasterApp/public/midi/" + this.midi_selection + ".mid";
+            const url = "https://strumaster.netlify.app/midi/" + this.midi_selection + ".mid";
             console.log("1. Loading MIDI from: " + url);
             const MIDIfile = await Midi.fromUrl(url)
             console.log("2. File transforming to MIDI...");
