@@ -46,7 +46,7 @@ export default {
         TheMenuBar,
     },
     data: () => ({
-        speed: 0,
+        speed: 45,
         channel: 0,
         notes: null,
         snackbarVisible: false,
@@ -118,6 +118,7 @@ export default {
             this.snackbarText = text
             this.snackbarColor = color
             this.snackbarVisible = true
+            console.log("Snackbar showed: ", text)
         },
 
     },
@@ -134,15 +135,17 @@ class Note {
 
 }
 
-let TIME_TO_MOVE_ONE_FRET = 0.1; // seconds
+let TIME_TO_MOVE_ONE_FRET = 240; 
+
+let TIME_NOTE = 500; 
 
 let guitar = [
-    ["E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#"],//,"D","D#"],
-    ["B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"],//,"A","A#"],
-    ["G", "G#", "A", "A#", "B", "C", "C#", "D", "D#", "E"],//,"F","F#"],
-    ["D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"],//,"C","C#"],
-    ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#"],//,"G","G#"],
-    ["E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#"],//,"D","D#"],
+    ["F", "F#", "G", "G#", "A", "A#", "B", "C", "C#"],//,"D","D#"],
+    ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"],//,"A","A#"],
+    ["G#", "A", "A#", "B", "C", "C#", "D", "D#", "E"],//,"F","F#"],
+    ["D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"],//,"C","C#"],
+    ["A#", "B", "C", "C#", "D", "D#", "E", "F", "F#"],//,"G","G#"],
+    ["F", "F#", "G", "G#", "A", "A#", "B", "C", "C#"],//,"D","D#"],
 ]
 
 
@@ -155,11 +158,12 @@ function transform(json, track_number) {
 
 
     let notes = []
+    let GLOBAL_START_TIME = json['notes'][0]['time']
 
     for (let i = 0; i < json['notes'].length; i++) {
         let note = json['notes'][i]
-        let time_start = note['time']
-        let time_end = time_start + note['duration']
+        let time_start = math.floor(note['time']*1000-GLOBAL_START_TIME)
+        let time_end = math.floor(time_start + math.min(note['duration']*1000,TIME_NOTE)-GLOBAL_START_TIME)
         let name = note['name'].replace(/\d+/g, '');// to do: handle octave
         notes.push(new Note(name, time_start, time_end))
     }
@@ -168,7 +172,7 @@ function transform(json, track_number) {
     // convert to csv
     let csv = "time_start,time_end,id\n"
     for (let i = 0; i < result.length; i++) {
-        csv += result[i][1] + "," + result[i][2] + "," + result[i][0] + "\n"
+        csv += result[i][1] + "," + result[i][2]+ "," + result[i][0] + "\n"
     }
     return csv
 
