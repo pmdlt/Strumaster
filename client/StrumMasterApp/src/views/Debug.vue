@@ -33,7 +33,7 @@
                   <v-slider v-model="servoId" :min="0" :max="5" :step="1" thumb-label label="Servo ID"
                     @input="servoId = $event"></v-slider>
 
-                  <v-btn @click="debugServo" block class="mt-2">Move Servo</v-btn>
+                  <v-btn @click="debugServo" block class="mt-2">Move Servo</v-btn><br><br>
 
                   <v-divider></v-divider><br><br>
 
