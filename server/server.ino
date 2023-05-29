@@ -77,6 +77,13 @@ void debug_stepper(int id_stepper, int steps) {
   Serial.printf("%d,%d,\n", id_stepper, steps);
 }
 
+
+void calibrate_stepper(int id_stepper) {
+  debug_stepper(id_stepper, 10);
+  delay(100);
+  debug_stepper(id_stepper, -10);
+}
+
 void reverse_stepper(int id_stepper) {
   Serial.printf("%d,%d,\n", -1, id_stepper);
 }
@@ -146,6 +153,8 @@ void handleDebugStepper() {
     rtnv = 3;
   } else if (function == "Reverse") {
     rtnv = 4;
+  } else if (function == "Calibrate"){
+    rtnv = 5;
   } else {
     return;
   }
@@ -169,6 +178,10 @@ void handleDebugStepper() {
     // Reverse the stepper
     case 4:
       reverse_stepper(id);
+      break;
+
+    case 5:
+      calibrate_stepper(id);
       break;
 
     default:
