@@ -90,7 +90,7 @@ void activate_servo(int id_servo) {
 }
 
 void handleConnect() {
-  server.send(200, "text/plain", "Connexion successful. Try to play a note :) !");
+  server.send(200, "text/plain", "Connexion successful. Try to play a note !");
 }
 
 void handlePause() {
@@ -106,22 +106,22 @@ void handleResume() {
 
 void handleStop() {
   // Todo
-  server.send(200, "text/plain", "All motor off.");
+  server.send(200, "text/plain", "All motor off");
 }
 
 void handleReset() {
   // Todo
   Serial.println("-3,");
-  server.send(200, "text/plain", "Device reseted.");
+  server.send(200, "text/plain", "Device reinitialized");
 }
 
 void handleNotSupported() {
-  server.send(501, "text/plain", "Command not supported.");
+  server.send(501, "text/plain", "Command not supported");
 }
 
 void handlePlaySong() {
-    activate_servo(1);
-    server.send(200, "text/plain", "POST body was:\n" + server.arg("plain"));
+    setupTimings(server.arg("plain").c_str());
+    server.send(200, "text/plain", "Song was sent to the guitar. Enjoy the vibe !");
 }
 
 void handlePlayNote() {
@@ -130,7 +130,7 @@ void handlePlayNote() {
   delay(1000);  // FIXME bloquing, Ok for debug and if we only want to play 1 note, Must be changed for final
   activate_servo(id / nbFrets);
 
-  server.send(200, "text/plain", "");
+  server.send(200, "text/plain", "Note sent and played");
 }
 
 void handleDebugStepper() {

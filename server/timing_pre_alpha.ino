@@ -13,7 +13,7 @@ ArduinoQueue<Note> queues[6]; // Queues of the notes
 Note notes[6];
 
 
-void setupTimings(char* csvData) {
+void setupTimings(const char* csvData) {
   csvData = "time_start,time_end,id\n"
             "967,3870,12\n"
             "1451,1935,42\n"
