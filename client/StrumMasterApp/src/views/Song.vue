@@ -259,7 +259,7 @@ function canPlay(note, used_until, position) {
             if (guitar[i].includes(note.name)) {
                 let move = guitar[i].indexOf(note.name) - position[i];
                 // check if the move is possible or if it's the first note
-                if (used_until[i] + move * TIME_TO_MOVE_ONE_FRET <= note.time_start) {
+                if (used_until[i] + move * TIME_TO_MOVE_ONE_FRET <= note.time_start || used_until[i] == 0) {
                     temp.push([i, guitar[i].indexOf(note.name), move]);
                 }
             }
