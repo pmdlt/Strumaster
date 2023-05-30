@@ -5,7 +5,7 @@
         <v-row>
           <v-col cols="12" sm="12">
             <v-sheet min-height="70vh" rounded="lg">
-              <v-container class="d-flex justify-center">
+              <v-container class="d-flex align-center">
                 <v-img contain :width="700" src="@/assets/logo.png" />
 
                 <p>Welcome to the control center app of the Strumaster project.<br>
