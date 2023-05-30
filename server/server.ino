@@ -173,6 +173,7 @@ void handleDebugStepper() {
   } else if (function == "CalibrateAll"){
     rtnv = 7; //todo
   } else {
+    server.send(501, "text/plain", "Unknown debug function !");
     return;
   }
 
@@ -210,6 +211,7 @@ void handleDebugStepper() {
     // calibrate all
     case 7:
       Serial.println("-3");
+      break;
 
     default:
       return;
