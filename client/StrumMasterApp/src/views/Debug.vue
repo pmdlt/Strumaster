@@ -16,7 +16,8 @@
                 <v-form ref="form">
                   <p class="text-center">Use functions to debug stepper<br><br></p>
 
-                  <v-select v-model="stepperFunctionToUse" :items="['Note', 'Steps', 'Reset', 'Reverse', 'Calibrate']"
+                  <v-select v-model="stepperFunctionToUse"
+                    :items="['PlayNote', 'Steps', 'Reset', 'Trigger', 'Reverse', 'Calibrate', 'CalibrateAll']"
                     label="Function to use" variant="outlined"></v-select>
 
                   <v-slider v-model="stepperId" :min="0" :max="5" :step="1" thumb-label label="Stepper ID"
@@ -32,9 +33,9 @@
 
                   <v-row v-for="id in 6" :key="id">
                     <v-col>
-                      <v-btn @click="calibrate(id - 1)" prepend-icon="mdi-location-enter" block variant="tonal"
-                        color="orange" class="mt-2">
-                        Calibrate Stepper {{ id - 1 }}
+                      <v-btn @click="trigger(id - 1)" prepend-icon="mdi-cursor-move" block variant="tonal" color="orange"
+                        class="mt-2">
+                        Trigger Stepper {{ id - 1 }}
                       </v-btn>
                     </v-col>
                     <v-col>
@@ -45,9 +46,12 @@
                     </v-col>
                   </v-row><br><br>
 
+                  <v-btn @click="calibrateAll" block prepend-icon="mdi-move-resize" variant="tonal" color="green"
+                    class="mt-2">Calibrate all Steppers</v-btn><br><br>
+
                   <v-divider></v-divider><br><br>
 
-                  <p class="text-center">Test servo<br><br></p>
+                  <p class="text-center">Trigger servo<br><br></p>
 
                   <v-slider v-model="servoId" :min="0" :max="5" :step="1" thumb-label label="Servo ID"
                     @input="servoId = $event"></v-slider>
@@ -125,10 +129,10 @@ export default {
           this.showSnackbar('We lost connection with the board', 'error')
         })
     },
-    calibrate(id) {
+    trigger(id) {
       this.stepperId = id;
       this.stepperValue = null;
-      this.stepperFunctionToUse = "Calibrate";
+      this.stepperFunctionToUse = "Trigger";
       this.debugStepper();
       this.stepperFunctionToUse = "Steps";
       this.stepperValue = -10;
@@ -137,6 +141,12 @@ export default {
       this.stepperId = id;
       this.stepperValue = null;
       this.stepperFunctionToUse = "Reverse";
+      this.debugStepper();
+    },
+    calibrateAll() {
+      this.stepperId = 0;
+      this.stepperValue = null;
+      this.stepperFunctionToUse = "CalibrateAll";
       this.debugStepper();
     },
     showSnackbar(text, color) {

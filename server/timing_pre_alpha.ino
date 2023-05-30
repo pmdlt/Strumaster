@@ -48,7 +48,7 @@ void loopTiming() {
   // We check all the string queues 
   for (int i = 0; i < 6; i++){
     // if a note has reached its play timing, we activate the servo
-    if (notes[i].id != -1 && notes[i].id != 2 && currentTime >= notes[i].start){ // we set id = -2 in order to not activate the servo several times
+    if (notes[i].id != -1 && notes[i].id != -2 && currentTime >= notes[i].start){ // we set id = -2 in order to not activate the servo several times
       activate_servo(notes[i].id/nbFrets);
       notes[i].id = -2;
     }

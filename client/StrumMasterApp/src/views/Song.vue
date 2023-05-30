@@ -3,27 +3,32 @@
         <v-main class="bg-grey-lighten-3">
             <v-container>
                 <v-row>
-                    <v-col cols="12" sm="4">
+                    <v-col cols="12" sm="3">
                         <v-sheet rounded="lg">
                             <the-menu-bar />
                         </v-sheet>
                     </v-col>
 
-                    <v-col cols="12" sm="8">
+                    <v-col cols="12" sm="9">
                         <v-sheet min-height="70vh" rounded="lg">
                             <v-container>
                                 <v-form ref="form">
-                                    <p class="text-center">Insert a midi file to be played by the guitar<br><br></p>
+                                    <p class="text-center">Insert a midi file to be played by the guitar:<br><br></p>
                                     <v-file-input label="MIDI File" variant="solo" @change="loadFile"></v-file-input>
 
-                                    <p class="text-center">Parameters</p>
+                                    <p class="text-center">or select it from the list:<br><br></p>
+
+                                    <v-autocomplete label="Pre-selection of songs" v-model="midi_selection"
+                                        :items="['gamme_debug_10bpm', 'gamme_debug_20bpm']" variant="solo"></v-autocomplete>
+
+                                    <p class="text-center">Parameters:</p>
 
                                     <v-slider v-model="channel" :min="0" :max="16" :step="1" thumb-label
                                         label="MIDI Channel"></v-slider>
 
                                     <v-slider v-model="speed" :min="0" :max="100" thumb-label label="Speed"></v-slider>
 
-                                    <v-btn @click="loadSong" block prepend-icon="mdi-send" class="mt-2">Send and load the
+                                    <v-btn @click="loadSong" block prepend-icon="mdi-upload" class="mt-2">Upload the
                                         song into the
                                         guitar</v-btn>
                                     <v-btn @click="playSong" block prepend-icon="mdi-play" variant="tonal" color="green"
@@ -53,6 +58,7 @@ export default {
         speed: 45,
         channel: 0,
         notes: null,
+        midi_selection: null,
         snackbarVisible: false,
         snackbarText: '',
         snackbarColor: '',
@@ -66,26 +72,38 @@ export default {
                 const file = files[0];
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    console.log("2. File loaded");
-                    console.log("3. File transforming to MIDI...");
+                    console.log("2. File transforming to MIDI...");
                     const MIDIfile = new Midi(e.target.result);
-                    const MIDIjson = MIDIfile.toJSON();
-                    console.log("MIDI File:", MIDIjson);
-
-                    console.log("4. File transforming to notes...");
-                    const transformed = transform(MIDIjson, this.channel);
-                    console.log("Notes:", '\n', transformed);
-
-                    this.notes = transformed;
-                    console.log("5. File transformed and ready to be sent");
+                    this.createSong(MIDIfile);
                 }
                 reader.readAsArrayBuffer(file);
             }
 
         },
+        async loadSelection() {
+            const url = "https://strumaster.netlify.app/midi/" + this.midi_selection + ".mid";
+            console.log("1. Loading MIDI from: " + url);
+            const MIDIfile = await Midi.fromUrl(url)
+            console.log("2. File transforming to MIDI...");
+            this.createSong(MIDIfile);
+        },
+        createSong(MIDIfile) {
+            const MIDIjson = MIDIfile.toJSON();
+            console.log("MIDI File:", MIDIjson);
 
-        loadSong() {
+            console.log("3. File transforming to notes...");
+            const transformed = transform(MIDIjson, this.channel);
+            console.log("Notes:", '\n', transformed);
+
+            this.notes = transformed;
+            console.log("4. File transformed and ready to be sent");
+        },
+        async loadSong() {
             console.log("Load song button clicked");
+
+            if (this.midi_selection != null) {
+                await this.loadSelection();
+            }
             if (this.notes == null) {
                 this.showSnackbar('The file provided cannot be transformed and played', 'error')
                 return;
@@ -96,7 +114,7 @@ export default {
 
             fetch(url, {
                 method: "POST",
-                body: this.notes
+                body: this.notes,
             })
                 .then(response => {
                     if (response.ok) {
@@ -172,6 +190,8 @@ let guitar = [
     ["F4", "F#4", "G4", "G#4", "A4", "A#4", "B4", "C5", "C#5"],
 ]
 
+const csvForDebug = "time_start,time_end,id\n0,1000,24\n1000,2000,24\n0,2000,3000,24\n3000,4000,26\n4000,6000,28\n6000,8000,26\n8000,9000,24\n9000,10000,28\n10000,11000,26\n11000,12000,26\n12000,14000,24\n";
+
 
 
 
@@ -185,7 +205,6 @@ function transform(json, track_number) {
 
     let notes = []
     let GLOBAL_START_TIME = json['notes'][0]['time'] - 2000
-    console.log("GLOBAL_START_TIME", GLOBAL_START_TIME)
 
     for (let i = 0; i < json['notes'].length; i++) {
         let note = json['notes'][i]

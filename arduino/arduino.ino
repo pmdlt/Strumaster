@@ -41,7 +41,7 @@ void setup() {
   // translater initialisation
   for (int id = 0; id < nbSteppers; id++){
     for (int fret = 0; fret < 10; fret++){
-      translater[id*10 + fret] = {id, frets[fret]}; //tbd, 1er fret = position 0, 2e = 170 , 3e = 170 + 160, 4e = 170 + 160 + 150
+      translater[id*10 + fret] = {id, frets[fret]};
     }
   }
 }
@@ -59,13 +59,25 @@ void loop() {
   updateSteppers(steppers);
 }
 
-void resetStepper(uint8_t id){
+//----------------- stepper debug function
+
+void reverseStepper(uint8_t id){
+  steppers[id].reversedDir = !steppers[id].reversedDir;
+}
+
+void calibrateStepper(uint8_t id){
   steppers[id].position = 0;
   steppers[id].goal = 0;
 }
 
-void reverseStepper(uint8_t id){
-  steppers[id].reversedDir = !steppers[id].reversedDir;
+void calibrateAllSteppers(){
+  for (int id = 0; id < nbSteppers; id++){
+    calibrateStepper(id);
+  }
+}
+
+void resetStepper(uint8_t id){
+  steppers[id].goal = 0;
 }
 
 void resetAllSteppers(){
@@ -73,6 +85,7 @@ void resetAllSteppers(){
     resetStepper(id);
   }
 }
+
 
 /**
   Non-blocking function, which listen to the esp
@@ -102,27 +115,35 @@ uint8_t listenToESP(){
         return -1;
       } 
       
-      // case reset
+      // case calibrate
       if (splittedData[0] == -2) {
-        resetStepper(splittedData[1]); 
+        calibrateStepper(splittedData[1]); 
         return -1;
       } 
+
+      //case reset
+      if (splittedData[0] == -4) {
+        resetStepper(splittedData[1]); 
+        return -1;
+      }
       
       // case where we have to move the stepper 
       doSteps(&steppers[splittedData[0]], splittedData[1]); 
       return -1; 
     } else if (nbData == 1) {
-      // case where we have to change the current note
+      if (splittedData[0] == -3) {
+        calibrateAllSteppers(); 
+        return -1;
+      }
 
-      if (splittedData[0] == -3)
-      {
+      if (splittedData[0] == -5) {
         resetAllSteppers(); 
         return -1;
-      } 
-      uint8_t note = splittedData[0];
-      
-      if (note>=0 && note<60) return note; // return the note
+      }
 
+      // case where we have to change the current note
+      uint8_t note = splittedData[0];
+      if (note>=0 && note<60) return note; // return the note
       Serial.println("Invalid note received from ESP");
     } else {
       Serial.println("Invalid data received from ESP");

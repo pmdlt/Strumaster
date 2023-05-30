@@ -10,7 +10,7 @@
       Test connection
     </v-btn>
     <br>
-    <v-btn block prepend-icon="mdi-update" variant="tonal" color="orange" @click="sendGetRequest('reset')">
+    <v-btn block prepend-icon="mdi-update" variant="tonal" color="orange" @click="sendGetRequest('reset_all')">
       Reset all motors
     </v-btn>
     <br>
