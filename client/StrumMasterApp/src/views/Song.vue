@@ -206,7 +206,6 @@ const ALL_EXISITING_NOTES = [
   "B1","A#1","A1","G#1","G1","F#1","F1","E1","D#1","D1","C#1","C1",
 ]
 
-const csvForDebug = "time_start,time_end,id\n0,1000,24\n1000,2000,24\n0,2000,3000,24\n3000,4000,26\n4000,6000,28\n6000,8000,26\n8000,9000,24\n9000,10000,28\n10000,11000,26\n11000,12000,26\n12000,14000,24\n";
 
 
 
@@ -327,5 +326,5 @@ function getHighestNote(notes){
   // get the note in notes with the smallest index in POSSIBLE_NOTES
   return notes.reduce((a, b) => ALL_EXISITING_NOTES.indexOf(a.name) < ALL_EXISITING_NOTES.indexOf(b.name) ? a : b);    
 }
-}
+
 </script>
