@@ -1,7 +1,7 @@
 <template>
   <v-app id="inspire">
-    <v-main class="bg-grey-lighten-3 justify-center align-center">
-      <v-container>
+    <v-main class="bg-grey-lighten-3">
+      <v-container class="justify-center align-center">
         <v-row>
           <v-col cols="12" sm="12">
             <v-sheet min-height="70vh" rounded="lg">
