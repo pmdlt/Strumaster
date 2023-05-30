@@ -169,29 +169,46 @@ export default {
 /// TRANSFORM NOTE ENGINE
 
 class Note {
-    constructor(name, time_start, time_end) {
-        this.name = name;
-        this.time_start = time_start;
-        this.time_end = time_end;
-    }
+  constructor(name, time_start, time_end) {
+      this.name = name;
+      this.time_start = time_start;
+      this.time_end = time_end;
+  }
 
 }
 
-let TIME_TO_MOVE_ONE_FRET = 240;
+const TIME_TO_MOVE_ONE_FRET = 240;
 
-let TIME_NOTE = 500;
+const TIME_NOTE = 500;
 
-let guitar = [
-    ["F7", "F#7", "G7", "G#7", "A6", "A#6", "B6", "C6", "C#6"],//,"D","D#"],
-    ["A#6", "B6", "C6", "C#6", "D5", "D#5", "E5", "F5", "F#5"],//,"G","G#"],
-    ["D#5", "E5", "F5", "F#5", "G4", "G#4", "A4", "A#4", "B3"],//,"C","C#"],
-    ["G#4", "A4", "A#4", "B3", "C3", "C#3", "D3", "D#3", "E2"],//,"F","F#"],
-    ["C3", "C#3", "D3", "D#3", "E2", "F2", "F#2", "G2", "G#2"],//,"A","A#"],
-    ["F2", "F#2", "G2", "G#2", "A2", "A#2", "B2", "C2", "C#2"],//,"D","D#"],
+const guitar = [
+  ["F2", "F#2", "G2", "G#2", "A2", "A#2", "B2", "C3", "C#3"],
+  ["A#2", "B2", "C3", "C#3", "D3", "D#3", "E3", "F3", "F#3"],
+  ["D#3", "E3", "F3", "F#3", "G3", "G#3", "A3", "A#3", "B3"],
+  ["G#3", "A3", "A#3", "B3", "C4", "C#4", "D4", "D#4", "E4"],
+  ["C3", "C#4", "D4", "D#4", "E4", "F4", "F#4", "G4", "G#4"],
+  ["F4", "F#4", "G4", "G#4", "A4", "A#4", "B4", "C5", "C#5"],
+]
 
+const POSSIBLE_NOTES = [
+  "C#5","C5",
+  "B4","A#4","A4","G#4","G4","F#4","F4","E4","D#4","D4","C#4","C4",
+  "B3","A#3","A3","G#3","G3","F#3","F3","E3","D#3","D3","C#3","C3",
+  "B2","A#2","A2","G#2","G2","F#2","F2"]
+
+const ALL_EXISITING_NOTES = [
+  "B7","A#7","A7","G#7","G7","F#7","F7","E7","D#7","D7","C#7","C7",
+  "B6","A#6","A6","G#6","G6","F#6","F6","E6","D#6","D6","C#6","C6",
+  "B5","A#5","A5","G#5","G5","F#5","F5","E5","D#5","D5","C#5","C5",
+  "B4","A#4","A4","G#4","G4","F#4","F4","E4","D#4","D4","C#4","C4",
+  "B3","A#3","A3","G#3","G3","F#3","F3","E3","D#3","D3","C#3","C3",
+  "B2","A#2","A2","G#2","G2","F#2","F2","E2","D#2","D2","C#2","C2",
+  "B1","A#1","A1","G#1","G1","F#1","F1","E1","D#1","D1","C#1","C1",
 ]
 
 const csvForDebug = "time_start,time_end,id\n0,1000,24\n1000,2000,24\n0,2000,3000,24\n3000,4000,26\n4000,6000,28\n6000,8000,26\n8000,9000,24\n9000,10000,28\n10000,11000,26\n11000,12000,26\n12000,14000,24\n";
+
+
 
 
 // take a json object and return a csv string
@@ -199,72 +216,116 @@ const csvForDebug = "time_start,time_end,id\n0,1000,24\n1000,2000,24\n0,2000,300
 function transform(json, track_number) {
 
 
-    json = json['tracks'][track_number]
+  json = json['tracks'][track_number]
 
 
-    let notes = []
-    let GLOBAL_START_TIME = json['notes'][0]['time'] - 2000
+  let notes = []
+  let GLOBAL_START_TIME = json['notes'][0]['time']
 
-    for (let i = 0; i < json['notes'].length; i++) {
-        let note = json['notes'][i]
-        let time_start = Math.floor(note['time'] * 1000 - GLOBAL_START_TIME)
-        let time_end = Math.floor(time_start + Math.min(note['duration'] * 1000, TIME_NOTE) - GLOBAL_START_TIME)
-        let name = note['name']//.replace(/\d+/g, '');// to do: handle octave
-        notes.push(new Note(name, time_start, time_end))
-    }
+  
+  for (let i = 0; i < json['notes'].length; i++) {
+      let note = json['notes'][i]
+      let time_start = Math.floor(note['time'] * 1000 - GLOBAL_START_TIME)
+      let time_end = Math.floor(time_start + Math.min(note['duration'] * 1000, TIME_NOTE) - GLOBAL_START_TIME)
+      let name = note['name']//.replace(/\d+/g, '');// to do: handle octave
+      notes.push(new Note(name, time_start, time_end))
+  }
 
-    let result = chooseCord(notes)
-    // convert to csv
-    let csv = "time_start,time_end,id\n"
-    for (let i = 0; i < result.length; i++) {
-        csv += result[i][1] + "," + result[i][2] + "," + result[i][0] + "\n"
-    }
-    return csv
+  let possibilities = translate(notes)
+  let result = []
+  for(let i = 0; i < possibilities.length; i++){
+    let tmp = chooseCord(possibilities[i])
+    console.log(tmp.length);
+    result.push(tmp)
+    
+  }
+  // keep the best result (the one with the most notes)
+  result = result.reduce((a, b) => a.length > b.length ? a : b);
+  if (result.length < notes.length){
+    console.log("WARNING: %d notes were not played", notes.length - result.length)
+  }
+
+
+  // convert to csv
+  let csv = "time_start,time_end,id\n"
+  for (let i = 0; i < result.length; i++) {
+      csv += result[i][1] + "," + result[i][2] + "," + result[i][0] + "\n"
+  }
+  return csv
 
 }
 
 function chooseCord(notes) {
-    let position = [0, 0, 0, 0, 0, 0]
-    let used_until = [0, 0, 0, 0, 0, 0]
-    let result = []
-    for (let i = 0; i < notes.length; i++) {
-        let a = canPlay(notes[i], used_until, position);
-        if (a.length > 0) {
-            result.push([a[0][0] * 10 + a[0][1], notes[i].time_start, notes[i].time_end]);
-            position[a[0][0]] = a[0][1];
-            // console.log(position,a[0][0],notes[i].time_start,notes[i].time_end);
-            // console.log(used_until.map(x => x>notes[i].time_start));
-            used_until[a[0][0]] = notes[i].time_end;
-        }
-        else {
-            console.error("Error during the transformation process : ", '\n',
-                "Can't play note ", notes[i].name, " at time ", notes[i].time_start, '\n',
-                "Note object: ", notes[i], '\n',
-                "Resolution : note was skipped");
-            // console.log(position);
-            // console.log(used_until.map(x => x>notes[i].time_start));
-        }
-    }
-    return result
+  let position = [0, 0, 0, 0, 0, 0]
+  let used_until = [0, 0, 0, 0, 0, 0]
+  let result = []
+  for (let i = 0; i < notes.length; i++) {
+      let a = canPlay(notes[i], used_until, position);
+      if (a.length > 0) {
+          result.push([a[0][0] * 10 + a[0][1], notes[i].time_start, notes[i].time_end]);
+          position[a[0][0]] = a[0][1];
+          // console.log(position,a[0][0],notes[i].time_start,notes[i].time_end);
+          // console.log(used_until.map(x => x>notes[i].time_start));
+          used_until[a[0][0]] = notes[i].time_end;
+      }
+  }
+  return result
 }
 
 
 function canPlay(note, used_until, position) {
-    let temp = []
-    for (let i = 0; i < 6; i++) {
-        // check if the cord is free
-        if (note.time_start >= used_until[i]) {
-            // check if the note is in the cord
-            if (guitar[i].includes(note.name)) {
-                let move = guitar[i].indexOf(note.name) - position[i];
-                // check if the move is possible or if it's the first note
-                if (used_until[i] + move * TIME_TO_MOVE_ONE_FRET <= note.time_start) {
-                    temp.push([i, guitar[i].indexOf(note.name), move]);
-                }
-            }
-        }
+  let temp = []
+  for (let i = 0; i < 6; i++) {
+      // check if the cord is free
+      if (note.time_start >= used_until[i]) {
+          // check if the note is in the cord
+          if (guitar[i].includes(note.name)) {
+              let move = guitar[i].indexOf(note.name) - position[i];
+              // check if the move is possible or if it's the first note
+              if (used_until[i] + move * TIME_TO_MOVE_ONE_FRET <= note.time_start || used_until[i] == 0) {
+                  temp.push([i, guitar[i].indexOf(note.name), move]);
+              }
+          }
+      }
+  }
+  let a = temp.sort(function (a, b) { return a[2] - b[2] }).map(x => [x[0], x[1]]);
+  return a
+}
+
+/**
+ * 
+ * @param {[Note]} notes the notes to translate
+ * 
+ * @returns {[[Note]]} a list of all possible translations of the notes
+ */
+function translate(notes){
+  let highest_note = getHighestNote(notes)
+  let highest_idx = ALL_EXISITING_NOTES.indexOf(highest_note.name)
+  let result = []
+  for(let i = 0; i < ALL_EXISITING_NOTES.length; i++){ // for each possible note
+    let shift = i - highest_idx
+    let translated_notes = []
+    for(let j = 0; j < notes.length; j++){ // for each note
+      let note = notes[j]
+      if (POSSIBLE_NOTES.indexOf(note.name) + shift < 0 || POSSIBLE_NOTES.indexOf(note.name) + shift > POSSIBLE_NOTES.length){
+        continue
+      }
+      translated_notes.push(new Note(POSSIBLE_NOTES[POSSIBLE_NOTES.indexOf(note.name) + shift], note.time_start, note.time_end))
     }
-    let a = temp.sort(function (a, b) { return a[2] - b[2] }).map(x => [x[0], x[1]]);
-    return a
+    result.push(translated_notes)
+  }
+
+  return result
+
+    
+    
+
+} 
+
+
+function getHighestNote(notes){
+  // get the note in notes with the smallest index in POSSIBLE_NOTES
+  return notes.reduce((a, b) => ALL_EXISITING_NOTES.indexOf(a.name) < ALL_EXISITING_NOTES.indexOf(b.name) ? a : b);    
+}
 }
 </script>
