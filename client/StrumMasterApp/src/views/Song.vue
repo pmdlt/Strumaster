@@ -204,7 +204,7 @@ function transform(json, track_number) {
 
 
     let notes = []
-    let GLOBAL_START_TIME = json['notes'][0]['time'] - 2000
+    let GLOBAL_START_TIME = json['notes'][0]['time']
 
     for (let i = 0; i < json['notes'].length; i++) {
         let note = json['notes'][i]
