@@ -178,7 +178,7 @@ class Note {
   
 }
 
-const TIME_TO_MOVE_ONE_FRET = 60;
+const TIME_TO_MOVE_ONE_FRET = 120;
 
 const TIME_NOTE = 500;
 
