@@ -2,7 +2,7 @@
   <v-app id="inspire">
     <v-main class="bg-grey-lighten-3">
       <v-container>
-        <v-sheet min-height="70vh" rounded="lg" class="d-flex align-center align-center">
+        <v-sheet min-height="70vh" rounded="lg" class="d-flex align-center justify-center">
           <v-img contain :width="700" src="@/assets/logo.png" />
 
           <p>Welcome to the control center app of the Strumaster project.<br>
