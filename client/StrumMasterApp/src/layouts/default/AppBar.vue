@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar class="px-3" color="white" flat density="compact" :elevation="20">
+  <v-app-bar class="px-3" color="white" flat density="compact" :elevation="5">
     <v-spacer></v-spacer>
     <v-tabs centered color="grey-darken-2" exact-active-class="active">
       <router-link to="/">
