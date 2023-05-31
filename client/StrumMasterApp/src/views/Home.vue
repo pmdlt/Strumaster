@@ -3,7 +3,7 @@
     <v-main class="bg-grey-lighten-3">
       <v-container>
         <v-sheet min-height="70vh" rounded="lg">
-          <v-container class="d-flex align-center align-center">
+          <v-container class="align-center align-center">
             <v-img contain :width="700" src="@/assets/logo.png" />
 
             <p>Welcome to the control center app of the Strumaster project.<br>
@@ -32,8 +32,3 @@
     </v-main>
   </v-app>
 </template>
-
-<script>
-export default {
-};
-</script>
