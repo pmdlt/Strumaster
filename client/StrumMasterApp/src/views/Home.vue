@@ -2,7 +2,7 @@
   <v-app id="inspire">
     <v-main class="bg-grey-lighten-3">
       <v-container>
-        <v-sheet min-height="70vh" rounded="lg" :elevation="10">
+        <v-sheet rounded="lg" :elevation="10">
           <v-container class="d-flex flex-column justify-center align-center">
             <v-img contain :width="700" src="@/assets/logo.png" />
 
