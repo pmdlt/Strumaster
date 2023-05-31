@@ -20,11 +20,19 @@ bool connected = 0;
 bool is_playing = false;
 uint8_t nbFrets = 10;  // number of frets handled by strings
 
+// CNC shield handling
+#define DEFAULT_CNC_TIME_LET 3000
+int cnc_pin = D4;
+unsigned long cnc_timer = 0;
+
 void setup() {
   Serial.begin(9600);
 
   // Servos init
   setupServos(10, 11, 12, 13, 14, 15);
+
+  //cnc shield init
+  pinMode(cnc_pin, OUTPUT);
 
   // WiFi initialisation
   WiFi.softAP(ssid, password);
@@ -62,21 +70,34 @@ void setup() {
   
 }
 void loop() {
+  // server
   server.handleClient();
+  
+  // Playing a song
   if (is_playing) loopTiming();
+
+  // Cnc handling
+  if (is_playing || millis() < cnc_timer) {
+    digitalWrite(cnc_pin, LOW);
+  } else {
+    digitalWrite(cnc_pin, HIGH);
+  }
 }
 
 //----------------- debug functions
 
 void activate_stepper(int id_note) {
+  cnc_timer = millis() + DEFAULT_CNC_TIME_LET;
   Serial.printf("%d,\n", id_note);
 }
 
 void debug_stepper(int id_stepper, int steps) {
+  cnc_timer = millis() + DEFAULT_CNC_TIME_LET;
   Serial.printf("%d,%d,\n", id_stepper, steps);
 }
 
 void trigger_stepper(int id_stepper) {
+  cnc_timer = millis() + 1000; // one second is enough
   debug_stepper(id_stepper, 10);
   delay(100);
   debug_stepper(id_stepper, -10);
@@ -87,6 +108,7 @@ void reverse_stepper(int id_stepper) {
 }
 
 void reset_stepper(int id_stepper) {
+  cnc_timer = millis() + DEFAULT_CNC_TIME_LET;
   Serial.printf("%d,%d,\n", -4, id_stepper);
 }
 
@@ -129,6 +151,7 @@ void handleStop() {
 }
 
 void handleReset() {
+  cnc_timer = millis() + DEFAULT_CNC_TIME_LET;
   Serial.println("-5,");
   server.send(200, "text/plain", "Device reinitialized");
 }
@@ -138,6 +161,7 @@ void handleNotSupported() {
 }
 
 void handleLoad() {
+    cnc_timer = millis() + DEFAULT_CNC_TIME_LET;
     setupTimings(server.arg("plain").c_str());
     is_playing = false;
     server.send(200, "text/plain", "Song was sent to the guitar. File was correctly loaded !");
@@ -145,8 +169,9 @@ void handleLoad() {
 
 void handlePlayNote() {
   int id = server.arg("id").toInt();
+  digitalWrite(cnc_pin, LOW);
   activate_stepper(id);
-  delay(1500);
+  delay(DEFAULT_CNC_TIME_LET);
   activate_servo(id / nbFrets);
 
   server.send(200, "text/plain", "Note sent and played");
