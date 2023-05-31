@@ -14,13 +14,13 @@
                             <v-container>
                                 <v-form ref="form">
                                     <p class="text-center">Insert a midi file to be played by the guitar:<br><br></p>
-                                    <v-file-input label="MIDI File" variant="solo-filled" @change="loadFile"></v-file-input>
+                                    <v-file-input label="MIDI File" variant="outlined" @change="loadFile"></v-file-input>
 
                                     <p class="text-center">or select it from the list:<br><br></p>
 
                                     <v-autocomplete label="Pre-selection of songs" v-model="midi_selection"
                                         :items="['gamme_debug_10bpm', 'gamme_debug_20bpm']"
-                                        variant="solo-filled"></v-autocomplete>
+                                        variant="outlined"></v-autocomplete>
 
                                     <p class="text-center">Parameters:</p>
 

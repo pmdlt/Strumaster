@@ -16,7 +16,7 @@
                 <v-form ref="form">
                   <p class="text-center">Enter the note you want to play<br><br></p>
 
-                  <v-text-field v-model="note" label="Note" variant="solo-filled"></v-text-field>
+                  <v-text-field v-model="note" label="Note" variant="outlined"></v-text-field>
 
                   <v-btn @click="playNote" block class="mt-2">Play note</v-btn><br><br>
 
