@@ -1,6 +1,5 @@
 <template>
   <v-container>
-
     <v-btn block prepend-icon="mdi-stop-circle-outline" stacked variant="tonal" color="red" size="x-large"
       @click="sendGetRequest('stop')">
       Emergency Stop
