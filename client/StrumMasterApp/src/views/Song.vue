@@ -14,12 +14,13 @@
                             <v-container>
                                 <v-form ref="form">
                                     <p class="text-center">Insert a midi file to be played by the guitar:<br><br></p>
-                                    <v-file-input label="MIDI File" variant="solo" @change="loadFile"></v-file-input>
+                                    <v-file-input label="MIDI File" variant="solo-filled" @change="loadFile"></v-file-input>
 
                                     <p class="text-center">or select it from the list:<br><br></p>
 
                                     <v-autocomplete label="Pre-selection of songs" v-model="midi_selection"
-                                        :items="['gamme_debug_10bpm', 'gamme_debug_20bpm']" variant="solo"></v-autocomplete>
+                                        :items="['gamme_debug_10bpm', 'gamme_debug_20bpm']"
+                                        variant="solo-filled"></v-autocomplete>
 
                                     <p class="text-center">Parameters:</p>
 
@@ -28,11 +29,12 @@
 
                                     <v-slider v-model="speed" :min="0" :max="100" thumb-label label="Speed"></v-slider>
 
-                                    <v-btn @click="loadSong" block prepend-icon="mdi-upload" class="mt-2">Upload the
+                                    <v-btn @click="loadSong" block prepend-icon="mdi-upload" class="mt-2"
+                                        :loading="loading">Upload the
                                         song into the
                                         guitar</v-btn>
-                                    <v-btn @click="playSong" block prepend-icon="mdi-play" variant="tonal" color="green"
-                                        class="mt-2">Play song</v-btn>
+                                    <v-btn @click="playSong" block prepend-icon="mdi-play" size="large" class="mt-2">Play
+                                        song</v-btn>
                                 </v-form>
                             </v-container>
                         </v-sheet>
@@ -63,6 +65,7 @@ export default {
         snackbarText: '',
         snackbarColor: '',
         snackbarTimeout: 2000,
+        loading: false,
     }),
     methods: {
         loadFile(e) {
@@ -99,6 +102,7 @@ export default {
             console.log("4. File transformed and ready to be sent");
         },
         async loadSong() {
+            this.loading = true;
             console.log("Load song button clicked");
 
             if (this.midi_selection != null) {
@@ -132,6 +136,9 @@ export default {
                 .catch(error => {
                     console.error(error)
                     this.showSnackbar('We lost connection with the board', 'error')
+                })
+                .finally(() => {
+                    this.loading = false;
                 })
 
         },

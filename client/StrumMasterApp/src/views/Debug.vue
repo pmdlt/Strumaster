@@ -18,12 +18,12 @@
 
                   <v-select v-model="stepperFunctionToUse"
                     :items="['PlayNote', 'Steps', 'Reset', 'Trigger', 'Reverse', 'Calibrate', 'CalibrateAll']"
-                    label="Function to use" variant="outlined"></v-select>
+                    label="Function to use" variant="solo-filled"></v-select>
 
                   <v-slider v-model="stepperId" :min="0" :max="5" :step="1" thumb-label label="Stepper ID"
                     @input="stepperId = $event"></v-slider>
 
-                  <v-text-field v-model="stepperValue" label="Value" variant="outlined"></v-text-field>
+                  <v-text-field v-model="stepperValue" label="Value" variant="solo-filled"></v-text-field>
 
                   <v-btn @click="debugStepper" block class="mt-2">Send to Stepper</v-btn><br><br>
 
