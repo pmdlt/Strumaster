@@ -8,6 +8,7 @@ typedef struct {
 } Note;
 
 unsigned long startTime = 0;
+unsigned long last_note_timing = 0;
 
 ArduinoQueue<Note> queues[6]; // Queues of the notes
 Note notes[6];
@@ -29,6 +30,7 @@ void setupTimings(const char* csvData) {
   for (int i = 0; i < nbNotes; i++) {
     queues[id[i]/nbFrets].enqueue((Note) {time_start[i], time_end[i], id[i]});
   }
+  last_note_timing = time_end[nbNotes-1];
 
   // setup to begin to play
   for (int i = 0; i < 6; i++){
@@ -62,6 +64,9 @@ void loopTiming() {
       activate_stepper(notes[i].id);
     }
   }
+
+  
+  if (last_note_timing < currentTime) is_playing = false; // not so good fix 
 }
 
 void startPlaying() {
