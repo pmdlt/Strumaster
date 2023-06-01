@@ -3,14 +3,14 @@
     <v-main class="bg-grey-lighten-3">
       <v-container>
         <v-row>
-          <v-col cols="12" sm="3">
+          <v-col cols="12" sm="3" :elevation="10">
             <v-sheet rounded="lg">
               <the-menu-bar />
             </v-sheet>
           </v-col>
 
           <v-col cols="12" sm="9">
-            <v-sheet min-height="70vh" rounded="lg">
+            <v-sheet rounded="lg" :elevation="10">
               <v-container>
 
                 <v-form ref="form">

@@ -4,13 +4,13 @@
       <v-container>
         <v-row>
           <v-col cols="12" sm="3">
-            <v-sheet rounded="lg">
+            <v-sheet rounded="lg" :elevation="10">
               <the-menu-bar />
             </v-sheet>
           </v-col>
 
           <v-col cols="12" sm="9">
-            <v-sheet min-height="70vh" rounded="lg">
+            <v-sheet rounded="lg" :elevation="10">
               <v-container>
 
                 <v-form ref="form">

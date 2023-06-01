@@ -1,18 +1,19 @@
 <template>
   <v-container>
-
-    <v-btn block prepend-icon="mdi-stop-circle-outline" stacked variant="tonal" color="red" size="x-large"
-      @click="sendGetRequest('stop')">
-      Emergency Stop
-    </v-btn>
-    <br>
-    <v-btn block prepend-icon="mdi-connection" variant="tonal" color="blue" @click="sendGetRequest('connect')">
-      Test connection
-    </v-btn>
-    <br>
-    <v-btn block prepend-icon="mdi-update" variant="tonal" color="orange" @click="sendGetRequest('reset_all')">
-      Reset all motors
-    </v-btn>
+    <div class="d-flex flex-column justify-center align-center">
+      <v-btn block prepend-icon="mdi-stop-circle-outline" stacked variant="tonal" color="red" size="x-large"
+        @click="sendGetRequest('stop')">
+        Emergency Stop
+      </v-btn>
+      <br>
+      <v-btn block prepend-icon="mdi-connection" variant="tonal" color="blue" @click="sendGetRequest('connect')">
+        Test connection
+      </v-btn>
+      <br>
+      <v-btn block prepend-icon="mdi-update" variant="tonal" color="orange" @click="sendGetRequest('reset_all')">
+        Reset all motors
+      </v-btn>
+    </div>
     <br>
     <v-divider></v-divider>
     <br>

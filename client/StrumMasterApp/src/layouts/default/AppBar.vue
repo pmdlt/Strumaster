@@ -1,7 +1,7 @@
 <template>
-  <v-app-bar class="px-3" color="white" flat density="compact">
+  <v-app-bar class="px-3" color="white" flat density="compact" :elevation="5">
     <v-spacer></v-spacer>
-    <v-tabs centered color="grey-darken-2" exact-active-class="">
+    <v-tabs centered color="grey-darken-2" exact-active-class="active">
       <router-link to="/">
         <v-tab>Home</v-tab>
       </router-link>

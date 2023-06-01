@@ -5,10 +5,10 @@ class Note {
       this.time_start = time_start;
       this.time_end = time_end;
   }
-
+  
 }
 
-const TIME_TO_MOVE_ONE_FRET = 240;
+const TIME_TO_MOVE_ONE_FRET = 120;
 
 const TIME_NOTE = 500;
 
@@ -37,7 +37,6 @@ const ALL_EXISITING_NOTES = [
   "B1","A#1","A1","G#1","G1","F#1","F1","E1","D#1","D1","C#1","C1",
 ]
 
-const csvForDebug = "time_start,time_end,id\n0,1000,24\n1000,2000,24\n0,2000,3000,24\n3000,4000,26\n4000,6000,28\n6000,8000,26\n8000,9000,24\n9000,10000,28\n10000,11000,26\n11000,12000,26\n12000,14000,24\n";
 
 
 
@@ -65,22 +64,35 @@ function transform(json, track_number) {
   let possibilities = translate(notes)
   let result = []
   for(let i = 0; i < possibilities.length; i++){
-    let tmp = chooseCord(possibilities[i])
-    console.log(tmp.length);
-    result.push(tmp)
+    //console.log(possibilities[i]);
+    let tmp = chooseCord(possibilities[i][1])
+    //console.log(tmp.length);
+    result.push([possibilities[i][0],tmp])
     
   }
   // keep the best result (the one with the most notes)
-  result = result.reduce((a, b) => a.length > b.length ? a : b);
-  if (result.length < notes.length){
-    console.log("WARNING: %d notes were not played", notes.length - result.length)
+  
+  result = result.reduce((a, b) => a[1].length > b[1].length ||(a[1].length == b[1].length && Math.abs(a[0])< Math.abs(b[0]))  ? a : b);
+  if (result[1].length < notes.length){
+    console.log("WARNING: %d notes will not be played", notes.length - result[1].length)
+  }
+  else {
+    console.log("All notes will be played")
+  }
+
+  if (result[0] != 0){
+    console.log("Note: the guitar will be shifted by %d frets", result[0])
+    
+  }
+  else {
+    console.log("The guitar will not be shifted")
   }
 
 
   // convert to csv
   let csv = "time_start,time_end,id\n"
-  for (let i = 0; i < result.length; i++) {
-      csv += result[i][1] + "," + result[i][2] + "," + result[i][0] + "\n"
+  for (let i = 0; i < result[1].length; i++) {
+      csv += result[1][i][1] + "," + result[1][i][2] + "," + result[1][i][0] + "\n"
   }
   return csv
 
@@ -135,6 +147,7 @@ function translate(notes){
   let result = []
   for(let i = 0; i < ALL_EXISITING_NOTES.length; i++){ // for each possible note
     let shift = i - highest_idx
+    //console.log(shift);
     let translated_notes = []
     for(let j = 0; j < notes.length; j++){ // for each note
       let note = notes[j]
@@ -143,7 +156,8 @@ function translate(notes){
       }
       translated_notes.push(new Note(POSSIBLE_NOTES[POSSIBLE_NOTES.indexOf(note.name) + shift], note.time_start, note.time_end))
     }
-    result.push(translated_notes)
+    
+    result.push([shift,translated_notes])
   }
 
   return result
@@ -206,7 +220,7 @@ let a = transform({
       "length": 33,
       "notes": [
         {
-          "name": "C#5",
+          "name": "C5",
           "midi": 73,
           "time": 0,
           "velocity": 0.3937007874015748,
@@ -430,7 +444,7 @@ let a = transform({
           "duration": 2.1818159999999978
         },
         {
-          "name": "F2",
+          "name": "F#2",
           "midi": 41,
           "time": 69.81811199999997,
           "velocity": 0.3937007874015748,
