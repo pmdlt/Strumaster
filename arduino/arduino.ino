@@ -36,7 +36,7 @@ void setup() {
   for (int i = 2; i < 14; i++){
     pinMode(i, OUTPUT);
   }
-  steppersLibrairySetup(nbSteppers, 500);
+  steppersLibrairySetup(nbSteppers, 1000);
 
   // translater initialisation
   for (int id = 0; id < nbSteppers; id++){
