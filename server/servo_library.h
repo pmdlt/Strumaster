@@ -1,8 +1,8 @@
 #include <Adafruit_PWMServoDriver.h>
 
 const uint PWM_FREQ = 50;
-const uint MIN_ANGLE_PWM = 210;
-const uint MAX_ANGLE_PWM = 390;
+const uint MIN_ANGLE_PWM = 200;
+const uint MAX_ANGLE_PWM = 400;
 const uint SERVO_DELAY = 500;
 
 /**
