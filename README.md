@@ -27,6 +27,14 @@ The rest of the hardware include electronics. For this, we connected the servos 
 
 The software part consisted in creating the library for using the servos (servo_library.h and servo_library.ino) and using them in the server file (server.ino). The coding of this part was pretty straightforward: we first setup the function to a 45 degree angle above the cords and then the function playSingleCord could be used to activate servos. Other functions of the library include moving several servos over specific cords, as well as moving servos to specific angles. The angle value of the servos always oscillate between 45 and 135 degrees, and is stored in memory by the program. 
 
+## Steppers and Rails
+
+## Other Hardware
+
+# Guitar Holders and Plank
+
+In order to fix all our hardware and guitar together, we used a 120x70x5 cm wooden epicea plank to put bellow the guitar, as well as % 3d small printed pieces used to keep the guitar from moving from its spot on the plank. Those holders where positioned at the bottem, beginning of neck and sides of the guitar, and screwed on the metal plank.
+
 
 
 ## List of supplies
