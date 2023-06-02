@@ -102,8 +102,8 @@ In order to fix all our hardware and guitar together, we used a 120x70x5 cm wood
 
 
 ## Electric scheme:
-![Electronic scheme ](https://github.com/pmdlt/Strumaster/assets/75203799/2d183761-9e1f-4923-83a1-ded09cbf64b4)
 
+![Guitar-1](https://github.com/pmdlt/Strumaster/assets/75203799/e787df2d-8602-4178-9e4d-8367f0e22c98)
 
 
 
