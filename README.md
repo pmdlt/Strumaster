@@ -81,9 +81,8 @@ The steppers are controlled by the Arduino board, with two CNC shields between t
 We also coded a Serial protocol of communication to get orders from the ESP. It was very straightforward, the ESP communication an integer corresponding to an order along a value, which can be an string id, a number of steps or a fret id. To move to a specific fret on the guitar, we counted the number of steps needed from the 1st fret to reach the desired fret.
 We also made a simple dictionnary to map a note id, which goes from 0 to 60, to a string and a fret. We made this because of the small RAM constraints and to make communications as small as possible. Indeed, the ESP just has to communicate a small integer, instead of a string id and a number of steps.
 
-###Necessary measurements
+### Necessary measurements
 
-##Intro
 When you are starting the build, it is important to note that even though all guitars are standardized in terms of length (4/4, 3/4, 1/2, 1/4), the neck sizes may vary.
 For example, in the case of 4/4 guitars, the neck widths (measured at the top) vary between 43 and 45 mm for acoustic, 51 and 55mm for classical and 41 and 45 mm for electric. In our case it is a 4/4 classic with a neck width of 52mm. The design we chose, requires the rails to run in parallel in order to not intersect, for this reason it is wise to first verify the maximum number of frets you can work with. How you can do this:
 
