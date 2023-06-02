@@ -189,7 +189,7 @@ class Note {
 
 }
 
-// const TIME_TO_MOVE_ONE_FRET = 120;
+const TIME_TO_MOVE_ONE_FRET = 120;
 
 const TIME_NOTE = 500;
 
@@ -334,7 +334,7 @@ function canPlay(note, used_until, position) {
 
                 let move = guitar[i].indexOf(note.name) - position[i];
                 // check if the move is possible or if it's the first note
-                if (used_until[i] + move * this.timeToMove <= note.time_start || used_until[i] == 0) {
+                if (used_until[i] + move * TIME_TO_MOVE_ONE_FRET <= note.time_start || used_until[i] == 0) {
                     temp.push([i, guitar[i].indexOf(note.name), move]);
                 }
             }
