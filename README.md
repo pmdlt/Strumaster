@@ -13,7 +13,7 @@ The ultimate goal of the Strumaster project is a guitar that can play itself, pr
 
 ## List of supplies
 - 1x Guitar
-- 1x Wooden plateform 
+- 1x Wooden plateform (120x70x5 cm)
 - 1x Arduino Uno
 - 1x ESP8266
 - 1x 12V power supply
