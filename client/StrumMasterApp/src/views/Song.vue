@@ -306,6 +306,7 @@ function chooseCord(notes) {
             used_until[a[0][0]] = notes[i].time_end;
         }
         else {
+            console.log("WARNING: note %s from %dms (to %dms) will not be played",notes[i].name,notes[i].time_start);
             if (!exist) {
                 miss_exist++;
             }
