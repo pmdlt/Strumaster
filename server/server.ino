@@ -146,7 +146,7 @@ void handlePlay() {
 
 void handleStop() {
   is_playing = false;
-  setupTimings("time_start,time_end,id\n");
+  resetQueues();
   server.send(200, "text/plain", "All motor off");
 }
 
@@ -248,7 +248,8 @@ void handleDebugStepper() {
 void handleDebugServo() {
   int id = server.arg("id").toInt();
 
-  playSingleCord(id);
+  //playSingleCord(id);
+  activate_servo(id);
 
   server.send(200, "text/plain", "Servo moved.");
 }

@@ -46,12 +46,16 @@ void setupTimings(const char* csvData) {
 void loopTiming() {
   unsigned long currentTime = millis() - startTime;
   if (startTime == 0) return;
+  int servos_activation[6] = {0, 0, 0, 0, 0, 0}; 
+  bool activation_requested = false;
 
   // We check all the string queues 
   for (int i = 0; i < 6; i++){
     // if a note has reached its play timing, we activate the servo
     if (notes[i].id != -1 && notes[i].id != -2 && currentTime >= notes[i].start){ // we set id = -2 in order to not activate the servo several times
-      activate_servo(notes[i].id/nbFrets);
+      //activate_servo(notes[i].id/nbFrets);
+      servos_activation[notes[i].id/nbFrets] = 1;
+      activation_requested = true;
       notes[i].id = -2;
     }
     // if a note has ended, we move to the next one
@@ -64,9 +68,16 @@ void loopTiming() {
       activate_stepper(notes[i].id);
     }
   }
-
+  //strumming !
+  playCords(servos_activation[0], servos_activation[1], servos_activation[2], servos_activation[3], servos_activation[4], servos_activation[5]);
   
-  if (last_note_timing < currentTime) is_playing = false; // not so good fix 
+  if (last_note_timing < currentTime) is_playing = false; // not so good fix
+}
+
+void resetQueues() {
+  for(int i = 0; i < 6; ++i){
+    queues[i] = ArduinoQueue<Note>(nbNotes);
+  }
 }
 
 void startPlaying() {

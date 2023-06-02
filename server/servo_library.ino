@@ -65,12 +65,12 @@ void setAllToMiddle() {
 }
 
 void writeToServo(int value1, int value2, int value3, int value4, int value5, int value6) {
-  pwm.setPWM(pin1_servo, 0, value1);
-  pwm.setPWM(pin2_servo, 0, value2);
-  pwm.setPWM(pin3_servo, 0, value3);
-  pwm.setPWM(pin4_servo, 0, value4);
-  pwm.setPWM(pin5_servo, 0, value5);
-  pwm.setPWM(pin6_servo, 0, value6);
+  if (value1) pwm.setPWM(pin1_servo, 0, value1);
+  if (value2) pwm.setPWM(pin2_servo, 0, value2);
+  if (value3) pwm.setPWM(pin3_servo, 0, value3);
+  if (value4) pwm.setPWM(pin4_servo, 0, value4);
+  if (value5) pwm.setPWM(pin5_servo, 0, value5);
+  if (value6) pwm.setPWM(pin6_servo, 0, value6);
 }
 
 void writeToAllServos(int value) {
