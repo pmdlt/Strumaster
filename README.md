@@ -13,11 +13,11 @@ The ultimate goal of the Strumaster project is a guitar that can play itself, pr
 
 ## List of supplies
 - 1x Guitar
-- 1x Wooden plateform (?x?x?cm)
+- 1x Wooden plateform 
 - 1x Arduino Uno
 - 1x ESP8266
 - 1x 12V power supply
-- 1x Buck converter (12V to 5V)
+- 1x 9V power supply
 - 1x Adafruit PCA9685
 - 2x CNC shield
 - 6x stepper motor driver
@@ -26,8 +26,9 @@ The ultimate goal of the Strumaster project is a guitar that can play itself, pr
 - 100cm of timing belt
 - 6x servo
 - 10x 6Mx65 screw
-- 10x 6M nuts
-- ?x 3Mx10 screw
+- 16x 6M nuts
+- 30x 3Mx10 screw
+- 12x 3mx5 screw
 - a lot of wires
 - zip-ties
 
@@ -44,8 +45,8 @@ The ultimate goal of the Strumaster project is a guitar that can play itself, pr
 ### Stepper Part:
 - 1x plateformSteppers
 - 2x plateformGuider
-- 3x neckGuiderUniversalTop
-- 3x neckGuiderUniversalBottom
+- 6x neckGuiderUniversalTop
+- 6x neckGuiderUniversalBottom
 - 1x neckGuiderFret2Top
 - 1x neckGuiderFret2Bottom
 - 1x neckGuiderFret0Top
