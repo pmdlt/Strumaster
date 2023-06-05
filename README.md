@@ -7,6 +7,8 @@
 > With its industrial-chic design and whimsical features, Strumaster is
 > not just a guitar, it's a blend of form and function.
 
+![IMG_7791](https://github.com/pmdlt/Strumaster/assets/75203799/07d37fa8-9f1d-486d-a900-db46ce40494b)
+
 ## Project Description
 ### Goal
 The ultimate goal of the Strumaster project is a guitar that can play itself, providing a MIDI file via a web app. It also has of course the function to play a note by itself, and has a whole host of debugging functions (manage engine by engine, string by string, etc.).
