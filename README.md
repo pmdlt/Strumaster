@@ -75,8 +75,13 @@ For the hardware, we use Adafruit PCA9685 and six 6v servos. The bridge on the g
 
 The rest of the hardware include electronics. For this, we connected the servos to the adafruit board and the adafruit board to a 5v output from the arduino, and connected the signal controls and ground to the ESP8266. This allowed us to control the servos from the esp using the adafruit library.
 
-### Software
-The software part consisted in creating the library for using the servos (servo_library.h and servo_library.ino) and using them in the server file (server.ino). The coding of this part was pretty straightforward: we first setup the function to a 45 degree angle above the cords and then the function playSingleCord could be used to activate servos. Other functions of the library include moving several servos over specific cords, as well as moving servos to specific angles. The angle value of the servos always oscillate between 45 and 135 degrees, and is stored in memory by the program. 
+### Software (Arduino/ESP part)
+The software part consisted in creating the library for using the servos (servo_library.h and servo_library.ino) and using them in the server file (server.ino). The coding of this part was pretty straightforward: we first setup the function to a 45 degree angle above the cords and then the function playSingleCord could be used to activate servos. Other functions of the library include moving several servos over specific cords, as well as moving servos to specific angles. The angle value of the servos always oscillate between 45 and 135 degrees, and is stored in memory by the program.
+
+### Software (Client part)
+<img width="1470" alt="image" src="https://github.com/pmdlt/Strumaster/assets/18498650/70ad5d67-f3cc-4ef7-8d43-e273a5c48ae2">
+
+To control the guitar, a modern web-app based on [VueJS](https://vuejs.org/)/[Vuetify](https://vuetifyjs.com/en/) and hosted on [Netlify](https://www.netlify.com/) was created. It send POST and GET request to the ESP, witch is on the same WiFi.
 
 # Steppers and Rails
 In order to do the fretting, we use rails that constantly push the strings. They are moved to the correct fret using stepper motors.
@@ -100,19 +105,10 @@ For example, in the case of 4/4 guitars, the neck widths (measured at the top) v
 
 ## Other Hardware
 
-# Guitar Holders and Plank
+### Guitar Holders and Plank
 In order to fix all our hardware and guitar together, we used a 120x70x5 cm wooden epicea plank to put bellow the guitar, as well as % 3d small printed pieces used to keep the guitar from moving from its spot on the plank. Those holders where positioned at the bottem, beginning of neck and sides of the guitar, and screwed on the metal plank.
 
 
 ## Electric scheme:
 
 ![Guitar-1](https://github.com/pmdlt/Strumaster/assets/75203799/eaa921dd-770b-434a-b1b7-62b4e1eb75d8)
-
-
-
-
-
-
-
-
-
