@@ -7,7 +7,8 @@
 > With its industrial-chic design and whimsical features, Strumaster is
 > not just a guitar, it's a blend of form and function.
 
-![IMG_7791](https://github.com/pmdlt/Strumaster/assets/75203799/07d37fa8-9f1d-486d-a900-db46ce40494b)
+![IMG_0113](https://github.com/pmdlt/Strumaster/assets/75203799/97a3d210-cc7e-4ddc-aac9-d32d75b0b9df)
+
 
 ## Project Description
 ### Goal
@@ -105,7 +106,8 @@ In order to fix all our hardware and guitar together, we used a 120x70x5 cm wood
 
 ## Electric scheme:
 
-![Guitar-1](https://github.com/pmdlt/Strumaster/assets/75203799/e787df2d-8602-4178-9e4d-8367f0e22c98)
+![Guitar-1](https://github.com/pmdlt/Strumaster/assets/75203799/eaa921dd-770b-434a-b1b7-62b4e1eb75d8)
+
 
 
 
